@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow">
+<title>From RoboTwin base tasks to evaluation scenes · ManipScope formal 48</title>
+<style>
+:root{
+  --ink:#151a22; --ink-2:#4a5568; --ink-3:#78849a;
+  --ground:#f2f4f7; --panel:#ffffff; --panel-2:#fafbfc;
+  --line:#dbe0e8; --line-2:#eceff4;
+  --accent:#1f6b8c; --accent-soft:#cfe3ec; --accent-ink:#0d4560;
+  --warn:#a8501c; --warn-soft:#f2e2d6;
+  --good:#2f6f4f; --mid:#9a8330; --bad:#a33c3c;
+  --grid-off:#e7eaf0;
+  --mono:"IBM Plex Mono","JetBrains Mono","SF Mono",Menlo,Consolas,"DejaVu Sans Mono",ui-monospace,monospace;
+  --sans:"IBM Plex Sans","Inter","Helvetica Neue",Arial,sans-serif;
+  --head:"Archivo","Inter","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.6}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 24px 72px;display:flex;flex-direction:column;gap:34px}
+header{display:flex;flex-direction:column;gap:14px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:var(--head);font-weight:700;font-size:34px;letter-spacing:-.015em;margin:0;text-wrap:balance}
+.lede{max-width:64ch;color:var(--ink-2);margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--line);background:var(--panel);border-radius:3px;overflow:hidden}
+.stat{flex:1 1 150px;padding:14px 18px;border-right:1px solid var(--line-2)}
+.stat:last-child{border-right:0}
+.stat b{display:block;font-family:var(--head);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.15}
+.stat span{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+h2{font-family:var(--head);font-size:17px;font-weight:600;margin:0 0 4px;letter-spacing:-.005em}
+.sec-note{color:var(--ink-2);font-size:13px;margin:0 0 16px;max-width:66ch}
+section{display:block}
+.matrix-shell{border:1px solid var(--line);background:var(--panel);border-radius:3px;overflow-x:auto}
+.matrix{--cell:15px;--rail:250px;min-width:max-content;padding:0 14px 14px}
+.mrow{display:grid;grid-template-columns:var(--rail) repeat(50,var(--cell));align-items:stretch}
+.colhead{height:104px;position:relative}
+.colhead .lbl{position:absolute;bottom:4px;left:50%;transform-origin:left bottom;transform:rotate(-62deg);font-family:var(--mono);font-size:9px;white-space:nowrap;color:var(--ink-3);letter-spacing:.01em}
+.colhead.used .lbl{color:var(--ink-2)}
+.colhead.unused .lbl{color:var(--warn);text-decoration:line-through;text-decoration-thickness:.5px}
+.colhead.hot .lbl{color:var(--accent-ink);font-weight:600}
+.grouphdr{grid-column:1 / -1;display:flex;align-items:baseline;gap:10px;padding:14px 0 5px;border-bottom:1px solid var(--line-2);margin-bottom:2px}
+.grouphdr .g{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--ink)}
+.grouphdr .gd{font-size:11.5px;color:var(--ink-3)}
+.srow{cursor:pointer;border-radius:2px}
+.srow:hover,.srow.pin{background:var(--panel-2)}
+.srow:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.rail{display:flex;align-items:center;gap:7px;padding-right:12px;height:var(--cell);overflow:hidden;white-space:nowrap}
+.rail .nm{font-family:var(--mono);font-size:10.5px;color:var(--ink);overflow:hidden;text-overflow:ellipsis}
+.srow.pin .rail .nm{font-weight:600;color:var(--accent-ink)}
+.tier{font-family:var(--mono);font-size:8.5px;padding:1px 3px;border-radius:2px;border:1px solid var(--line);color:var(--ink-3);flex:none}
+.sc{font-family:var(--mono);font-size:9.5px;font-variant-numeric:tabular-nums;margin-left:auto;flex:none;width:26px;text-align:right}
+.sc.g{color:var(--good)} .sc.m{color:var(--mid)} .sc.b{color:var(--bad)}
+.cell{height:var(--cell);border-right:1px solid var(--panel);border-bottom:1px solid var(--panel);background:var(--grid-off)}
+.cell.on{background:var(--accent)}
+.cell.pin{background:var(--accent-soft)}
+.cell.on.pin{background:var(--accent);box-shadow:inset 0 0 0 1px var(--panel)}
+.readout{border:1px solid var(--line);border-left:3px solid var(--accent);background:var(--panel);border-radius:3px;padding:16px 18px;display:flex;flex-direction:column;gap:9px;min-height:118px}
+.readout .top{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+.readout .rn{font-family:var(--mono);font-size:14px;font-weight:600}
+.readout .meta{font-size:12px;color:var(--ink-3)}
+.readout .instr{font-size:13px;color:var(--ink-2);font-style:italic}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--mono);font-size:11px;padding:2px 7px;border-radius:2px;background:var(--accent-soft);color:var(--accent-ink);border:1px solid transparent}
+.chip i{font-style:normal;opacity:.65;margin-right:5px}
+.pol{font-family:var(--mono);font-size:11px;padding:2px 7px;border-radius:2px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-2)}
+.pol b{font-weight:600;margin-left:4px}
+.pol.g b{color:var(--good)} .pol.m b{color:var(--mid)} .pol.b b{color:var(--bad)}
+.hint{color:var(--ink-3);font-size:12.5px}
+.cov{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:0 24px;border-top:1px solid var(--line);padding-top:12px}
+.cov div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--mono);font-size:11.5px;color:var(--ink-2);padding:3px 0;border-bottom:1px solid var(--line-2);display:flex;gap:8px}
+.cov div i{font-style:normal;color:var(--ink-3);width:18px;text-align:right;flex:none}
+.reuse{display:flex;flex-direction:column;gap:5px}
+.rb{display:grid;grid-template-columns:170px 1fr 30px;align-items:center;gap:12px;font-family:var(--mono);font-size:11.5px}
+.rb .bar{display:block;height:9px;min-width:2px;background:var(--accent);border-radius:1px}
+.rb .n{text-align:right;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:11.5px;color:var(--ink-3);font-family:var(--mono)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:11px;height:11px;border-radius:2px;display:inline-block}
+.arc-shell{border:1px solid var(--line);background:var(--panel);border-radius:3px;overflow-x:auto}
+#arc{display:block;min-width:0;width:100%;height:auto}  /* scales with the window; a fixed min-width hides the arcs and right column behind a horizontal scroll on narrow windows */
+#arc text{font-family:var(--mono);font-size:9.5px;fill:var(--ink-2)}
+#arc .colcap{font-size:10px;letter-spacing:.1em;fill:var(--ink-3)}
+#arc .grp{font-size:9.5px;font-weight:600;fill:var(--ink-3);letter-spacing:.08em}
+#arc .lnk{fill:none;stroke:var(--ink-3);stroke-opacity:.28;stroke-width:1}
+#arc .dot{fill:var(--ink-3);fill-opacity:.55}
+#arc .dot.unused{fill:var(--warn);fill-opacity:.9}
+#arc text.unused{fill:var(--warn)}
+#arc .hit{fill:transparent;cursor:pointer}
+#arc .hit:focus-visible{fill:var(--accent-soft);fill-opacity:.5}
+#arc.focus .lnk{stroke-opacity:.06}
+#arc.focus text{fill-opacity:.28}
+#arc.focus .dot{fill-opacity:.15}
+#arc .lnk.hl{stroke:var(--ink);stroke-opacity:1;stroke-width:1.7}
+#arc.focus text.hl{fill:var(--ink);fill-opacity:1;font-weight:600}
+#arc.focus .dot.hl{fill:var(--ink);fill-opacity:1}
+@media (prefers-reduced-motion:no-preference){
+  #arc .lnk{transition:stroke-opacity .12s ease,stroke .12s ease}
+  #arc text,#arc .dot{transition:fill-opacity .12s ease}
+  .cell{transition:background .1s ease}
+}
+footer{border-top:1px solid var(--line);padding-top:14px;color:var(--ink-3);font-size:12px;max-width:72ch}
+code{font-family:var(--mono);font-size:.92em;background:var(--panel-2);padding:1px 4px;border-radius:2px;border:1px solid var(--line-2)}
+@media print{body{background:#fff}.wrap{padding:0}.matrix-shell,.arc-shell{overflow:visible}}
+/* Embed modes (?view=arc | ?view=matrix): the docs site iframes one section at a time. */
+body.embed{background:transparent}
+body.embed .wrap{padding:0;gap:14px;max-width:none}
+body.embed header,body.embed footer,body.embed section{display:none}
+body.embed section h2,body.embed section .sec-note{display:none}  /* the host page carries the explanation */
+body.embed .arc-shell,body.embed .matrix-shell{border:0;border-radius:0;background:transparent}
+body.embed-arc #sec-arc{display:block}
+body.embed-arc #arc{min-width:0}
+body.embed-matrix #sec-matrix,body.embed-matrix #sec-readout{display:block}
+body.embed-matrix .matrix{--cell:13px;--rail:215px;padding:0 6px 10px}  /* fits the docs content column (~960px) without horizontal scrolling */
+body.embed-matrix .colhead .lbl{font-size:8.5px}
+</style></head><body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">RoboTwin 2.0 · ManipScope evaluation suite · formal scene list (formal-eval-v1)</div>
+  <h1>Which RoboTwin base tasks the 48 evaluation scenes build on</h1>
+  <p class="lede">Every evaluation scene recombines objects, skills or success criteria from one or more native RoboTwin 2.0 tasks. This page lays out that <strong>source dependency</strong>: rows are the 48 formal evaluation scenes, columns are the 50 RoboTwin base tasks, and a filled cell means "this scene reuses something from that task".</p>
+  <div class="stats">
+    <div class="stat"><b>48</b><span>evaluation scenes</span></div>
+    <div class="stat"><b>89</b><span>dependency edges</span></div>
+    <div class="stat"><b id="s-cov">34<span style="font-size:15px;color:var(--ink-3)">/50</span></b><span>base tasks used</span></div>
+    <div class="stat"><b id="s-un" style="color:var(--warn)">16</b><span>never used</span></div>
+    <div class="stat"><b>1.85</b><span>sources per scene (mean)</span></div>
+  </div>
+</header>
+
+<section id="sec-matrix">
+  <h2>Dependency matrix</h2>
+  <p class="sec-note">Rows are grouped by task family D1–D6. Hover a row to see its sources; click to pin it. Struck-through column names are base tasks that no formal scene touches. The number at the end of each row is the DM0.5 task-success rate on that scene (100 episodes).</p>
+  <div class="matrix-shell"><div class="matrix" id="mx"></div></div>
+</section>
+
+<section id="sec-readout">
+  <div class="readout" id="ro"><div class="hint">Hover or click any row of the matrix to see its instruction, level, expert seed yield, the task-success rate of the 12 policies and the RoboTwin tasks it inherits from.</div></div>
+</section>
+
+<section id="sec-arc">
+  <h2>Link diagram</h2>
+  <p class="sec-note">The same dependencies, read differently. The 48 evaluation scenes are on the left, the 50 RoboTwin base tasks on the right. Hover a name on either side: its links turn solid black and everything else fades. Orange names on the right have no scene linked to them.</p>
+  <div class="arc-shell"><svg id="arc" xmlns="http://www.w3.org/2000/svg"></svg></div>
+</section>
+
+<section>
+  <h2>Most reused base tasks</h2>
+  <p class="sec-note">Top ten. Heavy reuse of <code>place_a2b_left</code> / <code>place_a2b_right</code> is expected: the skill–spatial family (D2) is built around the "put A on one side of B" relation these two native tasks define.</p>
+  <div class="reuse" id="reuse"></div>
+</section>
+
+<section>
+  <h2>Base tasks not used by any scene (<span id="s-un2">16</span>)</h2>
+  <p class="sec-note">These are the current coverage gaps of the formal list. Most fall into bimanual coordination (<code>pick_dual_bottles</code>, <code>place_dual_shoes</code>), articulated-object manipulation (<code>open_microwave</code>, <code>turn_switch</code>) and dynamic motions (the two <code>shake_bottle</code> tasks), the three groups for which stable scripted experts are hardest to obtain.</p>
+  <div class="cov" id="cov"></div>
+</section>
+
+<section>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--accent)"></i> dependency</span>
+    <span><i class="sw" style="background:var(--grid-off)"></i> no dependency</span>
+    <span><i class="sw" style="background:var(--good)"></i> success ≥ 0.60</span>
+    <span><i class="sw" style="background:var(--mid)"></i> 0.20–0.60</span>
+    <span><i class="sw" style="background:var(--bad)"></i> &lt; 0.20</span>
+    <span><i class="sw" style="background:var(--warn)"></i> base task not covered</span>
+  </div>
+</section>
+
+<footer>
+  The scene list is the 48 scenes frozen for formal evaluation (<code>suite/scenes_v2.yaml</code> / <code>suite/seeds/</code>, code tag <code>formal-eval-v1</code> @ <code>39808b6</code>; 3 of the original 51 were excluded for a scripted-expert yield below 30%). Dependencies come from the <code>deps</code> field of each scene in <code>suite/table.py</code> and, for the 8 hand-written scenes, from their original lineage in the v1 table <code>suite/scenes.py</code>; exported by <code>suite/gen_depgraph.py</code>. Success rates come from <code>eval_result/formal_*</code>, 100 episodes per scene with the same frozen seeds and instructions. "Source dependency" is a design notion, not code-level inheritance: every scene is implemented independently, but its objects, skills and criteria trace back to these native tasks. The registry labels the mixture family D7; it is shown as D6 here to match the paper. Generated 2026-09-21.
+</footer>
+</div>
+
+<script>
+(function () {
+  var view = (new URLSearchParams(location.search).get("view") || "").toLowerCase();
+  if (view === "arc" || view === "matrix") document.body.classList.add("embed", "embed-" + view);
+  function report() {
+    if (window.parent === window) return;
+    // Measure the content itself (body auto-sizes to it). documentElement.scrollHeight is
+    // never below the iframe viewport, so reporting it feeds the parent's height back into
+    // the next measurement and the iframe ratchets taller, leaving blank space below.
+    var h = Math.ceil(document.body.getBoundingClientRect().height) + 1;
+    window.parent.postMessage({ depgraphHeight: h }, "*");
+  }
+  window.addEventListener("load", report);
+  window.addEventListener("resize", report);
+  // The host page pings once its own listener is up; without this the iframe can finish
+  // (srcdoc needs no network) before the deferred host script listens, and the single
+  // load-time report is lost -- the iframe then stays at the CSS fallback height and clips.
+  window.addEventListener("message", function (e) { if (e.data && e.data.depgraphPing) report(); });
+  [0, 250, 800, 2000].forEach(function (t) { setTimeout(report, t); });
+  if ("ResizeObserver" in window) new ResizeObserver(report).observe(document.body);
+})();
+const DATA = {"base": ["adjust_bottle", "beat_block_hammer", "blocks_ranking_rgb", "blocks_ranking_size", "click_alarmclock", "click_bell", "dump_bin_bigbin", "grab_roller", "handover_block", "handover_mic", "hanging_mug", "lift_pot", "move_can_pot", "move_pillbottle_pad", "move_playingcard_away", "move_stapler_pad", "open_laptop", "open_microwave", "pick_diverse_bottles", "pick_dual_bottles", "place_a2b_left", "place_a2b_right", "place_bread_basket", "place_bread_skillet", "place_burger_fries", "place_can_basket", "place_cans_plasticbox", "place_container_plate", "place_dual_shoes", "place_empty_cup", "place_fan", "place_mouse_pad", "place_object_basket", "place_object_scale", "place_object_stand", "place_phone_stand", "place_shoe", "press_stapler", "put_bottles_dustbin", "put_object_cabinet", "rotate_qrcode", "scan_object", "shake_bottle", "shake_bottle_horizontally", "stack_blocks_three", "stack_blocks_two", "stack_bowls_three", "stack_bowls_two", "stamp_seal", "turn_switch"], "scenes": [{"name": "grab_dumbbell", "dim": "D1", "tier": 1, "ctx": "Gym corner", "instr": "Pick up the {A}.", "deps": [8], "dep_src": "table", "smoke": "2/4", "score": 0.76, "scores": {"dm05": 0.76, "wla_formal": 0.47, "pi05": 0.56, "pi0": 0.52, "xvla": 0.81, "xwam": 0.97, "motus": 0.62, "starvla": 0.42, "fastwam": 0.52, "ahawam": 0.8, "lingbot_va": 0.86, "g05": 0.9}}, {"name": "move_can_coaster", "dim": "D1", "tier": 1, "ctx": "Bedside pillbox", "instr": "Put the {A} on the coaster.", "deps": [26, 30], "dep_src": "table", "smoke": "2/2", "score": 0.0, "scores": {"dm05": 0.0, "wla_formal": 0.06, "pi05": 0.07, "pi0": 0.0, "xvla": 0.18, "xwam": 0.72, "motus": 0.14, "starvla": 0.45, "fastwam": 0.31, "ahawam": 0.33, "lingbot_va": 0.14, "g05": 0.45}}, {"name": "move_cup_pad", "dim": "D1", "tier": 1, "ctx": "Office desk", "instr": "Move the {A} onto the pad.", "deps": [16], "dep_src": "table", "smoke": "not re-run (kept from v1)", "score": 0.99, "scores": {"dm05": 0.99, "wla_formal": 0.77, "pi05": 0.68, "pi0": 0.4, "xvla": 0.72, "xwam": 0.92, "motus": 0.99, "starvla": 0.93, "fastwam": 0.67, "ahawam": 0.76, "lingbot_va": 0.93, "g05": 0.66}}, {"name": "place_teabox_scale", "dim": "D1", "tier": 1, "ctx": "Supermarket weighing", "instr": "Put the {A} on the scale.", "deps": [34], "dep_src": "table", "smoke": "2/2", "score": 0.56, "scores": {"dm05": 0.56, "wla_formal": 0.41, "pi05": 0.21, "pi0": 0.06, "xvla": 0.0, "xwam": 0.83, "motus": 0.28, "starvla": 0.36, "fastwam": 0.43, "ahawam": 0.52, "lingbot_va": 0.49, "g05": 0.67}}, {"name": "grasp_mallet_novel", "dim": "D1", "tier": 2, "ctx": "Workbench", "instr": "Pick up the {A}.", "deps": [2, 8], "dep_src": "table", "smoke": "2/2", "score": 0.9, "scores": {"dm05": 0.9, "wla_formal": 0.95, "pi05": 0.97, "pi0": 0.94, "xvla": 0.93, "xwam": 0.98, "motus": 0.98, "starvla": 0.94, "fastwam": 0.94, "ahawam": 0.93, "lingbot_va": 0.97, "g05": 0.79}}, {"name": "lift_trophy", "dim": "D1", "tier": 2, "ctx": "Kitchen prep", "instr": "Pick up the {A}.", "deps": [8], "dep_src": "table", "smoke": "2/2", "score": 0.54, "scores": {"dm05": 0.54, "wla_formal": 0.76, "pi05": 0.66, "pi0": 0.44, "xvla": 0.25, "xwam": 0.87, "motus": 0.52, "starvla": 0.74, "fastwam": 0.49, "ahawam": 0.29, "lingbot_va": 0.69, "g05": 0.3}}, {"name": "place_seal_coaster", "dim": "D1", "tier": 2, "ctx": "Kitchen prep", "instr": "Put the {A} on the coaster.", "deps": [49, 30], "dep_src": "table", "smoke": "2/2", "score": 0.03, "scores": {"dm05": 0.03, "wla_formal": 0.16, "pi05": 0.34, "pi0": 0.01, "xvla": 0.11, "xwam": 0.6, "motus": 0.59, "starvla": 0.42, "fastwam": 0.28, "ahawam": 0.49, "lingbot_va": 0.08, "g05": 0.47}}, {"name": "place_teabox_skillet", "dim": "D1", "tier": 2, "ctx": "Kitchen prep", "instr": "Put the {A} into the skillet.", "deps": [24], "dep_src": "table", "smoke": "2/2", "score": 0.0, "scores": {"dm05": 0.0, "wla_formal": 0.0, "pi05": 0.05, "pi0": 0.0, "xvla": 0.02, "xwam": 0.29, "motus": 0.0, "starvla": 0.13, "fastwam": 0.0, "ahawam": 0.0, "lingbot_va": 0.0, "g05": 0.26}}, {"name": "place_teabox_stand", "dim": "D1", "tier": 2, "ctx": "Bookshelf", "instr": "Put the {A} on the display stand.", "deps": [35], "dep_src": "table", "smoke": "2/2", "score": 0.57, "scores": {"dm05": 0.57, "wla_formal": 0.22, "pi05": 0.39, "pi0": 0.0, "xvla": 0.02, "xwam": 0.79, "motus": 0.51, "starvla": 0.01, "fastwam": 0.45, "ahawam": 0.47, "lingbot_va": 0.75, "g05": 0.67}}, {"name": "place_toycar_plasticbox", "dim": "D1", "tier": 2, "ctx": "Entryway", "instr": "Put the {A} into the plastic box.", "deps": [33, 27], "dep_src": "table", "smoke": "2/2", "score": 0.55, "scores": {"dm05": 0.55, "wla_formal": 0.31, "pi05": 0.71, "pi0": 0.08, "xvla": 0.19, "xwam": 0.86, "motus": 0.48, "starvla": 0.41, "fastwam": 0.46, "ahawam": 0.42, "lingbot_va": 0.67, "g05": 0.6}}, {"name": "place_a2b_left_novel", "dim": "D2", "tier": 1, "ctx": "Generic tabletop", "instr": "Put the {A} to the left of the mug.", "deps": [21], "dep_src": "table", "smoke": "not re-run (kept from v1)", "score": 0.75, "scores": {"dm05": 0.75, "wla_formal": 0.46, "pi05": 0.46, "pi0": 0.05, "xvla": 0.19, "xwam": 0.55, "motus": 0.6, "starvla": 0.59, "fastwam": 0.46, "ahawam": 0.61, "lingbot_va": 0.64, "g05": 0.67}}, {"name": "place_a2b_right_novel", "dim": "D2", "tier": 1, "ctx": "Generic tabletop", "instr": "Put the {A} to the right of the mug.", "deps": [22], "dep_src": "table", "smoke": "not re-run (kept from v1)", "score": 0.65, "scores": {"dm05": 0.65, "wla_formal": 0.47, "pi05": 0.41, "pi0": 0.05, "xvla": 0.2, "xwam": 0.56, "motus": 0.64, "starvla": 0.59, "fastwam": 0.38, "ahawam": 0.52, "lingbot_va": 0.49, "g05": 0.6}}, {"name": "card_right_of_scanner", "dim": "D2", "tier": 2, "ctx": "Supermarket checkout", "instr": "Put the {A} to the right of the barcode scanner.", "deps": [41, 42, 22], "dep_src": "table", "smoke": "2/3", "score": 0.23, "scores": {"dm05": 0.23, "wla_formal": 0.05, "pi05": 0.12, "pi0": 0.02, "xvla": 0.1, "xwam": 0.05, "motus": 0.01, "starvla": 0.14, "fastwam": 0.01, "ahawam": 0.01, "lingbot_va": 0.07, "g05": 0.56}}, {"name": "phone_right_of_laptop", "dim": "D2", "tier": 2, "ctx": "Office desk", "instr": "Put the {A} to the right of the laptop.", "deps": [17, 36, 22], "dep_src": "table", "smoke": "2/3", "score": 0.38, "scores": {"dm05": 0.38, "wla_formal": 0.0, "pi05": 0.02, "pi0": 0.21, "xvla": 0.08, "xwam": 0.14, "motus": 0.33, "starvla": 0.0, "fastwam": 0.04, "ahawam": 0.16, "lingbot_va": 0.02, "g05": 0.47}}, {"name": "place_can_right_of_plasticbox", "dim": "D2", "tier": 2, "ctx": "Warehouse shelving", "instr": "Put the {A} to the right of the plastic box.", "deps": [27, 21], "dep_src": "table", "smoke": "2/4", "score": 0.58, "scores": {"dm05": 0.58, "wla_formal": 0.32, "pi05": 0.29, "pi0": 0.03, "xvla": 0.16, "xwam": 0.03, "motus": 0.87, "starvla": 0.09, "fastwam": 0.37, "ahawam": 0.28, "lingbot_va": 0.29, "g05": 0.78}}, {"name": "place_cube_right_of_plate", "dim": "D2", "tier": 2, "ctx": "Dining-table plating", "instr": "Put the {A} to the right of the plate.", "deps": [21, 22, 28], "dep_src": "table", "smoke": "2/4", "score": 0.42, "scores": {"dm05": 0.42, "wla_formal": 0.14, "pi05": 0.36, "pi0": 0.0, "xvla": 0.11, "xwam": 0.2, "motus": 0.62, "starvla": 0.18, "fastwam": 0.24, "ahawam": 0.25, "lingbot_va": 0.48, "g05": 0.4}}, {"name": "place_teabox_front_of_skillet", "dim": "D2", "tier": 2, "ctx": "Kitchen prep", "instr": "Put the {A} in front of the skillet.", "deps": [24, 21], "dep_src": "table", "smoke": "2/2", "score": 0.0, "scores": {"dm05": 0.0, "wla_formal": 0.04, "pi05": 0.04, "pi0": 0.03, "xvla": 0.11, "xwam": 0.04, "motus": 0.01, "starvla": 0.23, "fastwam": 0.03, "ahawam": 0.03, "lingbot_va": 0.04, "g05": 0.02}}, {"name": "put_toycar_left_basket", "dim": "D2", "tier": 2, "ctx": "Household sorting", "instr": "Put the {A} into the left basket.", "deps": [33, 21], "dep_src": "table", "smoke": "2/4", "score": 0.0, "scores": {"dm05": 0.0, "wla_formal": 0.01, "pi05": 0.02, "pi0": 0.0, "xvla": 0.0, "xwam": 0.21, "motus": 0.31, "starvla": 0.02, "fastwam": 0.01, "ahawam": 0.01, "lingbot_va": 0.06, "g05": 0.28}}, {"name": "place_between_bowls", "dim": "D2", "tier": 3, "ctx": "Dining-table plating", "instr": "Put the {A} between the two bowls.", "deps": [21, 22, 48], "dep_src": "table", "smoke": "2/2", "score": 0.16, "scores": {"dm05": 0.16, "wla_formal": 0.39, "pi05": 0.42, "pi0": 0.0, "xvla": 0.11, "xwam": 0.34, "motus": 0.17, "starvla": 0.36, "fastwam": 0.14, "ahawam": 0.17, "lingbot_va": 0.53, "g05": 0.19}}, {"name": "attr_bind_bottle", "dim": "D3", "tier": 1, "ctx": "Fridge drinks", "instr": "", "deps": [1, 19], "dep_src": "renamed", "smoke": "not re-run (kept from v1)", "score": 0.47, "scores": {"dm05": 0.47, "wla_formal": 0.28, "pi05": 0.46, "pi0": 0.26, "xvla": 0.39, "xwam": 0.62, "motus": 0.69, "starvla": 0.33, "fastwam": 0.4, "ahawam": 0.44, "lingbot_va": 0.66, "g05": 0.74}}, {"name": "attr_category_press_bell", "dim": "D3", "tier": 1, "ctx": "Front desk", "instr": "Press the {A}.", "deps": [6, 5], "dep_src": "table", "smoke": "2/3", "score": 1.0, "scores": {"dm05": 1.0, "wla_formal": 0.67, "pi05": 0.54, "pi0": 0.52, "xvla": 0.94, "xwam": 0.86, "motus": 1.0, "starvla": 0.18, "fastwam": 1.0, "ahawam": 1.0, "lingbot_va": 0.78, "g05": 0.77}}, {"name": "attr_category_can_plasticbox", "dim": "D3", "tier": 2, "ctx": "Warehouse shelving", "instr": "Put the {A} into the plastic box.", "deps": [27, 19], "dep_src": "table", "smoke": "2/7", "score": 0.19, "scores": {"dm05": 0.19, "wla_formal": 0.02, "pi05": 0.04, "pi0": 0.0, "xvla": 0.0, "xwam": 0.41, "motus": 0.32, "starvla": 0.02, "fastwam": 0.0, "ahawam": 0.23, "lingbot_va": 0.03, "g05": 0.44}}, {"name": "attr_color_beat_block", "dim": "D3", "tier": 2, "ctx": "Block stacking", "instr": "Beat the {A} with the hammer.", "deps": [2, 45], "dep_src": "table", "smoke": "3/5", "score": 0.87, "scores": {"dm05": 0.87, "wla_formal": 0.22, "pi05": 0.69, "pi0": 0.06, "xvla": 0.05, "xwam": 0.69, "motus": 0.55, "starvla": 0.28, "fastwam": 0.71, "ahawam": 0.85, "lingbot_va": 0.91, "g05": 0.91}}, {"name": "attr_color_block_3way", "dim": "D3", "tier": 2, "ctx": "Block stacking", "instr": "Pick up the {A}.", "deps": [45, 9], "dep_src": "table", "smoke": "2/2", "score": 0.69, "scores": {"dm05": 0.69, "wla_formal": 0.59, "pi05": 0.83, "pi0": 0.5, "xvla": 0.58, "xwam": 0.62, "motus": 0.68, "starvla": 0.85, "fastwam": 0.6, "ahawam": 0.74, "lingbot_va": 0.99, "g05": 0.75}}, {"name": "attr_size_beat_smaller", "dim": "D3", "tier": 2, "ctx": "Block stacking", "instr": "Beat the {A} with the hammer.", "deps": [2, 4], "dep_src": "table", "smoke": "3/3", "score": 0.86, "scores": {"dm05": 0.86, "wla_formal": 0.68, "pi05": 0.58, "pi0": 0.28, "xvla": 0.11, "xwam": 0.49, "motus": 0.27, "starvla": 0.59, "fastwam": 0.4, "ahawam": 0.71, "lingbot_va": 0.35, "g05": 0.84}}, {"name": "attr_size_block_pick", "dim": "D3", "tier": 2, "ctx": "Block stacking", "instr": "Pick up the {A}.", "deps": [4, 45], "dep_src": "table", "smoke": "2/2", "score": 0.97, "scores": {"dm05": 0.97, "wla_formal": 0.9, "pi05": 0.66, "pi0": 0.05, "xvla": 0.55, "xwam": 1.0, "motus": 0.83, "starvla": 0.79, "fastwam": 0.86, "ahawam": 0.95, "lingbot_va": 0.69, "g05": 0.99}}, {"name": "attr_bind_soap_box", "dim": "D3", "tier": 3, "ctx": "Toiletry storage", "instr": "", "deps": [40, 42], "dep_src": "renamed", "smoke": "not re-run (kept from v1)", "score": 0.33, "scores": {"dm05": 0.33, "wla_formal": 0.37, "pi05": 0.45, "pi0": 0.13, "xvla": 0.34, "xwam": 0.71, "motus": 0.72, "starvla": 0.56, "fastwam": 0.61, "ahawam": 0.54, "lingbot_va": 0.79, "g05": 0.63}}, {"name": "attr_size_rank_middle", "dim": "D3", "tier": 3, "ctx": "Household sorting", "instr": "Pick up the {A}.", "deps": [4, 28], "dep_src": "table", "smoke": "2/2", "score": 0.01, "scores": {"dm05": 0.01, "wla_formal": 0.0, "pi05": 0.03, "pi0": 0.03, "xvla": 0.09, "xwam": 0.01, "motus": 0.06, "starvla": 0.04, "fastwam": 0.0, "ahawam": 0.06, "lingbot_va": 0.28, "g05": 0.0}}, {"name": "ref_block_on_plate", "dim": "D4", "tier": 1, "ctx": "Table clearing", "instr": "Pick up the {A}.", "deps": [28], "dep_src": "table", "smoke": "2/2", "score": 0.0, "scores": {"dm05": 0.0, "wla_formal": 0.0, "pi05": 0.0, "pi0": 0.0, "xvla": 0.0, "xwam": 0.0, "motus": 0.0, "starvla": 0.09, "fastwam": 0.0, "ahawam": 0.0, "lingbot_va": 0.06, "g05": 0.0}}, {"name": "ref_block_behind_can", "dim": "D4", "tier": 2, "ctx": "Generic tabletop", "instr": "Pick up the {A}.", "deps": [21, 22], "dep_src": "table", "smoke": "2/3", "score": 0.02, "scores": {"dm05": 0.02, "wla_formal": 0.03, "pi05": 0.24, "pi0": 0.28, "xvla": 0.0, "xwam": 0.18, "motus": 0.11, "starvla": 0.05, "fastwam": 0.0, "ahawam": 0.0, "lingbot_va": 0.07, "g05": 0.21}}, {"name": "ref_cup_on_tray", "dim": "D4", "tier": 2, "ctx": "Fast-food pickup", "instr": "Pick up the {A}.", "deps": [25], "dep_src": "table", "smoke": "2/2", "score": 0.0, "scores": {"dm05": 0.0, "wla_formal": 0.0, "pi05": 0.0, "pi0": 0.0, "xvla": 0.0, "xwam": 0.0, "motus": 0.01, "starvla": 0.22, "fastwam": 0.0, "ahawam": 0.03, "lingbot_va": 0.07, "g05": 0.0}}, {"name": "ref_leftmost_of_four", "dim": "D4", "tier": 2, "ctx": "Block stacking", "instr": "Pick up the {A}.", "deps": [3, 45], "dep_src": "table", "smoke": "2/2", "score": 0.43, "scores": {"dm05": 0.43, "wla_formal": 0.32, "pi05": 0.52, "pi0": 0.13, "xvla": 0.04, "xwam": 0.5, "motus": 0.37, "starvla": 0.23, "fastwam": 0.27, "ahawam": 0.28, "lingbot_va": 0.25, "g05": 0.7}}, {"name": "ref_mug_next_to_bowl", "dim": "D4", "tier": 2, "ctx": "Table clearing", "instr": "Pick up the {A}.", "deps": [11, 48], "dep_src": "table", "smoke": "2/3", "score": 0.32, "scores": {"dm05": 0.32, "wla_formal": 0.45, "pi05": 0.45, "pi0": 0.12, "xvla": 0.4, "xwam": 0.46, "motus": 0.18, "starvla": 0.06, "fastwam": 0.17, "ahawam": 0.27, "lingbot_va": 0.7, "g05": 0.05}}, {"name": "ref_not_the_red_one", "dim": "D4", "tier": 2, "ctx": "Block stacking", "instr": "Pick up the {A}.", "deps": [3], "dep_src": "table", "smoke": "2/2", "score": 0.0, "scores": {"dm05": 0.0, "wla_formal": 0.15, "pi05": 0.01, "pi0": 0.07, "xvla": 0.02, "xwam": 0.18, "motus": 0.25, "starvla": 0.16, "fastwam": 0.16, "ahawam": 0.14, "lingbot_va": 0.0, "g05": 0.07}}, {"name": "ref_second_from_left", "dim": "D4", "tier": 2, "ctx": "Block stacking", "instr": "Pick up the {A}.", "deps": [3, 45], "dep_src": "table", "smoke": "2/2", "score": 0.15, "scores": {"dm05": 0.15, "wla_formal": 0.02, "pi05": 0.07, "pi0": 0.03, "xvla": 0.16, "xwam": 0.1, "motus": 0.02, "starvla": 0.1, "fastwam": 0.11, "ahawam": 0.17, "lingbot_va": 0.62, "g05": 0.02}}, {"name": "adjust_bottle_dustbin", "dim": "D5", "tier": 2, "ctx": "Trash cleanup", "instr": "", "deps": [1, 39], "dep_src": "v1", "smoke": "2/2", "score": 0.94, "scores": {"dm05": 0.94, "wla_formal": 1.0, "pi05": 0.97, "pi0": 0.94, "xvla": 0.99, "xwam": 0.72, "motus": 0.85, "starvla": 1.0, "fastwam": 0.01, "ahawam": 0.06, "lingbot_va": 0.79, "g05": 0.84}}, {"name": "click_bell_press_stapler", "dim": "D5", "tier": 2, "ctx": "Front desk", "instr": "", "deps": [6, 38], "dep_src": "v1", "smoke": "not re-run (kept from v1)", "score": 0.07, "scores": {"dm05": 0.07, "wla_formal": 0.0, "pi05": 0.0, "pi0": 0.0, "xvla": 0.95, "xwam": 0.01, "motus": 0.59, "starvla": 0.17, "fastwam": 0.03, "ahawam": 0.07, "lingbot_va": 0.04, "g05": 0.12}}, {"name": "serve_teabox_then_ring", "dim": "D5", "tier": 2, "ctx": "Kitchen prep", "instr": "Put the {A} into the basket, then press the bell.", "deps": [23, 6], "dep_src": "table", "smoke": "2/2", "score": 0.0, "scores": {"dm05": 0.0, "wla_formal": 0.0, "pi05": 0.01, "pi0": 0.0, "xvla": 0.0, "xwam": 0.01, "motus": 0.0, "starvla": 0.0, "fastwam": 0.0, "ahawam": 0.0, "lingbot_va": 0.0, "g05": 0.01}}, {"name": "stapler_pad_press", "dim": "D5", "tier": 2, "ctx": "Office desk", "instr": "", "deps": [16, 38], "dep_src": "v1", "smoke": "not re-run (kept from v1)", "score": 0.97, "scores": {"dm05": 0.97, "wla_formal": 0.83, "pi05": 0.59, "pi0": 0.15, "xvla": 0.73, "xwam": 0.95, "motus": 0.92, "starvla": 0.99, "fastwam": 0.94, "ahawam": 1.0, "lingbot_va": 1.0, "g05": 0.95}}, {"name": "lift_pot_to_pad", "dim": "D5", "tier": 3, "ctx": "Kitchen prep", "instr": "Lift the {A} with both arms and put it on the pad.", "deps": [12, 16], "dep_src": "table", "smoke": "3/10", "score": 0.0, "scores": {"dm05": 0.0, "wla_formal": 0.0, "pi05": 0.11, "pi0": 0.0, "xvla": 0.0, "xwam": 0.02, "motus": 0.09, "starvla": 0.0, "fastwam": 0.0, "ahawam": 0.0, "lingbot_va": 0.34, "g05": 0.0}}, {"name": "pack_toycar_then_ring", "dim": "D5", "tier": 3, "ctx": "Entryway", "instr": "Put the {A} into the plastic box, then press the bell.", "deps": [33, 27, 6], "dep_src": "table", "smoke": "2/2", "score": 0.01, "scores": {"dm05": 0.01, "wla_formal": 0.0, "pi05": 0.24, "pi0": 0.0, "xvla": 0.08, "xwam": 0.35, "motus": 0.03, "starvla": 0.0, "fastwam": 0.0, "ahawam": 0.06, "lingbot_va": 0.21, "g05": 0.17}}, {"name": "move_cup_pad_mix", "dim": "D6", "tier": 2, "ctx": "Office desk", "instr": "Move the {A} onto the pad.", "deps": [16], "dep_src": "table", "smoke": "2/2", "score": 0.83, "scores": {"dm05": 0.83, "wla_formal": 0.3, "pi05": 0.78, "pi0": 0.01, "xvla": 0.0, "xwam": 0.09, "motus": 0.2, "starvla": 0.08, "fastwam": 0.24, "ahawam": 0.35, "lingbot_va": 0.73, "g05": 0.39}}, {"name": "ref_block_on_plate_mix", "dim": "D6", "tier": 2, "ctx": "Table clearing", "instr": "Pick up the {A}.", "deps": [28], "dep_src": "table", "smoke": "2/2", "score": 0.0, "scores": {"dm05": 0.0, "wla_formal": 0.0, "pi05": 0.0, "pi0": 0.0, "xvla": 0.0, "xwam": 0.0, "motus": 0.0, "starvla": 0.16, "fastwam": 0.0, "ahawam": 0.0, "lingbot_va": 0.11, "g05": 0.0}}, {"name": "attr_teabox_basket_then_ring", "dim": "D6", "tier": 3, "ctx": "Kitchen prep", "instr": "Put the {A} into the basket, then press the bell.", "deps": [23, 6, 19], "dep_src": "table", "smoke": "2/3", "score": 0.0, "scores": {"dm05": 0.0, "wla_formal": 0.0, "pi05": 0.0, "pi0": 0.0, "xvla": 0.0, "xwam": 0.01, "motus": 0.01, "starvla": 0.02, "fastwam": 0.0, "ahawam": 0.0, "lingbot_va": 0.0, "g05": 0.0}}, {"name": "card_right_of_scanner_mix", "dim": "D6", "tier": 3, "ctx": "Supermarket checkout", "instr": "Put the {A} to the right of the barcode scanner.", "deps": [41, 42, 22], "dep_src": "table", "smoke": "2/3", "score": 0.11, "scores": {"dm05": 0.11, "wla_formal": 0.0, "pi05": 0.08, "pi0": 0.0, "xvla": 0.05, "xwam": 0.02, "motus": 0.0, "starvla": 0.07, "fastwam": 0.01, "ahawam": 0.0, "lingbot_va": 0.06, "g05": 0.56}}, {"name": "place_teabox_skillet_mix", "dim": "D6", "tier": 3, "ctx": "Kitchen prep", "instr": "Put the {A} into the skillet.", "deps": [24], "dep_src": "table", "smoke": "2/2", "score": 0.0, "scores": {"dm05": 0.0, "wla_formal": 0.0, "pi05": 0.0, "pi0": 0.0, "xvla": 0.0, "xwam": 0.0, "motus": 0.0, "starvla": 0.03, "fastwam": 0.0, "ahawam": 0.0, "lingbot_va": 0.0, "g05": 0.1}}, {"name": "put_toycar_left_basket_mix", "dim": "D6", "tier": 3, "ctx": "Household sorting", "instr": "Put the {A} into the left basket.", "deps": [33, 21], "dep_src": "table", "smoke": "2/6", "score": 0.02, "scores": {"dm05": 0.02, "wla_formal": 0.0, "pi05": 0.04, "pi0": 0.0, "xvla": 0.0, "xwam": 0.18, "motus": 0.28, "starvla": 0.02, "fastwam": 0.0, "ahawam": 0.0, "lingbot_va": 0.05, "g05": 0.22}}, {"name": "roller_to_plate_mix", "dim": "D6", "tier": 3, "ctx": "Kitchen prep", "instr": "Put the {A} on the plate.", "deps": [8, 28], "dep_src": "table", "smoke": "2/5", "score": 0.05, "scores": {"dm05": 0.05, "wla_formal": 0.0, "pi05": 0.5, "pi0": 0.0, "xvla": 0.0, "xwam": 0.2, "motus": 0.06, "starvla": 0.0, "fastwam": 0.0, "ahawam": 0.01, "lingbot_va": 0.38, "g05": 0.36}}], "policies": [["dm05", "DM0.5"], ["wla_formal", "WLA"], ["pi05", "π0.5"], ["pi0", "π0"], ["xvla", "X-VLA"], ["xwam", "X-WAM"], ["motus", "Motus"], ["starvla", "StarVLA"], ["fastwam", "FastWAM"], ["ahawam", "AHA-WAM"], ["lingbot_va", "LingBot-VA"], ["g05", "G0.5"]]};
+const DIMS = {D1:"Skill × object", D2:"Skill × spatial", D3:"Attribute selection", D4:"Referring expressions", D5:"Skill sequences", D6:"Mixed"};
+const base = DATA.base, scenes = DATA.scenes, POL = DATA.policies;
+
+const useCount = new Array(51).fill(0);
+scenes.forEach(s => s.deps.forEach(d => useCount[d]++));
+const unused = [];
+for (let i = 1; i <= 50; i++) if (!useCount[i]) unused.push(i);
+document.getElementById("s-cov").firstChild.nodeValue = String(50 - unused.length);
+document.getElementById("s-un").textContent = String(unused.length);
+document.getElementById("s-un2").textContent = String(unused.length);
+
+const mx = document.getElementById("mx");
+const head = document.createElement("div");
+head.className = "mrow";
+head.appendChild(Object.assign(document.createElement("div"), {className: "colhead"}));
+for (let i = 1; i <= 50; i++) {
+  const c = document.createElement("div");
+  c.className = "colhead " + (useCount[i] ? "used" : "unused");
+  c.dataset.col = i;
+  const l = document.createElement("div");
+  l.className = "lbl";
+  l.textContent = i + "  " + base[i - 1];
+  c.appendChild(l);
+  head.appendChild(c);
+}
+mx.appendChild(head);
+
+const scoreCls = v => (v === null || v === undefined) ? "" : (v >= 0.6 ? "g" : v >= 0.2 ? "m" : "b");
+const fmt = v => (v === null || v === undefined) ? "—" : v.toFixed(2);
+const rows = [];
+let lastDim = null;
+const body = document.createElement("div");
+body.className = "mrow";
+scenes.forEach(s => {
+  if (s.dim !== lastDim) {
+    lastDim = s.dim;
+    const h = document.createElement("div");
+    h.className = "grouphdr";
+    h.innerHTML = '<span class="g">' + s.dim + '</span><span class="gd">' + DIMS[s.dim] + "</span>";
+    body.appendChild(h);
+  }
+  const rail = document.createElement("div");
+  rail.className = "rail";
+  rail.innerHTML = '<span class="tier">L' + s.tier + '</span><span class="nm">' + s.name + "</span>" +
+    '<span class="sc ' + scoreCls(s.score) + '">' + fmt(s.score) + "</span>";
+  body.appendChild(rail);
+  const cells = [];
+  const on = new Set(s.deps);
+  for (let i = 1; i <= 50; i++) {
+    const c = document.createElement("div");
+    c.className = "cell" + (on.has(i) ? " on" : "");
+    c.dataset.col = i;
+    body.appendChild(c);
+    cells.push(c);
+  }
+  rows.push({s, rail, cells});
+});
+mx.appendChild(body);
+
+const ro = document.getElementById("ro");
+let pinned = null;
+function paint(rec, mode) { rec.rail.classList.toggle(mode, true); rec.cells.forEach(c => c.classList.toggle(mode, true)); }
+function clearAll(mode) {
+  rows.forEach(r => { r.rail.classList.remove(mode); r.cells.forEach(c => c.classList.remove(mode)); });
+  document.querySelectorAll(".colhead.hot").forEach(c => c.classList.remove("hot"));
+}
+function markCols(rec) {
+  rec.s.deps.forEach(d => { const h = head.querySelector('.colhead[data-col="' + d + '"]'); if (h) h.classList.add("hot"); });
+}
+function show(rec) {
+  const s = rec.s;
+  const deps = s.deps.map(d => '<span class="chip"><i>' + d + "</i>" + base[d - 1] + "</span>").join("");
+  const pols = POL.map(([k, lab]) => {
+    const v = s.scores ? s.scores[k] : undefined;
+    return '<span class="pol ' + scoreCls(v) + '">' + lab + '<b>' + fmt(v) + '</b></span>';
+  }).join("");
+  ro.innerHTML =
+    '<div class="top"><span class="rn">' + s.name + '</span>' +
+    '<span class="meta">' + s.dim + " " + DIMS[s.dim] + " · L" + s.tier + " · " + s.ctx +
+    " · expert yield " + (s.smoke || "—") + "</span></div>" +
+    (s.instr ? '<div class="instr">' + s.instr + "</div>" : "") +
+    '<div class="chips">' + (deps || '<span class="hint">no recorded dependency</span>') + "</div>" +
+    '<div class="chips">' + pols + "</div>";
+}
+rows.forEach(rec => {
+  [rec.rail, ...rec.cells].forEach(t => t.addEventListener("mouseenter", () => {
+    if (pinned) return; clearAll("pin"); paint(rec, "pin"); markCols(rec); show(rec);
+  }));
+  rec.rail.tabIndex = 0;
+  const toggle = () => {
+    if (pinned === rec) { pinned = null; clearAll("pin"); }
+    else { pinned = rec; clearAll("pin"); paint(rec, "pin"); markCols(rec); show(rec); }
+  };
+  rec.rail.addEventListener("click", toggle);
+  rec.cells.forEach(c => c.addEventListener("click", toggle));
+  rec.rail.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+});
+rows.forEach(r => r.rail.classList.add("srow"));
+
+(function () {
+  const SVG = "http://www.w3.org/2000/svg";
+  const el = (t, a) => { const n = document.createElementNS(SVG, t); for (const k in a) n.setAttribute(k, a[k]); return n; };
+  const arc = document.getElementById("arc");
+  const XL = 211, XR = 631, ROW = 15, TOP = 44, PAD = 16, GAP = 13, W = 816;  // tight margins: labels sized to the longest names
+  const L = []; let y = TOP, prev = null; const grpMarks = [];
+  scenes.forEach(s => {
+    if (s.dim !== prev) { if (prev !== null) y += GAP; grpMarks.push({dim: s.dim, y: y}); prev = s.dim; }
+    L.push({s, y: y}); y += ROW;
+  });
+  const hL = y;
+  const hR = TOP + 50 * ROW;
+  const offR = Math.max(0, (hL - hR) / 2);
+  const R = []; for (let i = 1; i <= 50; i++) R.push({i, y: TOP + offR + (i - 1) * ROW});
+  const H = Math.max(hL, hR + offR) + PAD;
+  arc.setAttribute("viewBox", "0 0 " + W + " " + H); arc.setAttribute("width", W); arc.setAttribute("height", H);
+  arc.appendChild(Object.assign(el("text", {x: XL, y: 22, "text-anchor": "end", class: "colcap"}), {textContent: "EVALUATION SCENES " + scenes.length}));
+  arc.appendChild(Object.assign(el("text", {x: XR, y: 22, class: "colcap"}), {textContent: "ROBOTWIN BASE TASKS 50"}));
+  grpMarks.forEach(g => { const t = el("text", {x: 8, y: g.y + 8, class: "grp"}); t.textContent = g.dim; arc.appendChild(t); });
+  const linksOf = new Map(), partners = new Map();
+  const push = (m, k, v) => { if (!m.has(k)) m.set(k, []); m.get(k).push(v); };
+  const yOfBase = new Map(R.map(r => [r.i, r.y]));
+  L.forEach(n => n.s.deps.forEach(d => {
+    const y1 = n.y + 3.5, y2 = yOfBase.get(d) + 3.5;
+    const path = el("path", {class: "lnk", d: "M" + XL + "," + y1 + " C" + (XL + 155) + "," + y1 + " " + (XR - 155) + "," + y2 + " " + XR + "," + y2});
+    arc.appendChild(path);
+    push(linksOf, "s:" + n.s.name, path); push(linksOf, "b:" + d, path);
+    push(partners, "s:" + n.s.name, "b:" + d); push(partners, "b:" + d, "s:" + n.s.name);
+  }));
+  const nodes = new Map();
+  function addNode(key, x, ty, label, anchor, extra) {
+    const t = el("text", {x: x, y: ty + 7, "text-anchor": anchor}); if (extra) t.setAttribute("class", extra); t.textContent = label;
+    const dot = el("circle", {cx: anchor === "end" ? XL : XR, cy: ty + 3.5, r: 2.4, class: "dot" + (extra ? " " + extra : "")});
+    const hit = el("rect", {x: anchor === "end" ? 4 : XR - 4, y: ty - 2, width: anchor === "end" ? XL : W - XR, height: ROW, class: "hit", tabindex: 0});
+    arc.appendChild(t); arc.appendChild(dot); arc.appendChild(hit);
+    nodes.set(key, {t, dot, hit});
+    const on = () => focus(key), off = () => blur();
+    hit.addEventListener("mouseenter", on); hit.addEventListener("mouseleave", off);
+    hit.addEventListener("focus", on); hit.addEventListener("blur", off);
+  }
+  L.forEach(n => addNode("s:" + n.s.name, XL - 9, n.y, n.s.name, "end", ""));
+  R.forEach(r => addNode("b:" + r.i, XR + 9, r.y, r.i + "  " + base[r.i - 1], "start", useCount[r.i] ? "" : "unused"));
+  function focus(key) {
+    arc.classList.add("focus");
+    (linksOf.get(key) || []).forEach(p => p.classList.add("hl"));
+    [key].concat(partners.get(key) || []).forEach(k => { const n = nodes.get(k); if (n) { n.t.classList.add("hl"); n.dot.classList.add("hl"); } });
+  }
+  function blur() { arc.classList.remove("focus"); arc.querySelectorAll(".hl").forEach(n => n.classList.remove("hl")); }
+})();
+
+const order = [];
+for (let i = 1; i <= 50; i++) if (useCount[i]) order.push(i);
+order.sort((a, b) => useCount[b] - useCount[a] || a - b);
+const max = useCount[order[0]];
+document.getElementById("reuse").innerHTML = order.slice(0, 10).map(i =>
+  '<div class="rb"><span>' + base[i - 1] + '</span><span><span class="bar" style="width:' + (useCount[i] / max * 100).toFixed(1) + '%"></span></span><span class="n">' + useCount[i] + "</span></div>").join("");
+document.getElementById("cov").innerHTML = unused.map(i => "<div><i>" + i + "</i>" + base[i - 1] + "</div>").join("");
+show(rows[0]); paint(rows[0], "pin"); markCols(rows[0]);
+</script>
+</body></html>

@@ -1,0 +1,121 @@
+# Site-wide configuration for the ManiScope documentation site.
+# Everything marked TODO is a placeholder that must be filled before publishing.
+
+site:
+  # The paper and the repository README use "ManipScope"; the directory name is ManiScope.
+  name: ManipScope
+  short_name: ManipScope
+  tagline: An evaluation-only diagnostic benchmark for robotic instruction following under changed task requirements
+  description: >
+    ManipScope is an evaluation-only diagnostic benchmark for robotic instruction following under
+    changed task requirements, built on RoboTwin 2.0: 48 held-out scenes in six task families, 100 frozen
+    initial states per scene, task-success and selection metrics, and language-following diagnostics
+    (failure decomposition, target reassignment and its controls) that run on any policy.
+  # Leave empty for relative links (works from file:// and any sub-path); set e.g. "/doc" when deploying under a prefix.
+  base_url: ""
+  # false → links end in ".../index.html" and work when the site is opened straight from disk (file://)
+  # or on hosts without directory-index fallback. true → clean ".../" URLs (needs a web server).
+  clean_urls: false
+  # Double-blind mode: hides authors, affiliations, citation, repository/email/community links and
+  # the header GitHub button. Paper / Code buttons link back to this page. Flip to false after review.
+  anonymous: true
+  language: en
+  date: "Nov 2026"            # revision release
+  version: formal48-v1
+  venue: ""                   # not rendered; fill in once the publication venue is announced
+  paper_snapshot: "formal-eval-v1 @ 39808b6"   # code freeze reported in the paper
+
+links:
+  paper: "#"                                        # TODO: arXiv link
+  # Anonymized benchmark repository (org name carries no identity); shown even in anonymous mode.
+  code: "https://github.com/embodied-ai-research/ManiScope"
+  leaderboard: "leaderboard/"
+  email: "TODO@example.com"                         # TODO: contact address
+  upstream_robotwin: "https://github.com/RoboTwin-Platform/RoboTwin"
+  community: "community/"
+
+paper:
+  title: "ManipScope: A Diagnostic Benchmark for Instruction Following and Generalization in Robotic Manipulation"
+  # TODO: replace with the real author list. `mark` is rendered as a superscript.
+  authors:
+    - {name: "Author One", affil: "1", mark: "*"}
+    - {name: "Author Two", affil: "1", mark: "*"}
+    - {name: "Author Three", affil: "2"}
+    - {name: "Corresponding Author", affil: "1", mark: "†"}
+  affiliations:
+    - {id: "1", name: "Institution One"}
+    - {id: "2", name: "Institution Two"}
+  marks: "* Equal contribution · † Corresponding author"
+  bibtex: |
+    @article{manipscope2026,
+      title   = {ManipScope: A Diagnostic Benchmark for Instruction Following and Generalization in Robotic Manipulation},
+      author  = {TODO},
+      journal = {arXiv preprint arXiv:TODO},
+      year    = {2026}
+    }
+
+leaderboard:
+  # Policy display names (as they appear in data/leaderboard.json) to hide from public tables.
+  exclude:
+    - "WLA(内部误用)"      # internal mis-used joint-interface integration; excluded from the paper. Public WLA = "WLA".
+  # Display-name normalisation to match the paper.
+  rename:
+    "GPT-6 Astra(high)": "GPT-6 Astra"
+    "Gemini 3.8 Flash(high)": "Gemini 3.8 Flash"
+    "GalaxeaVLA(G0.5)": "GalaxeaVLA (G0.5)"
+    "StarVLA": "StarVLA (Qwen3-VL-OFT)"
+    "Pi0.5": "π0.5"
+    "pi0": "π0"
+  # Systems listed on the separate Agents leaderboard (language-model agent with tools/controller).
+  agents:
+    - "GPT-6 Astra"
+    - "GPT-6.2 Astra"
+    - "Opus 5.5"
+    - "Gemini 4 Argon"
+    - "Gemini 3.8 Flash"
+  # Row order of the policy tables and column order of the per-scene matrix = paper Table 1 / Tables 11-13.
+  # Names not listed here are appended in data order.
+  order:
+    - "DM0.5"
+    - "π0.5"
+    - "StarVLA (Qwen3-VL-OFT)"
+    - "FastWAM"
+    - "π0"
+    - "AHA-WAM"
+    - "X-VLA"
+    - "WLA"
+    - "GalaxeaVLA (G0.5)"
+    - "X-WAM"
+    - "Motus"
+    - "LingBot-VA"
+    - "GPT-6 Astra"
+    - "GPT-6.2 Astra"
+    - "Opus 5.5"
+    - "Gemini 4 Argon"
+    - "Gemini 3.8 Flash"
+
+# Left sidebar. Auto-generated groups (sim-tasks, policies) are inserted where `auto:` appears.
+nav:
+  - {label: Home, href: ""}
+  - label: Usage
+    items:
+      - {label: "Install & Download", href: "usage/install-and-download/"}
+      - {label: "Quick Evaluation", href: "usage/quick-evaluation/"}
+      - {label: "Configurations", href: "usage/configurations/"}
+      - {label: "Policy Integration", href: "usage/policy-integration/"}
+      - {label: "Evaluation Protocol", href: "usage/evaluation-protocol/"}
+  - label: Common Issues
+    items:
+      - {label: "Installation", href: "common-issue/installation/"}
+      - {label: "Evaluation", href: "common-issue/evaluation/"}
+  - label: Simulation Tasks
+    href: "sim-tasks/"
+    auto: tasks
+  - {label: Policies, href: "policies/"}
+  - {label: Leaderboard, href: "leaderboard/"}
+  - {label: Diagnostics, href: "diagnostics/"}
+  - {label: Community, href: "community/"}
+
+# Header buttons (right side)
+header_links:
+  - {label: Code, href: "https://github.com/embodied-ai-research/ManiScope", icon: github}

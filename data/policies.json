@@ -1,0 +1,357 @@
+{
+  "policies": [
+    {
+      "key": "dm05",
+      "hf_repo": "https://huggingface.co/Dexmal/DM05-robotwin2",
+      "code_repo": "https://github.com/dexmal/opendm",
+      "desc": "Dexmal DM0.5，RoboTwin 2.0 微调通才 checkpoint（官方 leaderboard 93.5%）",
+      "policy_name": "DM05",
+      "ckpt_setting": "dm05",
+      "server": "http",
+      "port": 7891,
+      "launch": "suite/launch/start_dm05.sh",
+      "launch_note": "服务在 dexbotic/opendm（opendm 环境）里跑，模型用 DM05_MODEL 指定。 必须 --model-config.vision-attn-implementation sdpa（本机无 flash_attn）。\n",
+      "required_env": [
+        "DM05_MODEL",
+        "OPENDM_DIR",
+        "OPENDM_ENV"
+      ],
+      "desc_en": "Dexmal DM0.5, RoboTwin 2.0 fine-tuned generalist checkpoint; three RGB views, 14-D absolute joint actions in chunks of 50.",
+      "interface": {
+        "control": "Joint",
+        "state": "14-D joint positions + gripper",
+        "action": "chunks of 14-D absolute joint/gripper targets"
+      },
+      "in_paper": true,
+      "kind": "policy"
+    },
+    {
+      "key": "pi05",
+      "hf_repo": "https://huggingface.co/motus-robotics/pi0.5_robotwin2",
+      "code_repo": "https://github.com/Physical-Intelligence/openpi",
+      "desc": "Pi0.5 (motus-robotics/pi0.5_robotwin2)，RoboTwin 2.0 全 50 任务微调（clean 50/任务 + randomized 500/任务）",
+      "policy_name": "Pi05",
+      "ckpt_setting": "pi05",
+      "server": "http",
+      "port": 7893,
+      "launch": "suite/launch/start_pi05.sh",
+      "launch_note": "服务在 openpi 的 .venv（PyTorch 路径）里跑：需 transformers==4.53.2 + transformers_replace 覆盖。 训练配置逐项复刻自 checkpoint README：pi05=True, action_horizon=32, adapt_to_pi=True, use_delta_joint_actions=True；服务输出绝对关节角。服务必须单线程（cudagraph 线程敏感）。 首次启动预热约 6 分钟（编译），之后约 20 秒。\n",
+      "required_env": [
+        "OPENPI",
+        "PI05_CKPT"
+      ],
+      "desc_en": "π0.5 (motus-robotics/pi0.5_robotwin2), OpenPI; trained on all 50 RoboTwin 2.0 tasks with 50 clean + 500 randomized demonstrations per task; action horizon 32.",
+      "interface": {
+        "control": "Joint",
+        "state": "14-D joint positions + gripper",
+        "action": "chunks of 14-D absolute joint/gripper targets"
+      },
+      "in_paper": true,
+      "kind": "policy"
+    },
+    {
+      "key": "xvla",
+      "hf_repo": "https://huggingface.co/2toINF/X-VLA-RoboTwin2",
+      "code_repo": "https://github.com/2toINF/X-VLA",
+      "desc": "X-VLA 0.9B RoboTwin 版 (2toINF/X-VLA-RoboTwin2)，Florence-2-large + flow matching，RoboTwin 2.0 全任务从头训练（榜单 70%）",
+      "policy_name": "XVLA",
+      "ckpt_setting": "xvla",
+      "server": "http",
+      "port": 7960,
+      "launch": "suite/launch/start_xvla.sh",
+      "launch_note": "**控制空间是末端 6D 位姿（ee6d），不是关节角**：插件按官方 client 解码成 16 维走 take_action(action_type=\"ee\")（curobo 规划）。属方法本身，报告需注明； step_lim 仍按 take_action 次数计，ee 模式一次调用是一段规划轨迹。 domain_id=6（Agilex）。服务约 4GB 显存，214ms/次。\n",
+      "required_env": [
+        "XVLA_CKPT",
+        "XVLA_DIR"
+      ],
+      "desc_en": "X-VLA 0.9B RoboTwin checkpoint (Florence-2-large + flow matching), trained on the full RoboTwin 2.0 task set; 20-D EEF state, 16-D EEF actions executed through cuRobo.",
+      "interface": {
+        "control": "EEF",
+        "state": "20-D: xyz + rot6D + grip, two arms",
+        "action": "16-D: xyz + quaternion + grip, two arms (cuRobo)"
+      },
+      "in_paper": true,
+      "kind": "policy"
+    },
+    {
+      "key": "pi0",
+      "hf_repo": "https://huggingface.co/yuffish/robotwin-pi0_aloha-agilex_clean-50",
+      "code_repo": "https://github.com/Physical-Intelligence/openpi",
+      "desc": "pi0 (yuffish/robotwin-pi0_aloha-agilex_clean-50)，openpi JAX，aloha-agilex clean-50 微调 35000 步（无 README，训练配置按 openpi Aloha 默认）",
+      "policy_name": "Pi0",
+      "ckpt_setting": "pi0",
+      "server": "http",
+      "port": 7894,
+      "launch": "suite/launch/start_pi0.sh",
+      "launch_note": "JAX 路径：XLA 关预分配以便与同卡其它车道共存。adapt_to_pi / use_delta_joint_actions 按 openpi LeRobotAlohaDataConfig 默认（均 True），冒烟不通再试其它组合。\n",
+      "required_env": [
+        "OPENPI",
+        "PI0_CKPT"
+      ],
+      "desc_en": "π0 (yuffish/robotwin-pi0_aloha-agilex_clean-50), OpenPI JAX; clean-50 adaptation for 35,000 steps.",
+      "interface": {
+        "control": "Joint",
+        "state": "14-D joint positions + gripper",
+        "action": "chunks of 14-D absolute joint/gripper targets"
+      },
+      "in_paper": true,
+      "kind": "policy"
+    },
+    {
+      "key": "wla_formal",
+      "desc": "WLA-0 (SJTU-DENG-Lab/wla_robotwin_all_image_action)，World-Language-Action，RynnBrain-2B + Sana-600M 世界模型，RoboTwin 2.0 全 50 任务 image_action 训练（论文报 Clean 92.94%）",
+      "hf_repo": "https://huggingface.co/SJTU-DENG-Lab/wla_robotwin_all_image_action",
+      "code_repo": "https://github.com/SJTU-DENG-Lab/WLA",
+      "policy_name": "WLAFormal",
+      "ckpt_setting": "wla_formal",
+      "server": "http",
+      "port": 7980,
+      "launch": "suite/launch/start_wla_formal.sh",
+      "launch_note": "权重与依赖已在 <deployment-path>、RynnBrain-2B、Sana）。 官方插件逐行复刻：4 图 [历史head(256), head(256), left(256), right(256)]（resize_with_pad）， 历史帧 = 上一 chunk 第 len-8-1 步的观测；状态/动作用官方 configs/norm_stats.json[robotwin_all]； chunk 32；backbone bf16 + action expert fp32。\n",
+      "required_env": [
+        "WLA_MODEL_ID",
+        "WLA_ROOT"
+      ],
+      "desc_en": "WLA (RynnBrain-2B + SANA-600M + flow action head), RoboTwin all-task image_action weights; images resized to 224 and JPEG-encoded, eight historical head images; 16-D EEF state/actions, chunk 32. The evaluated action-sampling path does not call the World Expert or generate subtask text.",
+      "interface": {
+        "control": "EEF",
+        "state": "16-D: xyz + quaternion + grip, two arms",
+        "action": "16-D: xyz + quaternion + grip, two arms (cuRobo)"
+      },
+      "in_paper": true,
+      "kind": "policy"
+    },
+    {
+      "key": "starvla",
+      "desc": "StarVLA Qwen3-VL-OFT (StarVLA/Qwen3-VL-OFT-RoboTwin2-All)，Qwen3-VL-4B + MLP 动作头，RGB-only 三路 224，14 维绝对关节角，chunk 50，RoboTwin 2.0 全 50 任务 clean+randomized 训练 140k 步",
+      "hf_repo": "https://huggingface.co/StarVLA/Qwen3-VL-OFT-RoboTwin2-All",
+      "code_repo": "https://github.com/starVLA/starVLA",
+      "policy_name": "StarVLA",
+      "ckpt_setting": "starvla",
+      "server": "http",
+      "port": 7970,
+      "launch": "suite/launch/start_starvla.sh",
+      "launch_note": "官方 run_policy_server.sh（websocket，PORT+100）+ 本仓库桥接（PORT）。桥接逐行复刻官方 client： 224 INTER_AREA、unnorm_key=new_embodiment、DDIM 10 步、关节重排 [0..5,12,6..11,13]。\n",
+      "required_env": [
+        "STARVLA_CKPT",
+        "STARVLA_DIR"
+      ],
+      "desc_en": "StarVLA instantiated as Qwen3-VL-OFT (Qwen3-VL-4B backbone + MLP action head; continuous L1 regression from action-token hidden states, not quantized tokens or a diffusion head); three 224 RGB views and the instruction only, no proprioception at the model boundary; 14-D absolute joint actions, chunk 50; clean + randomized training for 140k steps.",
+      "interface": {
+        "control": "Joint",
+        "state": "14-D joint positions + gripper",
+        "action": "chunks of 14-D absolute joint/gripper targets"
+      },
+      "in_paper": true,
+      "kind": "policy"
+    },
+    {
+      "key": "fastwam",
+      "desc": "FastWAM (yuanty/fastwam robotwin_uncond_3cam_384)，Wan2.2-TI2V-5B 视频 DiT + 1B 动作 DiT 的世界-动作模型，三视角拼接 384x320，14 维绝对关节角，horizon 32 / replan 24",
+      "hf_repo": "https://huggingface.co/yuanty/fastwam",
+      "hf_note_en": "RoboTwin checkpoint robotwin_uncond_3cam_384.pt; LeRobot-format alternative: https://huggingface.co/lerobot/fastwam_robotwin_uncond_3cam_384",
+      "code_repo": "https://github.com/yuantianyuan01/FastWAM",
+      "policy_name": "FastWAM",
+      "ckpt_setting": "fastwam",
+      "server": "http",
+      "port": 7995,
+      "launch": "suite/launch/start_fastwam.sh",
+      "launch_note": "需要 Wan2.2 侧车（VAE/T5/umt5 tokenizer）在 DIFFSYNTH_MODEL_BASE_PATH 下，DiT 权重来自 .pt。 官方 sim_robotwin.yaml: num_inference_steps=10, replan_steps=24, text_cfg_scale=1.0。\n",
+      "required_env": [
+        "DIFFSYNTH_MODEL_BASE_PATH",
+        "FASTWAM_CKPT",
+        "FASTWAM_ROOT",
+        "FASTWAM_STATS"
+      ],
+      "desc_en": "FastWAM (Wan2.2-TI2V-5B video DiT + 1B action DiT); three views concatenated at 384×320, 14-D absolute joint actions, horizon 32 / replan 24. The evaluated uncond path skips future-video generation; instruction conditioning of this checkpoint remains to be verified.",
+      "interface": {
+        "control": "Joint",
+        "state": "14-D joint positions + gripper",
+        "action": "chunks of 14-D absolute joint/gripper targets"
+      },
+      "in_paper": true,
+      "kind": "policy"
+    },
+    {
+      "key": "ahawam",
+      "desc": "AHA-WAM (SereneC/AHA-WAM-RoboTwin2.0, robotwin_ahawam)，Wan2.2-TI2V-5B 视频 DiT + ActionDiT 双 DiT 异步世界-动作模型，三视角拼接 384x320，14 维绝对关节角，action_chunk 16 / 每 2 chunk 视频 prefill",
+      "hf_repo": "https://huggingface.co/SereneC/AHA-WAM-RoboTwin2.0",
+      "hf_note_en": "robotwin_ahawam.pt + dataset_stats.json",
+      "code_repo": "https://github.com/serene-sivy/AHA-WAM",
+      "policy_name": "AHAWAM",
+      "ckpt_setting": "ahawam",
+      "server": "http",
+      "port": 7996,
+      "launch": "suite/launch/start_ahawam.sh",
+      "launch_note": "与 FastWAM 共用 Wan2.2 侧车（DIFFSYNTH_MODEL_BASE_PATH）。官方 sim_robotwin.yaml: num_inference_steps=10, chunks_per_video_prefill=2, text_cfg_scale=1.0；服务端保持同一 policy 对象以维护历史帧。\n",
+      "required_env": [
+        "AHAWAM_CKPT",
+        "AHAWAM_ROOT",
+        "AHAWAM_STATS",
+        "DIFFSYNTH_MODEL_BASE_PATH"
+      ],
+      "desc_en": "AHA-WAM (asynchronous dual-DiT world-action model on Wan2.2-TI2V-5B); three views at 384×320, 14-D absolute joint actions, chunk 16, video prefill every two chunks.",
+      "interface": {
+        "control": "Joint",
+        "state": "14-D joint positions + gripper",
+        "action": "chunks of 14-D absolute joint/gripper targets"
+      },
+      "in_paper": true,
+      "kind": "policy"
+    },
+    {
+      "key": "xwam",
+      "desc": "X-WAM (sharinka0715)，Wan2.2-TI2V-5B 视频先验统一 4D 世界-动作模型 + 异步去噪，robotwin_sft 权重；16 维 eef 状态、14 维增量 eef 动作（xyz+axisangle+gripper），每次执行 32 步（ee 控制）",
+      "hf_repo": "https://huggingface.co/sharinka0715/X-WAM-checkpoints",
+      "hf_note_en": "artifact robotwin_sft",
+      "code_repo": "https://github.com/sharinka0715/X-WAM",
+      "policy_name": "XWAM",
+      "ckpt_setting": "xwam",
+      "server": "http",
+      "port": 7997,
+      "launch": "suite/launch/start_xwam.sh",
+      "launch_note": "Wan2.2 VAE/T5 用 diffsynth 侧车目录；DiT 由 last.ckpt 覆盖（from_config 构图）。 官方默认 denoise_steps=50, action_denoise_steps=10, cfg=0, action_length=32。\n",
+      "required_env": [
+        "TOKENIZERS_PARALLELISM",
+        "XWAM_EXP",
+        "XWAM_ROOT",
+        "XWAM_WAN_DIR"
+      ],
+      "desc_en": "X-WAM (unified 4D world-action model with Wan2.2 video prior, asynchronous denoising), robotwin_sft weights; 16-D EEF state, native 14-D incremental EEF actions converted to absolute EEF targets, 32 steps per call. Evaluated with early stopping on action completion and the depth branch disabled.",
+      "interface": {
+        "control": "EEF",
+        "state": "16-D: xyz + quaternion + grip, two arms",
+        "action": "16-D absolute EEF targets from 14-D incremental actions (cuRobo)"
+      },
+      "in_paper": true,
+      "kind": "policy"
+    },
+    {
+      "key": "g05",
+      "desc": "GalaxeaVLA G0.5 (OpenGalaxea/G05 g05-robotwin20)，Qwen3.5-2B 单流自回归 VLA（推理 token + 4096 动作 token），三视角 + 14 维关节角，chunk 32 / 官方 replan 8",
+      "hf_repo": "https://huggingface.co/OpenGalaxea/G05",
+      "hf_note_en": "g05-robotwin20/ + action_tokenizer.pt + qwen3_5_2b_base_processor/; gated access",
+      "code_repo": "https://github.com/OpenGalaxea/GalaxeaVLA",
+      "policy_name": "G05",
+      "ckpt_setting": "g05",
+      "server": "http",
+      "port": 7999,
+      "launch": "suite/launch/start_g05.sh",
+      "launch_note": "checkpoints/ 布局用软链接指到 ckpts/g05_robotwin20；官方 deploy_policy.yml: replan_steps=8, num_inference_steps=10, text_cfg_scale=1.0。\n",
+      "required_env": [
+        "G05_ROOT"
+      ],
+      "desc_en": "GalaxeaVLA G0.5 (Qwen3.5-2B + continuous action expert, adapted from g05-base); three views + 14-D joint state. Evaluated in continuous flow-matching mode with autoregressive action tokens and CoT disabled: 32 targets predicted per request, 8 executed by the client. Weights are gated.",
+      "interface": {
+        "control": "Joint",
+        "state": "14-D joint positions + gripper",
+        "action": "chunks of 14-D absolute joint/gripper targets"
+      },
+      "in_paper": true,
+      "kind": "policy"
+    },
+    {
+      "key": "openwam",
+      "desc": "OpenWAM-α (OpenWAM-Official)，Wan2.2-TI2V-5B 双系统联合自注意力世界-动作模型，RoboTwin 2.0 全任务微调；eef 口径（状态 20 维 xyz+rot6d+grip×2，动作 20 维 -> 16 维 ee），每步一个动作、服务端分块",
+      "hf_repo": "https://huggingface.co/OpenWAM/OpenWAM-Alpha-Sim-RoboTwin-Full",
+      "code_repo": "https://github.com/OpenWAM-Official/OpenWAM",
+      "policy_name": "OpenWAM",
+      "ckpt_setting": "openwam",
+      "server": "http",
+      "port": 7998,
+      "launch": "suite/launch/start_openwam.sh",
+      "launch_note": "发布 ckpt 自带 VAE/T5/tokenizer（unified safetensors），无需外部 Wan 目录。 官方 policy_config.yml: action_type=ee, state_dim=20, request_timeout=300。\n",
+      "required_env": [
+        "OPENWAM_CKPT",
+        "OPENWAM_DIR"
+      ],
+      "desc_en": "OpenWAM-α (Wan2.2-TI2V-5B dual-system joint-attention world-action model), RoboTwin 2.0 all-task fine-tune; 20-D EEF state, EEF actions. Registered adapter; not part of the paper snapshot.",
+      "interface": {
+        "control": "EEF",
+        "state": "20-D: xyz + rot6D + grip, two arms",
+        "action": "16-D EEF targets (cuRobo)"
+      },
+      "in_paper": false,
+      "kind": "policy"
+    },
+    {
+      "key": "motus",
+      "desc": "Motus (thu-ml)，统一隐动作世界模型（MoT：Wan2.2 视频 + Qwen3-VL-2B 理解 + 动作专家三专家），RoboTwin 2.0 微调；三视角拼接 384x320，14 维绝对关节角，整段 chunk 执行",
+      "hf_repo": "https://huggingface.co/motus-robotics/Motus_robotwin2",
+      "code_repo": "https://github.com/thu-ml/Motus",
+      "policy_name": "Motus",
+      "ckpt_setting": "motus",
+      "server": "http",
+      "port": 8000,
+      "launch": "suite/launch/start_motus.sh",
+      "launch_note": "Wan2.2 侧车（config/VAE/umt5）+ Qwen3-VL-2B-Instruct 处理器（权重来自 ckpt）；官方 utils/robotwin.yml: 10 步去噪。\n",
+      "required_env": [
+        "MOTUS_CKPT",
+        "MOTUS_ROOT",
+        "MOTUS_VLM",
+        "MOTUS_WAN"
+      ],
+      "desc_en": "Motus (unified latent-action world model: Wan2.2 video + Qwen3-VL-2B understanding + action expert), RoboTwin 2.0 fine-tune; three views at 384×320, 14-D absolute joint targets, full chunk executed.",
+      "interface": {
+        "control": "Joint",
+        "state": "14-D joint positions + gripper",
+        "action": "chunks of 14-D absolute joint/gripper targets"
+      },
+      "in_paper": true,
+      "kind": "policy"
+    },
+    {
+      "key": "lingbot_va",
+      "desc": "LingBot-VA (Robbyant)，自回归因果视频-动作世界模型（Wan2.2 骨干、KV 缓存跨块），RoboTwin post-train；官方三段协议（reset/infer/kv），动作为相对初始位姿的 16 维 eef，take_action(ee)",
+      "hf_repo": "https://huggingface.co/robbyant/lingbot-va-posttrain-robotwin",
+      "code_repo": "https://github.com/Robbyant/lingbot-va",
+      "policy_name": "LingBotVA",
+      "ckpt_setting": "lingbot_va",
+      "server": "http",
+      "port": 8001,
+      "launch": "suite/launch/start_lingbot_va.sh",
+      "launch_note": "官方 launch_client.sh: video_guidance_scale=5, action_guidance_scale=1；配置 va_robotwin_cfg（25 步视频/50 步动作去噪）。\n",
+      "required_env": [
+        "LB_CKPT",
+        "LB_DIR"
+      ],
+      "desc_en": "LingBot-VA (autoregressive causal video-action world model on Wan2.2 with cross-chunk KV cache), RoboTwin post-train; 14-D joint state, 16-D actions relative to the initial EEF pose recovered to absolute EEF targets.",
+      "interface": {
+        "control": "EEF",
+        "state": "14-D joint positions + gripper",
+        "action": "16-D EEF targets recovered from actions relative to the initial pose (cuRobo)"
+      },
+      "in_paper": true,
+      "kind": "policy"
+    },
+    {
+      "key": "eef_bridge",
+      "desc": "Optional externally hosted EEF tool agent. No provider bridge or API credentials are bundled.",
+      "policy_name": "GPT6",
+      "ckpt_setting": "eef_bridge",
+      "server": "http",
+      "port": 18770,
+      "launch": "",
+      "external_only": true,
+      "launch_note": "AUTO_LAUNCH=0; see docs/EXTERNAL_AGENT.md.",
+      "desc_en": "Externally hosted end-effector agent bridge (language-model agent with move_eef / finish tools). No provider implementation or credentials are bundled; used for the GPT-6 Astra, GPT-6.2 Astra, Opus 5.5, Gemini 4 Argon and Gemini 3.8 Flash evaluations.",
+      "interface": {
+        "control": "EEF (agent)",
+        "state": "EEF + joint/gripper state, contact feedback",
+        "action": "move_eef tool: absolute EEF target per call"
+      },
+      "in_paper": false,
+      "kind": "agent"
+    }
+  ],
+  "planned": [
+    {
+      "key": "eventvla",
+      "desc": "EventVLA (InternRobotics)，事件驱动关键帧证据记忆 VLA；RoboTwin-MeM 权重（接入中，未开跑）",
+      "hf_repo": "https://huggingface.co/ganlinyang/EventVLA",
+      "hf_note_en": "RoboTwin-MeM weights",
+      "code_repo": "https://github.com/InternRobotics/EventVLA",
+      "status": "接入中"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+# Static site generator
+pyyaml==6.0.3
+markdown==3.11.3
+# Optional: only for scripts/crop_overview_tiles.py
+pillow>=9.0
+numpy>=1.21

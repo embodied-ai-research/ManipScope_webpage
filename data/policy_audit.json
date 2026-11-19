@@ -1,0 +1,174 @@
+{
+  "_source": "Configuration audit of 22 September 2026 (paper Appendix B.2, Table 8 and the Table 1 provenance footnote): checkpoint files, adapter call paths, model cards and available historical launch logs. Launch-log evidence does not establish identical settings for every accepted episode. Keys are leaderboard display names.",
+  "audit_date": "2026-09-22",
+  "provenance_legend": {
+    "∗": "Robot or latent-action pretraining followed by RoboTwin adaptation. The ∗ group does not imply that pretraining excludes RoboTwin.",
+    "†": "RoboTwin action-policy training from pretrained vision/language/video backbones; no additional robot-action pretraining reported.",
+    "‡": "Checkpoint lineage unverified."
+  },
+  "scope_legend": {
+    "§": "Conditioned on task-name strings; this row does not measure instruction following.",
+    "¶": "Near-zero success on RoboTwin source tasks; this row does not measure instruction following."
+  },
+  "policies": {
+    "DM0.5": {
+      "provenance": "∗",
+      "backbone": "Gemma3 4B + 680M action expert",
+      "robot_pretraining": "DM0.5 robot foundation model (Dexmal/DM05) adapted to RoboTwin",
+      "robotwin_quota": "Multi-task RoboTwin 2.0 (DM05-robotwin2); full quota unresolved",
+      "action_generation": "Flow matching",
+      "predict": "50",
+      "execute": "50",
+      "inference_path": "No explicit future-image sampling in the inspected path; no explicit cross-request image history in the adapter."
+    },
+    "π0.5": {
+      "provenance": "∗",
+      "backbone": "PaliGemma / Gemma + action expert",
+      "robot_pretraining": "Third-party RoboTwin adaptation of the released pi0.5-base (10k+ h robot data reported by openpi)",
+      "robotwin_quota": "50 tasks × (50 clean + 500 randomized) = 27,500 episodes",
+      "action_generation": "Flow matching",
+      "predict": "32",
+      "execute": "32",
+      "inference_path": "Current observation; discretized state input is not discrete action output (not π0-FAST)."
+    },
+    "π0": {
+      "provenance": "‡",
+      "backbone": "PaliGemma / Gemma + action expert",
+      "robot_pretraining": "Third-party π0 checkpoint; parent weights unverified",
+      "robotwin_quota": "'clean-50' identifier, 35,000-step directory; data quota unverified (model card unavailable)",
+      "action_generation": "Flow matching (JAX)",
+      "predict": "50",
+      "execute": "50",
+      "inference_path": "Current observation; parent checkpoint and training quota unverified.",
+      "scope": "¶"
+    },
+    "StarVLA (Qwen3-VL-OFT)": {
+      "provenance": "†",
+      "backbone": "Qwen3-VL-4B-Instruct + residual MLP action head",
+      "robot_pretraining": "None reported beyond the VLM backbone",
+      "robotwin_quota": "50 tasks × (50 clean + 500 randomized) = 27,500; released step 140,000",
+      "action_generation": "MLP / L1 regression",
+      "predict": "50",
+      "execute": "50",
+      "inference_path": "RGB and instruction only at the model boundary (no proprioception); continuous regression from action-token hidden states, not quantized classification or a diffusion head."
+    },
+    "FastWAM": {
+      "provenance": "†",
+      "backbone": "Wan2.2-5B / T5 / VAE + ActionDiT",
+      "robot_pretraining": "None reported; video foundation-model initialization",
+      "robotwin_quota": "2,500 clean + 25,000 randomized; 30k steps reported",
+      "action_generation": "Action denoising",
+      "predict": "32",
+      "execute": "24",
+      "inference_path": "Video co-training; the evaluated uncond path skips future-video generation. Instruction conditioning of this checkpoint remains to be verified."
+    },
+    "AHA-WAM": {
+      "provenance": "†",
+      "backbone": "Wan2.2-5B / T5 / VAE + ActionDiT",
+      "robot_pretraining": "None reported for the evaluated RoboTwin weights",
+      "robotwin_quota": "50 tasks × (50 clean + 500 randomized) = 27,500",
+      "action_generation": "Video/action flow matching (separate phases)",
+      "predict": "16",
+      "execute": "16",
+      "inference_path": "Video prefill every two action chunks; total configured horizon 64 (prefill horizon 32)."
+    },
+    "X-VLA": {
+      "provenance": "‡",
+      "backbone": "Florence-2-large + soft-prompted transformer (0.9B)",
+      "robot_pretraining": "Not confirmed for this RoboTwin checkpoint",
+      "robotwin_quota": "Repository entry: 50 demos per task; full quota unconfirmed",
+      "action_generation": "Flow matching",
+      "predict": "30",
+      "execute": "30",
+      "inference_path": "EEF state and actions (ee6d decoded to 16-D pose/gripper, gripper threshold 0.7); cuRobo motion planning follows action decoding.",
+      "scope": "§"
+    },
+    "WLA": {
+      "provenance": "†",
+      "backbone": "RynnBrain-2B + SANA-600M + flow action head",
+      "robot_pretraining": "None reported (no embodied action pretraining)",
+      "robotwin_quota": "50 tasks; 2,500 clean + 25,000 randomized; 100k steps reported",
+      "action_generation": "Flow matching",
+      "predict": "32",
+      "execute": "32",
+      "inference_path": "Historical head images (history_obs_step = 8); 16-D EEF state/actions. Action sampling bypasses the World Expert and subtask-text generation."
+    },
+    "GalaxeaVLA (G0.5)": {
+      "provenance": "∗",
+      "backbone": "Qwen3.5-2B + continuous action expert",
+      "robot_pretraining": "g05-base (14 embodiments + web/embodied VQA reported) adapted to RoboTwin",
+      "robotwin_quota": "2,500 clean + 25,000 randomized; 4 epochs in the checkpoint config",
+      "action_generation": "Flow matching",
+      "predict": "32",
+      "execute": "8",
+      "inference_path": "Continuous actions enabled; autoregressive action tokens and CoT disabled. Server replan 24, client executes 8 of 32 predicted targets."
+    },
+    "X-WAM": {
+      "provenance": "∗",
+      "backbone": "Wan2.2-5B + action/state + depth branch",
+      "robot_pretraining": "Multi-source robot/simulation pretraining (5,873.9 h, 1,492,026 episodes reported), including RoboTwin",
+      "robotwin_quota": "50 tasks × (50 clean + 500 randomized); RoboTwin also in the pretraining mixture (27,500 episodes / 113.7 h)",
+      "action_generation": "Asynchronous denoising",
+      "predict": "32",
+      "execute": "32",
+      "inference_path": "Action-completion early stop enabled; depth branch disabled. 14-D incremental EEF actions decoded to 16-D absolute EEF targets."
+    },
+    "Motus": {
+      "provenance": "∗",
+      "backbone": "Wan2.2-5B + Qwen3-VL-2B + action/understanding experts",
+      "robot_pretraining": "Multi-stage video and latent-action pretraining (Stage 1 VGM, Stage 2 latent action) before RoboTwin (Stage 3)",
+      "robotwin_quota": "50 tasks × (50 clean + 500 randomized) = 27,500",
+      "action_generation": "Joint video/action flow matching",
+      "predict": "16",
+      "execute": "16",
+      "inference_path": "Inference returns predicted frames and actions; the full 16-action chunk is executed."
+    },
+    "LingBot-VA": {
+      "provenance": "∗",
+      "backbone": "Wan2.2-5B video backbone + action stream",
+      "robot_pretraining": "Large-scale causal video-action pretraining (≈16K h robot data, 1.4T tokens reported) before post-training",
+      "robotwin_quota": "2,500 clean + 25,000 randomized; 50k post-training steps reported",
+      "action_generation": "Causal video/action flow matching",
+      "predict": "variable",
+      "execute": "variable",
+      "inference_path": "Cross-chunk KV updates using execution observations; executes (F−1)·S targets on the first block and F·S afterwards, where F and S are returned frame and within-frame action dimensions. 16-D EEF actions relative to the initial pose."
+    }
+  },
+  "agents": {
+    "GPT-6 Astra": {
+      "backbone": "External multimodal model API (reported identifier gpt-6-astra); returned provider version not independently verified",
+      "action_generation": "Text / tool calls producing numeric EEF targets (move_eef, finish); not a quantized action codebook",
+      "inference_path": "Three RGB views + EEF/joint state + tool results and contact feedback; text and tool history retained within an episode. 120-call budget, soft 3,300 s wall limit."
+    },
+    "Gemini 3.8 Flash": {
+      "backbone": "External multimodal model API (reported identifier gemini-3.8-flash); returned provider version not independently verified",
+      "action_generation": "Text / tool calls producing numeric EEF targets (move_eef, finish); not a quantized action codebook",
+      "inference_path": "Same shared tool/controller interface as GPT-6 as described in the configuration report; independent verification of the full bridge configuration is pending."
+    },
+    "GPT-6.2 Astra": {
+      "backbone": "External multimodal model API (reported identifier gpt-6.2-astra); returned provider version not independently verified",
+      "action_generation": "Text / tool calls producing numeric EEF targets (move_eef, finish); not a quantized action codebook",
+      "inference_path": "Three RGB views + EEF/joint state + tool results and contact feedback; text and tool history retained within an episode. Policy-exported instruction wording; 120-call limit; soft 3,300 s budget excludes API waiting."
+    },
+    "Opus 5.5": {
+      "backbone": "External multimodal model API (reported identifier claude-opus-5-5); returned provider version not independently verified",
+      "action_generation": "Text / tool calls producing numeric EEF targets (move_eef, finish); not a quantized action codebook",
+      "inference_path": "Three RGB views + EEF/joint state + tool results and contact feedback; text and tool history retained within an episode. Policy-exported instruction wording; 120-call limit; soft 3,300 s budget excludes API waiting."
+    },
+    "Gemini 4 Argon": {
+      "backbone": "External multimodal model API (reported identifier gemini-4-argon); returned provider version not independently verified",
+      "action_generation": "Text / tool calls producing numeric EEF targets (move_eef, finish); not a quantized action codebook",
+      "inference_path": "Three RGB views + EEF/joint state + tool results and contact feedback; text and tool history retained within an episode. Policy-exported instruction wording; 120-call limit; soft 3,300 s budget excludes API waiting."
+    }
+  },
+  "findings": [
+    "G0.5 ran in continuous flow-matching mode with autoregressive action tokens and CoT disabled (checkpoint config and historical server logs agree); the server replan setting alone does not specify the executed length, which the client fixes at 8 of 32 targets.",
+    "StarVLA (Qwen3-VL-OFT) regresses continuous actions with an MLP head and L1 loss; it is neither quantized action classification nor a diffusion head, and the bridge forwards RGB and instruction only, without proprioception.",
+    "WLA uses the 16-D end-effector interface (robotwin_all_eef, chunk 32). Its inspected action-sampling path calls the VLM and action expert without invoking the World Expert or generating subtask text.",
+    "X-WAM runs with early stopping on action completion and its depth branch disabled; scores do not correspond to a full 4-D depth-reconstruction configuration.",
+    "None of the twelve inspected inference paths outputs discrete action tokens, so the current results do not support a discrete-versus-continuous action comparison. Agent text/JSON outputs are not quantized action codes either.",
+    "X-WAM's published pretraining mixture already includes RoboTwin (27,500 episodes, 113.7 h). This establishes domain exposure, not exposure to the derived ManipScope combinations.",
+    "Prediction and execution lengths differ (G0.5 32/8, FastWAM 32/24, AHA-WAM 16 per chunk within a 64 horizon, Motus 16/16); none of these lengths is a measured control frequency.",
+    "Nine checkpoints report 50 clean + 500 randomized demonstrations per RoboTwin task (27,500 episodes); quotas remain unresolved for DM0.5, π0 and X-VLA. Equal episode counts do not equalize augmentation, sampling or compute."
+  ]
+}

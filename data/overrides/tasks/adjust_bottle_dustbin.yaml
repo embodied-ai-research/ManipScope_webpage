@@ -1,0 +1,8 @@
+# Paper Appendix C.1: instruction delivery differs between policies and agents on this task.
+delivery_note: >-
+  Instruction delivery differs between system groups on this task. Learned policies receive
+  oracle-staged instructions (COMBO_STAGED_INSTRUCTION=1): the instruction switches to the second
+  stage once stage 1 succeeds. The two agents (GPT-6, Gemini 3.8 Flash) receive the complete compound
+  instruction from the start (COMBO_STAGED_INSTRUCTION=0); GPT-6's result is the corrected rerun
+  (1/5, originally 0/5 under staged delivery). Seeds, success predicate and step limit are unchanged,
+  but agent and policy numbers on this scene are not measured under identical instruction conditions.

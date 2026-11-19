@@ -1,0 +1,11 @@
+site/
+docs/
+# Internal reference material (paper drafts, audit sheets); never published or pushed.
+reference_doc/
+# Processed video samples for internal review; never pushed.
+video_sample/
+__pycache__/
+*.pyc
+.DS_Store
+# Large media are tracked with Git LFS or hosted externally; uncomment to ignore locally.
+# assets/videos/*.mp4

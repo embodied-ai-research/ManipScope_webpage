@@ -1,0 +1,13 @@
+# Manual override example. Fields here replace the auto-extracted ones for this scene
+# (see scripts/sync_from_maniscope.py). Derived from envs/attr_bind_bottle.py check_success().
+description_en: >-
+  Two bottles of the same shape but different colours (a brown cola bottle and a green soda bottle)
+  lie on the table. The instruction names one colour; pick up that bottle. Colour is the only cue,
+  so guessing scores 50 %.
+scoring:
+  - score: 0
+    cond: The other-coloured bottle moved at least as much as the instructed one (wrong object selected).
+  - score: 0
+    cond: The instructed bottle was only stood upright or nudged; its collision geometry is not at least 2 cm above the table while held by a gripper.
+  - score: 100
+    cond: The instructed bottle moved more than the distractor **and** is lifted ≥ 2 cm above its initial support while in gripper contact.

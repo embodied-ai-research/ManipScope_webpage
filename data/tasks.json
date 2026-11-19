@@ -1,0 +1,5293 @@
+{
+ "suite": {
+  "name": "formal48-v1",
+  "protocol_version": "formal48-v1",
+  "episodes_default": 50,
+  "task_config": "demo_clean",
+  "instruction_type": "unseen",
+  "formal_scenes": 48,
+  "seeds_per_scene": 100,
+  "randomized_task_config": "_rand_noclutter",
+  "randomized_anchors": [
+   "move_cup_pad",
+   "attr_bind_bottle",
+   "ref_block_on_plate",
+   "place_a2b_left_novel",
+   "stapler_pad_press",
+   "ref_second_from_left"
+  ]
+ },
+ "tiers": {
+  "L1": {
+   "zh": "单点替换 —— 克隆一个训练任务只动一个变量，干扰物 0-1 个，单段动作",
+   "en": "Single substitution: one variable changed from a training task, 0-1 distractors, single-segment motion."
+  },
+  "L2": {
+   "zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+   "en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion."
+  },
+  "L3": {
+   "zh": "双约束 / 双段 —— 两个约束同时成立，或两段动作有真实先后依赖",
+   "en": "Two constraints / two segments: two constraints hold simultaneously, or two segments with a real ordering dependency."
+  },
+  "L4": {
+   "zh": "复合深度 —— 三个及以上约束，或需要重复执行 / 多目标分派",
+   "en": "Compositional depth: three or more constraints, or repeated execution / multi-target dispatch."
+  }
+ },
+ "excluded": {
+  "reason": "Removed from the 51-scene candidate list because scripted-expert generation yield was below the 30 % threshold (12–15 % measured): the retained seed set would have concentrated on a narrow subset of states. These are feasibility decisions, not removals based on policy scores.",
+  "measured": {
+   "place_a2b_behind_novel": "4/26 ~ 15%",
+   "attr_color_bottle_basket": "4/26 ~ 15%",
+   "ref_cube_on_plate_to_pad": "3/26 ~ 12%"
+  },
+  "scenes": [
+   "attr_color_bottle_basket",
+   "place_a2b_behind_novel",
+   "ref_cube_on_plate_to_pad"
+  ],
+  "status": "Scene definitions, instruction pools and configs were deleted from the repository on 2026-09-16; only this record of the exclusion remains."
+ },
+ "dimensions": [
+  {
+   "id": "D1",
+   "repo_id": "D1",
+   "axis": "skill_x_object",
+   "name_en": "Skill–object transfer",
+   "short_en": "Skill–object",
+   "desc_en": "A familiar skill is applied to an object that changes relative to the source task.",
+   "desc_zh": "训练过的技能迁到没见过的物体",
+   "scenes": [
+    {
+     "name": "grab_dumbbell",
+     "title": "Grab dumbbell",
+     "index": 1,
+     "dim": "D1",
+     "repo_dim": "D1",
+     "tier": "L1",
+     "tier_desc_zh": "单点替换 —— 克隆一个训练任务只动一个变量，干扰物 0-1 个，单段动作",
+     "tier_desc_en": "Single substitution: one variable changed from a training task, 0-1 distractors, single-segment motion.",
+     "source": "generated",
+     "criterion": "lift",
+     "criterion_en": "Lift: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper.",
+     "context_zh": "健身角",
+     "context_en": "Gym corner",
+     "baseline": [
+      "grab_roller"
+     ],
+     "note_zh": "",
+     "smoke": "2/4",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Grab the {A}.",
+       "Pick up the {A} with {a}."
+      ],
+      "unseen": [
+       "Pick up the {A}.",
+       "Please pick up the {A}."
+      ],
+      "schema": "",
+      "note": "D1-10 skill x object L1;判据=lift;由 suite/table.py 生成"
+     },
+     "a_desc": "dumbbell",
+     "goal": {
+      "type": "lift",
+      "dz": 0.035
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "052_dumbbell",
+       "ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+       ],
+       "desc": "dumbbell",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Pick up the dumbbell and lift it at least 0.04 m off its support.",
+     "env_doc": "D1-10 · skill x object · L1 · 健身角\n\n依赖的 RoboTwin 基础任务: 8 grab_roller\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Pick up the dumbbell and lift it at least 0.04 m off its support."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/grab_dumbbell_success.mp4",
+      "failure": "assets/videos/grab_dumbbell_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/grab_dumbbell.png"
+    },
+    {
+     "name": "move_can_coaster",
+     "title": "Move can coaster",
+     "index": 2,
+     "dim": "D1",
+     "repo_dim": "D1",
+     "tier": "L1",
+     "tier_desc_zh": "单点替换 —— 克隆一个训练任务只动一个变量，干扰物 0-1 个，单段动作",
+     "tier_desc_en": "Single substitution: one variable changed from a training task, 0-1 distractors, single-segment motion.",
+     "source": "generated",
+     "criterion": "on",
+     "criterion_en": "On: the target rests on top of the reference object within the declared xy/z tolerance.",
+     "context_zh": "床头药盒",
+     "context_en": "Bedside pillbox",
+     "baseline": [
+      "place_can_basket",
+      "place_empty_cup"
+     ],
+     "note_zh": "",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} on the coaster.",
+       "Place the {A} on the coaster.",
+       "Put the {A} on the coaster with {a}."
+      ],
+      "unseen": [
+       "Put the {A} on the coaster.",
+       "Please put the {A} on the coaster."
+      ],
+      "schema": "",
+      "note": "D1-03 skill x object L1;判据=on;由 suite/table.py 生成"
+     },
+     "a_desc": "pill bottle",
+     "goal": {
+      "type": "on",
+      "ref": "coaster"
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "071_can",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "can",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "coaster",
+       "kind": "reference",
+       "type": "model",
+       "model": "019_coaster",
+       "ids": [
+        0
+       ],
+       "desc": "coaster",
+       "static": true,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Place the pill bottle on top of the coaster.",
+     "env_doc": "D1-03 · skill x object · L1 · 床头药盒\n\n依赖的 RoboTwin 基础任务: 26 place_can_basket, 30 place_empty_cup\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target rests on top of the reference object within the declared xy/z tolerance. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Place the pill bottle on top of the coaster."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/move_can_coaster_success.mp4",
+      "failure": "assets/videos/move_can_coaster_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/move_can_coaster.png"
+    },
+    {
+     "name": "move_cup_pad",
+     "title": "Move cup pad",
+     "index": 3,
+     "dim": "D1",
+     "repo_dim": "D1",
+     "tier": "L1",
+     "tier_desc_zh": "单点替换 —— 克隆一个训练任务只动一个变量，干扰物 0-1 个，单段动作",
+     "tier_desc_en": "Single substitution: one variable changed from a training task, 0-1 distractors, single-segment motion.",
+     "source": "handwritten",
+     "criterion": "handwritten",
+     "criterion_en": "Handwritten: task-specific `check_success` in the environment file (see the description).",
+     "context_zh": "办公桌",
+     "context_en": "Office desk",
+     "baseline": [
+      "move_stapler_pad"
+     ],
+     "note_zh": "手写克隆 move_stapler_pad，判据含姿态与双爪张开",
+     "smoke": "未跑（v1 沿用）",
+     "step_limit": 600,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Grab {A} and drop it on {B} mat.",
+       "{a} moves {A} to the {B} mat.",
+       "Set {A} onto the {B} colored mat.",
+       "{a} places {A} on the {B} mat.",
+       "Drop {A} onto the {B} mat.",
+       "Stick {A} onto the {B} colored mat.",
+       "{a} grabs {A} and sets it on {B} mat.",
+       "Slide {A} to the {B} colored mat.",
+       "{a} transfers {A} to the {B} mat.",
+       "Stick {A} on the {B} mat.",
+       "Grab {A} using {a} and set it on {B} mat.",
+       "Move {A} to the {B} mat.",
+       "Transfer {A} to the {B} colored mat.",
+       "Use {a} and place {A} on {B} mat.",
+       "Set {A} on the {B} mat with {a}.",
+       "Position {A} on the {B} mat.",
+       "Pick {A} using {a} and move it to {B} mat.",
+       "Place {A} onto the {B} colored mat.",
+       "Relocate {A} to the {B} mat.",
+       "Grab {A} with {a} and drop it on {B} mat.",
+       "Grab {A}, place it on the {B} mat",
+       "Using {a}, set {A} on the {B} colored mat",
+       "Put {A} on the {B} mat",
+       "Lift {A} to the {B} mat using {a}",
+       "Place {A} onto the {B} colored mat",
+       "Set {A} down on the {B} mat",
+       "With {a}, position {A} on the {B} mat",
+       "Transfer {A} to the {B} mat",
+       "Move {A} with {a} to the {B} mat",
+       "Drop {A} carefully on the {B} mat",
+       "Place {A} on the {B} mat using {a}",
+       "Lift {A} and drop it onto {B} mat",
+       "Shift {A} manually to the {B} mat",
+       "Move {A} to the {B} mat with {a}",
+       "Grab {A} and stick it onto {B} mat",
+       "Use {a} to grab {A} and place it on {B} mat",
+       "Pick {A} up and position it on {B} mat",
+       "Carry {A} and drop it onto the {B} mat",
+       "Use {a} to shift {A} onto the {B} mat",
+       "Pick {A} with {a} and place it on {B} mat",
+       "Use {a} to grab {A} and move it",
+       "Set {A} down on the {B} mat",
+       "Pick up {A} and place it on {B} mat",
+       "Grab {A} using {a} and shift it to {B}",
+       "Relocate {A} to the {B} colored mat",
+       "Use {a} to place {A} onto the {B} mat",
+       "Shift {A} to the {B} mat",
+       "Pick up {A} with {a} and set it on {B}",
+       "Carry {A} to the {B} colored mat",
+       "With {a}, move {A} to the {B} mat"
+      ],
+      "unseen": [
+       "Move {A} to the {B} mat.",
+       "Place {A} on the {B} colored mat.",
+       "Use {a} to move {A} to {B} mat.",
+       "Place {A} on the {B} colored mat.",
+       "Use {a} to move {A} to the {B} mat",
+       "Move {A} to the {B} colored mat",
+       "Grab {A} and set it on {B} mat",
+       "Use {a} to move {A} to {B} mat",
+       "Move {A} to the {B} mat",
+       "Place {A} on the {B} mat"
+      ],
+      "schema": "{A} notifies the stapler, {B} notifies the color of the mat(YOU SHOULD SAY {B} mat, or {B} colored mat), {a} notifies the arm to grab the stapler",
+      "note": "move_cup_pad 复用 move_stapler_pad 的模板（占位符相同 {A}{B}{a}）；{A} 会被替换成杯子的描述。"
+     },
+     "a_desc": null,
+     "goal": null,
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "Base_Task",
+     "objects": [],
+     "description_en": "Use appropriate arm to move the stapler to a colored mat.",
+     "env_doc": "组合泛化测试场景（技能 x 物体）。\n\n从 move_stapler_pad 克隆，**只把订书机换成杯子**，其余一字不动。不用于训练。\n内部变量名沿用 stapler_* 以便和原任务逐行对照。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Task-specific `check_success` returns false (wrong object selected, or the declared end state not reached)."
+      },
+      {
+       "score": 100,
+       "cond": "Task-specific `check_success` returns true. See the environment docstring above for the exact rule."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/move_cup_pad_success.mp4",
+      "failure": "assets/videos/move_cup_pad_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/move_cup_pad.png"
+    },
+    {
+     "name": "place_teabox_scale",
+     "title": "Place teabox scale",
+     "index": 4,
+     "dim": "D1",
+     "repo_dim": "D1",
+     "tier": "L1",
+     "tier_desc_zh": "单点替换 —— 克隆一个训练任务只动一个变量，干扰物 0-1 个，单段动作",
+     "tier_desc_en": "Single substitution: one variable changed from a training task, 0-1 distractors, single-segment motion.",
+     "source": "generated",
+     "criterion": "on",
+     "criterion_en": "On: the target rests on top of the reference object within the declared xy/z tolerance.",
+     "context_zh": "超市称重",
+     "context_en": "Supermarket weighing",
+     "baseline": [
+      "place_object_scale"
+     ],
+     "note_zh": "",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} on the scale.",
+       "Place the {A} on the scale.",
+       "Put the {A} on the scale with {a}."
+      ],
+      "unseen": [
+       "Put the {A} on the scale.",
+       "Please put the {A} on the scale."
+      ],
+      "schema": "",
+      "note": "D1-07 skill x object L1;判据=on;由 suite/table.py 生成"
+     },
+     "a_desc": "tea box",
+     "goal": {
+      "type": "on",
+      "ref": "scale"
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "112_tea-box",
+       "ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+       ],
+       "desc": "tea box",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "scale",
+       "kind": "reference",
+       "type": "model",
+       "model": "072_electronicscale",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "scale",
+       "static": true,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Place the tea box on top of the scale.",
+     "env_doc": "D1-07 · skill x object · L1 · 超市称重\n\n依赖的 RoboTwin 基础任务: 34 place_object_scale\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target rests on top of the reference object within the declared xy/z tolerance. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Place the tea box on top of the scale."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/place_teabox_scale_success.mp4",
+      "failure": "assets/videos/place_teabox_scale_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/place_teabox_scale.png"
+    },
+    {
+     "name": "grasp_mallet_novel",
+     "title": "Grasp mallet novel",
+     "index": 5,
+     "dim": "D1",
+     "repo_dim": "D1",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "lift",
+     "criterion_en": "Lift: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper.",
+     "context_zh": "工具台",
+     "context_en": "Workbench",
+     "baseline": [
+      "beat_block_hammer",
+      "grab_roller"
+     ],
+     "note_zh": "",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Grab the {A}.",
+       "Pick up the {A} with {a}."
+      ],
+      "unseen": [
+       "Pick up the {A}.",
+       "Please pick up the {A}."
+      ],
+      "schema": "",
+      "note": "D1-05 skill x object L2;判据=lift;由 suite/table.py 生成"
+     },
+     "a_desc": "wooden mallet",
+     "goal": {
+      "type": "lift",
+      "dz": 0.035
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "084_woodenmallet",
+       "ids": [
+        0,
+        1,
+        2,
+        3,
+        4
+       ],
+       "desc": "wooden mallet",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Pick up the wooden mallet and lift it at least 0.04 m off its support.",
+     "env_doc": "D1-05 · skill x object · L2 · 工具台\n\n依赖的 RoboTwin 基础任务: 2 beat_block_hammer, 8 grab_roller\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Pick up the wooden mallet and lift it at least 0.04 m off its support."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/grasp_mallet_novel_success.mp4",
+      "failure": "assets/videos/grasp_mallet_novel_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/grasp_mallet_novel.png"
+    },
+    {
+     "name": "lift_trophy",
+     "title": "Lift trophy",
+     "index": 6,
+     "dim": "D1",
+     "repo_dim": "D1",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "lift",
+     "criterion_en": "Lift: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper.",
+     "context_zh": "厨房备餐",
+     "context_en": "Kitchen prep",
+     "baseline": [
+      "grab_roller"
+     ],
+     "note_zh": "",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Grab the {A}.",
+       "Pick up the {A} with {a}."
+      ],
+      "unseen": [
+       "Pick up the {A}.",
+       "Please pick up the {A}."
+      ],
+      "schema": "",
+      "note": "D1-09 skill x object L2;判据=lift;由 suite/table.py 生成"
+     },
+     "a_desc": "trophy",
+     "goal": {
+      "type": "lift",
+      "dz": 0.06
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "090_trophy",
+       "ids": [
+        0,
+        1,
+        2,
+        3,
+        4
+       ],
+       "desc": "trophy",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Pick up the trophy and lift it at least 0.06 m off its support.",
+     "env_doc": "D1-09 · skill x object · L2 · 厨房备餐\n\n依赖的 RoboTwin 基础任务: 8 grab_roller\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Pick up the trophy and lift it at least 0.06 m off its support."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/lift_trophy_success.mp4",
+      "failure": "assets/videos/lift_trophy_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/lift_trophy.png"
+    },
+    {
+     "name": "place_seal_coaster",
+     "title": "Place seal coaster",
+     "index": 7,
+     "dim": "D1",
+     "repo_dim": "D1",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "on",
+     "criterion_en": "On: the target rests on top of the reference object within the declared xy/z tolerance.",
+     "context_zh": "厨房备餐",
+     "context_en": "Kitchen prep",
+     "baseline": [
+      "stamp_seal",
+      "place_empty_cup"
+     ],
+     "note_zh": "",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} on the coaster.",
+       "Place the {A} on the coaster.",
+       "Put the {A} on the coaster with {a}."
+      ],
+      "unseen": [
+       "Put the {A} on the coaster.",
+       "Please put the {A} on the coaster."
+      ],
+      "schema": "",
+      "note": "D1-08 skill x object L2;判据=on;由 suite/table.py 生成"
+     },
+     "a_desc": "seal",
+     "goal": {
+      "type": "on",
+      "ref": "coaster"
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "100_seal",
+       "ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "desc": "seal",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "coaster",
+       "kind": "reference",
+       "type": "model",
+       "model": "019_coaster",
+       "ids": [
+        0
+       ],
+       "desc": "coaster",
+       "static": true,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Place the seal on top of the coaster.",
+     "env_doc": "D1-08 · skill x object · L2 · 厨房备餐\n\n依赖的 RoboTwin 基础任务: 49 stamp_seal, 30 place_empty_cup\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target rests on top of the reference object within the declared xy/z tolerance. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Place the seal on top of the coaster."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/place_seal_coaster_success.mp4",
+      "failure": "assets/videos/place_seal_coaster_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/place_seal_coaster.png"
+    },
+    {
+     "name": "place_teabox_skillet",
+     "title": "Place teabox skillet",
+     "index": 8,
+     "dim": "D1",
+     "repo_dim": "D1",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "in",
+     "criterion_en": "In: the target is inside the container — touching it, low velocity, bottom below the rim, and displaced from its start.",
+     "context_zh": "厨房备餐",
+     "context_en": "Kitchen prep",
+     "baseline": [
+      "place_bread_skillet"
+     ],
+     "note_zh": "",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} into the skillet.",
+       "Place the {A} into the skillet.",
+       "Put the {A} into the skillet with {a}."
+      ],
+      "unseen": [
+       "Put the {A} into the skillet.",
+       "Please put the {A} into the skillet."
+      ],
+      "schema": "",
+      "note": "D1-15 skill x object L2;判据=in;由 suite/table.py 生成"
+     },
+     "a_desc": "tea box",
+     "goal": {
+      "type": "in",
+      "ref": "skillet",
+      "r": 0.16
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "112_tea-box",
+       "ids": [
+        0,
+        1,
+        2,
+        3,
+        4
+       ],
+       "desc": "tea box",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "skillet",
+       "kind": "reference",
+       "type": "model",
+       "model": "106_skillet",
+       "ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "desc": "skillet",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Put the tea box inside the skillet.",
+     "env_doc": "D1-15 · skill x object · L2 · 厨房备餐\n\n依赖的 RoboTwin 基础任务: 24 place_bread_skillet\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target is inside the container — touching it, low velocity, bottom below the rim, and displaced from its start. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Put the tea box inside the skillet."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/place_teabox_skillet_success.mp4",
+      "failure": "assets/videos/place_teabox_skillet_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/place_teabox_skillet.png"
+    },
+    {
+     "name": "place_teabox_stand",
+     "title": "Place teabox stand",
+     "index": 9,
+     "dim": "D1",
+     "repo_dim": "D1",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "on",
+     "criterion_en": "On: the target rests on top of the reference object within the declared xy/z tolerance.",
+     "context_zh": "书架",
+     "context_en": "Bookshelf",
+     "baseline": [
+      "place_object_stand"
+     ],
+     "note_zh": "",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} on the display stand.",
+       "Place the {A} on the display stand.",
+       "Put the {A} on the display stand with {a}."
+      ],
+      "unseen": [
+       "Put the {A} on the display stand.",
+       "Please put the {A} on the display stand."
+      ],
+      "schema": "",
+      "note": "D1-12 skill x object L2;判据=on;由 suite/table.py 生成"
+     },
+     "a_desc": "tea box",
+     "goal": {
+      "type": "on",
+      "ref": "stand"
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "112_tea-box",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "tea box",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "stand",
+       "kind": "reference",
+       "type": "model",
+       "model": "074_displaystand",
+       "ids": [
+        0,
+        1,
+        2,
+        3,
+        4
+       ],
+       "desc": "display stand",
+       "static": true,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Place the tea box on top of the display stand.",
+     "env_doc": "D1-12 · skill x object · L2 · 书架\n\n依赖的 RoboTwin 基础任务: 35 place_object_stand\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target rests on top of the reference object within the declared xy/z tolerance. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Place the tea box on top of the display stand."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/place_teabox_stand_success.mp4",
+      "failure": "assets/videos/place_teabox_stand_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/place_teabox_stand.png"
+    },
+    {
+     "name": "place_toycar_plasticbox",
+     "title": "Place toycar plasticbox",
+     "index": 10,
+     "dim": "D1",
+     "repo_dim": "D1",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "in",
+     "criterion_en": "In: the target is inside the container — touching it, low velocity, bottom below the rim, and displaced from its start.",
+     "context_zh": "玄关",
+     "context_en": "Entryway",
+     "baseline": [
+      "place_object_basket",
+      "place_cans_plasticbox"
+     ],
+     "note_zh": "",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} into the plastic box.",
+       "Place the {A} into the plastic box.",
+       "Put the {A} into the plastic box with {a}."
+      ],
+      "unseen": [
+       "Put the {A} into the plastic box.",
+       "Please put the {A} into the plastic box."
+      ],
+      "schema": "",
+      "note": "D1-14 skill x object L2;判据=in;由 suite/table.py 生成"
+     },
+     "a_desc": "toy car",
+     "goal": {
+      "type": "in",
+      "ref": "box",
+      "r": 0.13
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "057_toycar",
+       "ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+       ],
+       "desc": "toy car",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "box",
+       "kind": "reference",
+       "type": "model",
+       "model": "062_plasticbox",
+       "ids": [
+        3,
+        5
+       ],
+       "desc": "plastic box",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Put the toy car inside the plastic box.",
+     "env_doc": "D1-14 · skill x object · L2 · 玄关\n\n依赖的 RoboTwin 基础任务: 33 place_object_basket, 27 place_cans_plasticbox\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target is inside the container — touching it, low velocity, bottom below the rim, and displaced from its start. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Put the toy car inside the plastic box."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/place_toycar_plasticbox_success.mp4",
+      "failure": "assets/videos/place_toycar_plasticbox_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/place_toycar_plasticbox.png"
+    }
+   ]
+  },
+  {
+   "id": "D2",
+   "repo_id": "D2",
+   "axis": "skill_x_spatial",
+   "name_en": "Skill–spatial transfer",
+   "short_en": "Skill–spatial",
+   "desc_en": "A spatial condition (left / right / front / between) must be satisfied for a changed object pair or relation.",
+   "desc_zh": "空间关系迁到没见过的物体对 / 没训练过的关系词",
+   "scenes": [
+    {
+     "name": "place_a2b_left_novel",
+     "title": "Place a2b left novel",
+     "index": 1,
+     "dim": "D2",
+     "repo_dim": "D2",
+     "tier": "L1",
+     "tier_desc_zh": "单点替换 —— 克隆一个训练任务只动一个变量，干扰物 0-1 个，单段动作",
+     "tier_desc_en": "Single substitution: one variable changed from a training task, 0-1 distractors, single-segment motion.",
+     "source": "handwritten",
+     "criterion": "handwritten",
+     "criterion_en": "Handwritten: task-specific `check_success` in the environment file (see the description).",
+     "context_zh": "通用桌面",
+     "context_en": "Generic tabletop",
+     "baseline": [
+      "place_a2b_left"
+     ],
+     "note_zh": "手写克隆 place_a2b_left，判据逐字相同",
+     "smoke": "未跑（v1 沿用）",
+     "step_limit": 600,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Grab {A} using {a} and place left of {B}.",
+       "Place {A} on the left of {B}.",
+       "With {a}, position {A} left of {B}.",
+       "Position {A} to the left of {B}.",
+       "Using {a}, move {A} left of {B}.",
+       "Move {A} to the left of {B}.",
+       "Use {a} and place {A} left of {B}.",
+       "Set {A} left of {B}.",
+       "With {a}, set {A} on the left of {B}.",
+       "Carefully position {A} to the left of {B}.",
+       "Place {A} left of {B} using {a}",
+       "Move {A} to the left of {B}",
+       "Put {A} on the left side of {B}",
+       "Grab {A} with {a} and set left of {B}",
+       "Shift {A} leftward to the side of {B}",
+       "Use {a} to move {A} to {B}'s left",
+       "Adjust {A} to rest on {B}'s left",
+       "Use {a} to position {A} left of {B}",
+       "Place {A} carefully to {B}'s left",
+       "Grab {A} using {a} and move left of {B}",
+       "Use {a}, move {A} left of {B}",
+       "Position {A} to the left of {B}",
+       "Place {A} exactly to the left of {B}",
+       "Using {a}, put {A} on left of {B}",
+       "Set {A} carefully on the left of {B}",
+       "Move {A} to the left side of {B}",
+       "Place {A} to rest left of {B} using {a}",
+       "With {a}, position {A} left of {B}",
+       "Set {A} directly to the left of {B}",
+       "Using {a}, place {A} on the left of {B}",
+       "Move {A} to the left of {B}.",
+       "Grab {A} with {a} and shift it left of {B}.",
+       "Place {A} directly to the left of {B}.",
+       "With {a}, move {A} to the left side of {B}.",
+       "Shift {A} and position it left of {B}.",
+       "Use {a} to move {A} to the left of {B}.",
+       "Set {A} on the left side of {B}.",
+       "Grab {A} using {a} and place it left of {B}.",
+       "Position {A} carefully to the left of {B}.",
+       "Using {a}, set {A} to the left of {B}.",
+       "Put {A} to the left of {B}",
+       "Use {a} to set {A} left of {B}",
+       "Drop {A} on the left side of {B}",
+       "With {a}, stick {A} left of {B}",
+       "Set {A} to the left of {B}",
+       "Place {A} left of {B} using {a}",
+       "Stick {A} on the left of {B}",
+       "Use {a} to put {A} left of {B}",
+       "Drop {A} to the left of {B}",
+       "With {a}, place {A} left of {B}"
+      ],
+      "unseen": [
+       "Use {a} to put {A} left of {B}.",
+       "Set {A} on the left side of {B}.",
+       "Set {A} to the left of {B}",
+       "Position {A} on the left of {B}",
+       "Grab {A} and place left of {B}",
+       "Set {A} down to the left of {B}",
+       "Pick {A} and set it left of {B}.",
+       "Use {a} to place {A} left of {B}.",
+       "Set {A} on the left side of {B}",
+       "Place {A} to the left of {B} using {a}"
+      ],
+      "schema": "{A} notifies the object A, {B} notifies the object B, {a} notifies the arm to grab the object A",
+      "note": "place_a2b_left_novel 复用 place_a2b_left 的模板（占位符相同 {A}{B}{a}）；差异只在物体池。"
+     },
+     "a_desc": null,
+     "goal": null,
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "Base_Task",
+     "objects": [],
+     "description_en": "Use appropriate arm to place object A on the left of object B.",
+     "env_doc": "组合泛化测试场景（技能 x 空间关系）。\n\n从 place_a2b_left 克隆，**只改物体池**，其余全部保持一致。不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Task-specific `check_success` returns false (wrong object selected, or the declared end state not reached)."
+      },
+      {
+       "score": 100,
+       "cond": "Task-specific `check_success` returns true. See the environment docstring above for the exact rule."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/place_a2b_left_novel_success.mp4",
+      "failure": "assets/videos/place_a2b_left_novel_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/place_a2b_left_novel.png"
+    },
+    {
+     "name": "place_a2b_right_novel",
+     "title": "Place a2b right novel",
+     "index": 2,
+     "dim": "D2",
+     "repo_dim": "D2",
+     "tier": "L1",
+     "tier_desc_zh": "单点替换 —— 克隆一个训练任务只动一个变量，干扰物 0-1 个，单段动作",
+     "tier_desc_en": "Single substitution: one variable changed from a training task, 0-1 distractors, single-segment motion.",
+     "source": "handwritten",
+     "criterion": "handwritten",
+     "criterion_en": "Handwritten: task-specific `check_success` in the environment file (see the description).",
+     "context_zh": "通用桌面",
+     "context_en": "Generic tabletop",
+     "baseline": [
+      "place_a2b_right"
+     ],
+     "note_zh": "手写克隆 place_a2b_right",
+     "smoke": "未跑（v1 沿用）",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Grab {A} using {a} and place right of {B}.",
+       "Place {A} on the right of {B}.",
+       "With {a}, position {A} right of {B}.",
+       "Position {A} to the right of {B}.",
+       "Using {a}, move {A} right of {B}.",
+       "Move {A} to the right of {B}.",
+       "Use {a} and place {A} right of {B}.",
+       "Set {A} right of {B}.",
+       "With {a}, set {A} on the right of {B}.",
+       "Carefully position {A} to the right of {B}.",
+       "Place {A} right of {B} using {a}",
+       "Move {A} to the right of {B}",
+       "Put {A} on the right side of {B}",
+       "Grab {A} with {a} and set right of {B}",
+       "Shift {A} leftward to the side of {B}",
+       "Use {a} to move {A} to {B}'s left",
+       "Adjust {A} to rest on {B}'s left",
+       "Use {a} to position {A} right of {B}",
+       "Place {A} carefully to {B}'s left",
+       "Grab {A} using {a} and move right of {B}",
+       "Use {a}, move {A} right of {B}",
+       "Position {A} to the right of {B}",
+       "Place {A} exactly to the right of {B}",
+       "Using {a}, put {A} on right of {B}",
+       "Set {A} carefully on the right of {B}",
+       "Move {A} to the right side of {B}",
+       "Place {A} to rest right of {B} using {a}",
+       "With {a}, position {A} right of {B}",
+       "Set {A} directly to the right of {B}",
+       "Using {a}, place {A} on the right of {B}",
+       "Move {A} to the right of {B}.",
+       "Grab {A} with {a} and shift it right of {B}.",
+       "Place {A} directly to the right of {B}.",
+       "With {a}, move {A} to the right side of {B}.",
+       "Shift {A} and position it right of {B}.",
+       "Use {a} to move {A} to the right of {B}.",
+       "Set {A} on the right side of {B}.",
+       "Grab {A} using {a} and place it right of {B}.",
+       "Position {A} carefully to the right of {B}.",
+       "Using {a}, set {A} to the right of {B}.",
+       "Put {A} to the right of {B}",
+       "Use {a} to set {A} right of {B}",
+       "Drop {A} on the right side of {B}",
+       "With {a}, stick {A} right of {B}",
+       "Set {A} to the right of {B}",
+       "Place {A} right of {B} using {a}",
+       "Stick {A} on the right of {B}",
+       "Use {a} to put {A} right of {B}",
+       "Drop {A} to the right of {B}",
+       "With {a}, place {A} right of {B}"
+      ],
+      "unseen": [
+       "Use {a} to put {A} right of {B}.",
+       "Set {A} on the right side of {B}.",
+       "Set {A} to the right of {B}",
+       "Position {A} on the right of {B}",
+       "Grab {A} and place right of {B}",
+       "Set {A} down to the right of {B}",
+       "Pick {A} and set it right of {B}.",
+       "Use {a} to place {A} right of {B}.",
+       "Set {A} on the right side of {B}",
+       "Place {A} to the right of {B} using {a}"
+      ],
+      "schema": "{A} notifies the object A, {B} notifies the object B, {a} notifies the arm to grab the object A",
+      "note": "判据是 object_pose[0] > target_pos[0]（A 在 B 的右边），但指令文件是从 place_a2b_left 复制来的、写的是 left —— 指令和判据互相矛盾，模型照指令放左边就必然判负。已改为 right。"
+     },
+     "a_desc": null,
+     "goal": null,
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "Base_Task",
+     "objects": [],
+     "description_en": "Use appropriate arm to place object A on the left of object B.",
+     "env_doc": "组合泛化测试场景（技能 x 空间关系）。\n\n从 place_a2b_left 克隆，**只改物体池**，其余全部保持一致。不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Task-specific `check_success` returns false (wrong object selected, or the declared end state not reached)."
+      },
+      {
+       "score": 100,
+       "cond": "Task-specific `check_success` returns true. See the environment docstring above for the exact rule."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/place_a2b_right_novel_success.mp4",
+      "failure": "assets/videos/place_a2b_right_novel_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/place_a2b_right_novel.png"
+    },
+    {
+     "name": "card_right_of_scanner",
+     "title": "Card right of scanner",
+     "index": 3,
+     "dim": "D2",
+     "repo_dim": "D2",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "rel",
+     "criterion_en": "Relation: the target ends up on the declared side (left/right/front/behind) of the reference within a gap band and without lateral drift.",
+     "context_zh": "超市结账",
+     "context_en": "Supermarket checkout",
+     "baseline": [
+      "rotate_qrcode",
+      "scan_object",
+      "place_a2b_right"
+     ],
+     "note_zh": "rotate_qrcode 的物体 + 空间关系。rotate_qrcode 此前零覆盖",
+     "smoke": "2/3",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} to the right of the barcode scanner.",
+       "Place the {A} to the right of the barcode scanner.",
+       "Put the {A} to the right of the barcode scanner with {a}."
+      ],
+      "unseen": [
+       "Put the {A} to the right of the barcode scanner.",
+       "Please put the {A} to the right of the barcode scanner."
+      ],
+      "schema": "",
+      "note": "D2-12 skill x spatial L2;判据=rel;由 suite/table.py 生成"
+     },
+     "a_desc": "payment card",
+     "goal": {
+      "type": "rel",
+      "ref": "scanner",
+      "dir": "right",
+      "gap": [
+       0.05,
+       0.22
+      ],
+      "min_start": 0.18
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "070_paymentsign",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "paymentsign",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "scanner",
+       "kind": "reference",
+       "type": "model",
+       "model": "024_scanner",
+       "ids": [
+        0,
+        1,
+        2,
+        3,
+        4
+       ],
+       "desc": "barcode",
+       "static": true,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Place the payment card to the right of the barcode.",
+     "env_doc": "D2-12 · skill x spatial · L2 · 超市结账\n\nrotate_qrcode 的物体 + 空间关系。rotate_qrcode 此前零覆盖\n\n依赖的 RoboTwin 基础任务: 41 rotate_qrcode, 42 scan_object, 22 place_a2b_right\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target ends up on the declared side (left/right/front/behind) of the reference within a gap band and without lateral drift. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Place the payment card to the right of the barcode."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/card_right_of_scanner_success.mp4",
+      "failure": "assets/videos/card_right_of_scanner_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/card_right_of_scanner.png"
+    },
+    {
+     "name": "phone_right_of_laptop",
+     "title": "Phone right of laptop",
+     "index": 4,
+     "dim": "D2",
+     "repo_dim": "D2",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "rel",
+     "criterion_en": "Relation: the target ends up on the declared side (left/right/front/behind) of the reference within a gap band and without lateral drift.",
+     "context_zh": "办公桌",
+     "context_en": "Office desk",
+     "baseline": [
+      "open_laptop",
+      "place_phone_stand",
+      "place_a2b_right"
+     ],
+     "note_zh": "用户提的 open_laptop+放手机。开盖需要关节开度判据(暂无)，先做空间关系版",
+     "smoke": "2/3",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} to the right of the laptop.",
+       "Place the {A} to the right of the laptop.",
+       "Put the {A} to the right of the laptop with {a}."
+      ],
+      "unseen": [
+       "Put the {A} to the right of the laptop.",
+       "Please put the {A} to the right of the laptop."
+      ],
+      "schema": "",
+      "note": "D2-13 skill x spatial L2;判据=rel;由 suite/table.py 生成"
+     },
+     "a_desc": "phone",
+     "goal": {
+      "type": "rel",
+      "ref": "laptop",
+      "dir": "right",
+      "gap": [
+       0.05,
+       0.22
+      ]
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "laptop",
+       "kind": "reference",
+       "type": "urdf",
+       "model": "015_laptop",
+       "ids": [
+        0
+       ],
+       "desc": "laptop",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "077_phone",
+       "ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "desc": "phone",
+       "static": false,
+       "color": null,
+       "rel": "laptop"
+      }
+     ],
+     "description_en": "Place the phone to the right of the laptop.",
+     "env_doc": "D2-13 · skill x spatial · L2 · 办公桌\n\n用户提的 open_laptop+放手机。开盖需要关节开度判据(暂无)，先做空间关系版\n\n依赖的 RoboTwin 基础任务: 17 open_laptop, 36 place_phone_stand, 22 place_a2b_right\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target ends up on the declared side (left/right/front/behind) of the reference within a gap band and without lateral drift. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Place the phone to the right of the laptop."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/phone_right_of_laptop_success.mp4",
+      "failure": "assets/videos/phone_right_of_laptop_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/phone_right_of_laptop.png"
+    },
+    {
+     "name": "place_can_right_of_plasticbox",
+     "title": "Place can right of plasticbox",
+     "index": 5,
+     "dim": "D2",
+     "repo_dim": "D2",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "rel",
+     "criterion_en": "Relation: the target ends up on the declared side (left/right/front/behind) of the reference within a gap band and without lateral drift.",
+     "context_zh": "仓储上架",
+     "context_en": "Warehouse shelving",
+     "baseline": [
+      "place_cans_plasticbox",
+      "place_a2b_left"
+     ],
+     "note_zh": "方向从 left 翻成 right：收纳箱在最右、往左放时落点跨度最大，专家稳定 0/8（可达范围 |x|<=0.22 放不下）。翻成收纳箱在左、往右放，语义等价但几何可行。",
+     "smoke": "2/4",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} to the right of the plastic box.",
+       "Place the {A} to the right of the plastic box.",
+       "Put the {A} to the right of the plastic box with {a}."
+      ],
+      "unseen": [
+       "Put the {A} to the right of the plastic box.",
+       "Please put the {A} to the right of the plastic box."
+      ],
+      "schema": "",
+      "note": "D2-10 skill x spatial L2;判据=rel;由 suite/table.py 生成"
+     },
+     "a_desc": "can",
+     "goal": {
+      "type": "rel",
+      "ref": "pbox",
+      "dir": "right",
+      "gap": [
+       0.05,
+       0.24
+      ],
+      "lat": 0.14,
+      "upright": true
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "071_can",
+       "ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "desc": "can",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "pbox",
+       "kind": "reference",
+       "type": "model",
+       "model": "062_plasticbox",
+       "ids": [
+        3,
+        5
+       ],
+       "desc": "plastic box",
+       "static": true,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Place the can to the right of the plastic box.",
+     "env_doc": "D2-10 · skill x spatial · L2 · 仓储上架\n\n方向从 left 翻成 right：收纳箱在最右、往左放时落点跨度最大，专家稳定 0/8（可达范围 |x|<=0.22 放不下）。翻成收纳箱在左、往右放，语义等价但几何可行。\n\n依赖的 RoboTwin 基础任务: 27 place_cans_plasticbox, 21 place_a2b_left\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target ends up on the declared side (left/right/front/behind) of the reference within a gap band and without lateral drift. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Place the can to the right of the plastic box."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/place_can_right_of_plasticbox_success.mp4",
+      "failure": "assets/videos/place_can_right_of_plasticbox_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/place_can_right_of_plasticbox.png"
+    },
+    {
+     "name": "place_cube_right_of_plate",
+     "title": "Place cube right of plate",
+     "index": 6,
+     "dim": "D2",
+     "repo_dim": "D2",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "rel",
+     "criterion_en": "Relation: the target ends up on the declared side (left/right/front/behind) of the reference within a gap band and without lateral drift.",
+     "context_zh": "餐桌摆盘",
+     "context_en": "Dining-table plating",
+     "baseline": [
+      "place_a2b_left",
+      "place_a2b_right",
+      "place_container_plate"
+     ],
+     "note_zh": "",
+     "smoke": "2/4",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} to the right of the plate.",
+       "Place the {A} to the right of the plate.",
+       "Put the {A} to the right of the plate with {a}."
+      ],
+      "unseen": [
+       "Put the {A} to the right of the plate.",
+       "Please put the {A} to the right of the plate."
+      ],
+      "schema": "",
+      "note": "D2-06 skill x spatial L2;判据=rel;由 suite/table.py 生成"
+     },
+     "a_desc": "cube",
+     "goal": {
+      "type": "rel",
+      "ref": "plate",
+      "dir": "right",
+      "gap": [
+       0.14,
+       0.26
+      ],
+      "lat": 0.13
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "073_rubikscube",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "cube",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "plate",
+       "kind": "reference",
+       "type": "model",
+       "model": "003_plate",
+       "ids": [
+        0
+       ],
+       "desc": "plate",
+       "static": true,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Place the cube to the right of the plate.",
+     "env_doc": "D2-06 · skill x spatial · L2 · 餐桌摆盘\n\n依赖的 RoboTwin 基础任务: 21 place_a2b_left, 22 place_a2b_right, 28 place_container_plate\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target ends up on the declared side (left/right/front/behind) of the reference within a gap band and without lateral drift. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Place the cube to the right of the plate."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/place_cube_right_of_plate_success.mp4",
+      "failure": "assets/videos/place_cube_right_of_plate_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/place_cube_right_of_plate.png"
+    },
+    {
+     "name": "place_teabox_front_of_skillet",
+     "title": "Place teabox front of skillet",
+     "index": 7,
+     "dim": "D2",
+     "repo_dim": "D2",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "rel",
+     "criterion_en": "Relation: the target ends up on the declared side (left/right/front/behind) of the reference within a gap band and without lateral drift.",
+     "context_zh": "厨房备餐",
+     "context_en": "Kitchen prep",
+     "baseline": [
+      "place_bread_skillet",
+      "place_a2b_left"
+     ],
+     "note_zh": "",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} in front of the skillet.",
+       "Place the {A} in front of the skillet.",
+       "Put the {A} in front of the skillet with {a}."
+      ],
+      "unseen": [
+       "Put the {A} in front of the skillet.",
+       "Please put the {A} in front of the skillet."
+      ],
+      "schema": "",
+      "note": "D2-11 skill x spatial L2;判据=rel;由 suite/table.py 生成"
+     },
+     "a_desc": "tea box",
+     "goal": {
+      "type": "rel",
+      "ref": "skillet",
+      "dir": "front",
+      "gap": [
+       0.05,
+       0.22
+      ],
+      "lat": 0.14
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "112_tea-box",
+       "ids": [
+        0,
+        1,
+        2,
+        3,
+        4
+       ],
+       "desc": "tea box",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "skillet",
+       "kind": "reference",
+       "type": "model",
+       "model": "106_skillet",
+       "ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "desc": "skillet",
+       "static": true,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Place the tea box to the front of the skillet.",
+     "env_doc": "D2-11 · skill x spatial · L2 · 厨房备餐\n\n依赖的 RoboTwin 基础任务: 24 place_bread_skillet, 21 place_a2b_left\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target ends up on the declared side (left/right/front/behind) of the reference within a gap band and without lateral drift. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Place the tea box to the front of the skillet."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/place_teabox_front_of_skillet_success.mp4",
+      "failure": "assets/videos/place_teabox_front_of_skillet_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/place_teabox_front_of_skillet.png"
+    },
+    {
+     "name": "put_toycar_left_basket",
+     "title": "Put toycar left basket",
+     "index": 8,
+     "dim": "D2",
+     "repo_dim": "D2",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "in",
+     "criterion_en": "In: the target is inside the container — touching it, low velocity, bottom below the rim, and displaced from its start.",
+     "context_zh": "家务分拣",
+     "context_en": "Household sorting",
+     "baseline": [
+      "place_object_basket",
+      "place_a2b_left"
+     ],
+     "note_zh": "",
+     "smoke": "2/4",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} into the left basket.",
+       "Place the {A} into the left basket.",
+       "Put the {A} into the left basket with {a}."
+      ],
+      "unseen": [
+       "Put the {A} into the left basket.",
+       "Please put the {A} into the left basket."
+      ],
+      "schema": "",
+      "note": "D2-08 skill x spatial L2;判据=in;由 suite/table.py 生成"
+     },
+     "a_desc": "toy car",
+     "goal": {
+      "type": "in",
+      "ref": "basket_l",
+      "r": 0.12
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "057_toycar",
+       "ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+       ],
+       "desc": "toy car",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "basket_l",
+       "kind": "reference",
+       "type": "model",
+       "model": "110_basket",
+       "ids": [
+        0,
+        1
+       ],
+       "desc": "basket",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "basket_r",
+       "kind": "distractor",
+       "type": "model",
+       "model": "110_basket",
+       "ids": [
+        2,
+        3
+       ],
+       "desc": "basket",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Put the toy car inside the basket.",
+     "env_doc": "D2-08 · skill x spatial · L2 · 家务分拣\n\n依赖的 RoboTwin 基础任务: 33 place_object_basket, 21 place_a2b_left\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target is inside the container — touching it, low velocity, bottom below the rim, and displaced from its start. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Put the toy car inside the basket."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/put_toycar_left_basket_success.mp4",
+      "failure": "assets/videos/put_toycar_left_basket_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/put_toycar_left_basket.png"
+    },
+    {
+     "name": "place_between_bowls",
+     "title": "Place between bowls",
+     "index": 9,
+     "dim": "D2",
+     "repo_dim": "D2",
+     "tier": "L3",
+     "tier_desc_zh": "双约束 / 双段 —— 两个约束同时成立，或两段动作有真实先后依赖",
+     "tier_desc_en": "Two constraints / two segments: two constraints hold simultaneously, or two segments with a real ordering dependency.",
+     "source": "generated",
+     "criterion": "between",
+     "criterion_en": "Between: the target ends up near the midpoint of the segment joining the two references.",
+     "context_zh": "餐桌摆盘",
+     "context_en": "Dining-table plating",
+     "baseline": [
+      "place_a2b_left",
+      "place_a2b_right",
+      "stack_bowls_two"
+     ],
+     "note_zh": "",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} between the two bowls.",
+       "Place the {A} between the two bowls.",
+       "Put the {A} between the two bowls with {a}."
+      ],
+      "unseen": [
+       "Put the {A} between the two bowls.",
+       "Please put the {A} between the two bowls."
+      ],
+      "schema": "",
+      "note": "D2-05 skill x spatial L3;判据=between;由 suite/table.py 生成"
+     },
+     "a_desc": "cube",
+     "goal": {
+      "type": "between",
+      "refs": [
+       "b1",
+       "b2"
+      ],
+      "lat": 0.1
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "073_rubikscube",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "cube",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "b1",
+       "kind": "reference",
+       "type": "model",
+       "model": "002_bowl",
+       "ids": [
+        1,
+        2,
+        3
+       ],
+       "desc": "bowl",
+       "static": true,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "b2",
+       "kind": "reference",
+       "type": "model",
+       "model": "002_bowl",
+       "ids": [
+        4,
+        5,
+        6
+       ],
+       "desc": "bowl",
+       "static": true,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Place the cube between the bowl and the bowl.",
+     "env_doc": "D2-05 · skill x spatial · L3 · 餐桌摆盘\n\n依赖的 RoboTwin 基础任务: 21 place_a2b_left, 22 place_a2b_right, 48 stack_bowls_two\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target ends up near the midpoint of the segment joining the two references. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Place the cube between the bowl and the bowl."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/place_between_bowls_success.mp4",
+      "failure": "assets/videos/place_between_bowls_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/place_between_bowls.png"
+    }
+   ]
+  },
+  {
+   "id": "D3",
+   "repo_id": "D3",
+   "axis": "attribute_binding",
+   "name_en": "Attribute selection",
+   "short_en": "Attribute selection",
+   "desc_en": "The instruction names an attribute (colour, size or category); the target must be selected among distractors that differ in it.",
+   "desc_zh": "必须解析属性词才能在干扰物中选对（5 类属性 × 4 类动作）",
+   "scenes": [
+    {
+     "name": "attr_bind_bottle",
+     "title": "Attr bind bottle",
+     "index": 1,
+     "dim": "D3",
+     "repo_dim": "D3",
+     "tier": "L1",
+     "tier_desc_zh": "单点替换 —— 克隆一个训练任务只动一个变量，干扰物 0-1 个，单段动作",
+     "tier_desc_en": "Single substitution: one variable changed from a training task, 0-1 distractors, single-segment motion.",
+     "source": "handwritten",
+     "criterion": "handwritten",
+     "criterion_en": "Handwritten: task-specific `check_success` in the environment file (see the description).",
+     "context_zh": "冰箱取饮",
+     "context_en": "Fridge drinks",
+     "baseline": [
+      "adjust_bottle",
+      "pick_diverse_bottles"
+     ],
+     "note_zh": "手写，含 ATTR_BIND_LOG 诊断",
+     "smoke": "未跑（v1 沿用）",
+     "step_limit": 600,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Lift the {A}.",
+       "Grab the {A}.",
+       "Use {a} to pick up the {A}.",
+       "Take the {A} from the table.",
+       "Pick the {A} up off the table.",
+       "With {a}, lift the {A}.",
+       "Grab the {A} with {a}.",
+       "Lift the {A} off the table.",
+       "Pick up the {A} from the table."
+      ],
+      "unseen": [
+       "Pick up the {A} please.",
+       "Raise the {A}.",
+       "Use {a} to lift the {A}.",
+       "Take hold of the {A}.",
+       "Pick the {A} up."
+      ],
+      "schema": "{A} notifies the color and the object, e.g. 'green bottle'; {a} notifies the arm",
+      "note": "attr_bind_bottle（属性绑定·颜色）。桌上两个同类别不同颜色的瓶子（棕色可乐 / 绿色雪碧），唯一消歧线索是颜色，随机选=50%。用瓶子是因为 adjust_bottle 实测 1.00，这两个变体的可抓性已被数据确认。{A} 传字面串如 'green bottle'，非路径值不加冠词，模板自带 'the'。"
+     },
+     "a_desc": null,
+     "goal": null,
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "Base_Task",
+     "objects": [],
+     "description_en": "Two bottles of the same shape but different colours (a brown cola bottle and a green soda bottle) lie on the table. The instruction names one colour; pick up that bottle. Colour is the only cue, so guessing scores 50 %.",
+     "env_doc": "组合泛化测试场景（属性绑定 · 颜色）。不用于训练。\n\n桌上两个**同类别、不同颜色**的瓶子：\n    001_bottle/base13  棕色可乐瓶（红盖）\n    001_bottle/base16  绿色雪碧瓶\n指令形如「拿起绿色的瓶子」。两者类别相同，**唯一的消歧线索就是颜色** ——\n模型必须真的解析颜色词才能选对，随机选是 50%。\n\n为什么用瓶子（前两版的教训）：\n  * attr_bind_cup_mug 用 021_cup / 039_mug，专家产出率始终 1/8。逐步探针定位到\n    **第 1 步抓取**就挂，不是放置。改间距、改三角形分布、把任务简化成「拿起」都没用；\n    同样是「拿起」，魔方能 8/8 —— 说明是杯子/马克杯本身难抓。\n  * attr_bind_soap_box 换成肥皂/茶叶盒，能凑出颜色x类别的三元组，但探针没跑出结果。\n  * 这一版用 001_bottle 的两个变体：adjust_bottle 这个任务 DM05 实测 **1.00**，\n    所以这两个瓶子的可抓性是**已经被数据确认过**的，不用再赌。\n  * 代价：两个瓶子类别相同，所以只测**颜色**这一个属性，测不了「颜色x类别」的\n    联合绑定。但作为语言 steerability 的基础指标（能不能按颜色词选对），它是干净的。\n\n生成姿态和位置沿用 adjust_bottle（躺姿、左右各一侧），保证抓取在分布内。\n\n诊断：成功率分不清「颜色绑错」和「抓不准」，所以每条 episode 把**实际被拿起的是哪一个**\n写进 ATTR_BIND_LOG 指定的文件。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "The other-coloured bottle moved at least as much as the instructed one (wrong object selected)."
+      },
+      {
+       "score": 0,
+       "cond": "The instructed bottle was only stood upright or nudged; its collision geometry is not at least 2 cm above the table while held by a gripper."
+      },
+      {
+       "score": 100,
+       "cond": "The instructed bottle moved more than the distractor **and** is lifted ≥ 2 cm above its initial support while in gripper contact."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/attr_bind_bottle_success.mp4",
+      "failure": "assets/videos/attr_bind_bottle_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/attr_bind_bottle.png"
+    },
+    {
+     "name": "attr_category_press_bell",
+     "title": "Attr category press bell",
+     "index": 2,
+     "dim": "D3",
+     "repo_dim": "D3",
+     "tier": "L1",
+     "tier_desc_zh": "单点替换 —— 克隆一个训练任务只动一个变量，干扰物 0-1 个，单段动作",
+     "tier_desc_en": "Single substitution: one variable changed from a training task, 0-1 distractors, single-segment motion.",
+     "source": "generated",
+     "criterion": "press",
+     "criterion_en": "Press: a gripper contact point touches the reference object and the object has not been carried away.",
+     "context_zh": "前台服务",
+     "context_en": "Front desk",
+     "baseline": [
+      "click_bell",
+      "click_alarmclock"
+     ],
+     "note_zh": "按压型动作上的属性绑定 —— 不涉及抓取，语言信号最干净",
+     "smoke": "2/3",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Press the {A}.",
+       "Press the {A} with {a}."
+      ],
+      "unseen": [
+       "Press the {A}.",
+       "Please press the {A}."
+      ],
+      "schema": "",
+      "note": "D3-10 attribute binding L1;判据=press;由 suite/table.py 生成"
+     },
+     "a_desc": "bell",
+     "goal": {
+      "type": "press",
+      "ref": "target",
+      "model": "050_bell",
+      "cp": 0
+     },
+     "mirror": true,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "050_bell",
+       "ids": [
+        0,
+        1
+       ],
+       "desc": "bell",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "distractor",
+       "kind": "distractor",
+       "type": "model",
+       "model": "046_alarm-clock",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "alarm clock",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Press the bell.",
+     "env_doc": "D3-10 · attribute binding · L1 · 前台服务\n\n按压型动作上的属性绑定 —— 不涉及抓取，语言信号最干净\n\n依赖的 RoboTwin 基础任务: 6 click_bell, 5 click_alarmclock\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: a gripper contact point touches the reference object and the object has not been carried away. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Press the bell."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/attr_category_press_bell_success.mp4",
+      "failure": "assets/videos/attr_category_press_bell_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/attr_category_press_bell.png"
+    },
+    {
+     "name": "attr_category_can_plasticbox",
+     "title": "Attr category can plasticbox",
+     "index": 3,
+     "dim": "D3",
+     "repo_dim": "D3",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "in",
+     "criterion_en": "In: the target is inside the container — touching it, low velocity, bottom below the rim, and displaced from its start.",
+     "context_zh": "仓储上架",
+     "context_en": "Warehouse shelving",
+     "baseline": [
+      "place_cans_plasticbox",
+      "pick_diverse_bottles"
+     ],
+     "note_zh": "类别属性 + 容器动作",
+     "smoke": "2/7",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} into the plastic box.",
+       "Place the {A} into the plastic box.",
+       "Put the {A} into the plastic box with {a}."
+      ],
+      "unseen": [
+       "Put the {A} into the plastic box.",
+       "Please put the {A} into the plastic box."
+      ],
+      "schema": "",
+      "note": "D3-05 attribute binding L2;判据=in;由 suite/table.py 生成"
+     },
+     "a_desc": "can",
+     "goal": {
+      "type": "in",
+      "ref": "pbox",
+      "r": 0.13
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "071_can",
+       "ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "desc": "can",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "distractor",
+       "kind": "distractor",
+       "type": "model",
+       "model": "001_bottle",
+       "ids": [
+        13,
+        16
+       ],
+       "desc": "bottle",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "pbox",
+       "kind": "reference",
+       "type": "model",
+       "model": "062_plasticbox",
+       "ids": [
+        3,
+        5
+       ],
+       "desc": "plastic box",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Put the can inside the plastic box.",
+     "env_doc": "D3-05 · attribute binding · L2 · 仓储上架\n\n类别属性 + 容器动作\n\n依赖的 RoboTwin 基础任务: 27 place_cans_plasticbox, 19 pick_diverse_bottles\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target is inside the container — touching it, low velocity, bottom below the rim, and displaced from its start. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Put the can inside the plastic box."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/attr_category_can_plasticbox_success.mp4",
+      "failure": "assets/videos/attr_category_can_plasticbox_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/attr_category_can_plasticbox.png"
+    },
+    {
+     "name": "attr_color_beat_block",
+     "title": "Attr color beat block",
+     "index": 4,
+     "dim": "D3",
+     "repo_dim": "D3",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "beat",
+     "criterion_en": "Beat: the hammer/mallet contacts the referenced block (press-type criterion applied to a tool).",
+     "context_zh": "积木码垛",
+     "context_en": "Block stacking",
+     "baseline": [
+      "beat_block_hammer",
+      "stack_blocks_three"
+     ],
+     "note_zh": "颜色选紫/青/黄 —— 训练集里方块基本是红/蓝/绿，少见色更能考「按词选」而不是按先验蒙",
+     "smoke": "3/5",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Beat the {A} with the hammer.",
+       "Beat the {A} with the hammer with {a}."
+      ],
+      "unseen": [
+       "Beat the {A} with the hammer.",
+       "Please beat the {A} with the hammer."
+      ],
+      "schema": "",
+      "note": "D3-12 attribute binding L2;判据=beat;由 suite/table.py 生成"
+     },
+     "a_desc": "purple block",
+     "goal": {
+      "type": "beat",
+      "tool": "hammer"
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "hammer",
+       "kind": "distractor",
+       "type": "model",
+       "model": "020_hammer",
+       "ids": [
+        0
+       ],
+       "desc": "hammer",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "purple block",
+       "static": true,
+       "color": [
+        0.55,
+        0.2,
+        0.75
+       ],
+       "rel": null
+      },
+      {
+       "role": "d1",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "grey block",
+       "static": true,
+       "color": [
+        0.1,
+        0.65,
+        0.62
+       ],
+       "rel": null
+      },
+      {
+       "role": "d2",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "orange block",
+       "static": true,
+       "color": [
+        0.92,
+        0.82,
+        0.15
+       ],
+       "rel": null
+      }
+     ],
+     "description_en": "Goal type `beat`.",
+     "env_doc": "D3-12 · attribute binding · L2 · 积木码垛\n\n颜色选紫/青/黄 —— 训练集里方块基本是红/蓝/绿，少见色更能考「按词选」而不是按先验蒙\n\n依赖的 RoboTwin 基础任务: 2 beat_block_hammer, 45 stack_blocks_three\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the hammer/mallet contacts the referenced block (press-type criterion applied to a tool). is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Goal type `beat`."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/attr_color_beat_block_success.mp4",
+      "failure": "assets/videos/attr_color_beat_block_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/attr_color_beat_block.png"
+    },
+    {
+     "name": "attr_color_block_3way",
+     "title": "Attr color block 3way",
+     "index": 5,
+     "dim": "D3",
+     "repo_dim": "D3",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "lift",
+     "criterion_en": "Lift: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper.",
+     "context_zh": "积木码垛",
+     "context_en": "Block stacking",
+     "baseline": [
+      "stack_blocks_three",
+      "handover_block"
+     ],
+     "note_zh": "三路颜色干扰，随机基线 33%",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Grab the {A}.",
+       "Pick up the {A} with {a}."
+      ],
+      "unseen": [
+       "Pick up the {A}.",
+       "Please pick up the {A}."
+      ],
+      "schema": "",
+      "note": "D3-02 attribute binding L2;判据=lift;由 suite/table.py 生成"
+     },
+     "a_desc": "red block",
+     "goal": {
+      "type": "lift",
+      "dz": 0.06
+     },
+     "mirror": true,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "red block",
+       "static": false,
+       "color": [
+        0.9,
+        0.15,
+        0.15
+       ],
+       "rel": null
+      },
+      {
+       "role": "d1",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "green block",
+       "static": false,
+       "color": [
+        0.15,
+        0.75,
+        0.2
+       ],
+       "rel": null
+      },
+      {
+       "role": "d2",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "blue block",
+       "static": false,
+       "color": [
+        0.15,
+        0.3,
+        0.9
+       ],
+       "rel": null
+      }
+     ],
+     "description_en": "Pick up the red block and lift it at least 0.06 m off its support.",
+     "env_doc": "D3-02 · attribute binding · L2 · 积木码垛\n\n三路颜色干扰，随机基线 33%\n\n依赖的 RoboTwin 基础任务: 45 stack_blocks_three, 9 handover_block\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Pick up the red block and lift it at least 0.06 m off its support."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/attr_color_block_3way_success.mp4",
+      "failure": "assets/videos/attr_color_block_3way_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/attr_color_block_3way.png"
+    },
+    {
+     "name": "attr_size_beat_smaller",
+     "title": "Attr size beat smaller",
+     "index": 6,
+     "dim": "D3",
+     "repo_dim": "D3",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "beat",
+     "criterion_en": "Beat: the hammer/mallet contacts the referenced block (press-type criterion applied to a tool).",
+     "context_zh": "积木码垛",
+     "context_en": "Block stacking",
+     "baseline": [
+      "beat_block_hammer",
+      "blocks_ranking_size"
+     ],
+     "note_zh": "同色异尺寸，唯一线索是大小",
+     "smoke": "3/3",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Beat the {A} with the hammer.",
+       "Beat the {A} with the hammer with {a}."
+      ],
+      "unseen": [
+       "Beat the {A} with the hammer.",
+       "Please beat the {A} with the hammer."
+      ],
+      "schema": "",
+      "note": "D3-13 attribute binding L2;判据=beat;由 suite/table.py 生成"
+     },
+     "a_desc": "smaller block",
+     "goal": {
+      "type": "beat",
+      "tool": "hammer"
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "hammer",
+       "kind": "distractor",
+       "type": "model",
+       "model": "020_hammer",
+       "ids": [
+        0
+       ],
+       "desc": "hammer",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "smaller block",
+       "static": true,
+       "color": [
+        0.1,
+        0.65,
+        0.62
+       ],
+       "rel": null
+      },
+      {
+       "role": "d1",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "grey block",
+       "static": true,
+       "color": [
+        0.1,
+        0.65,
+        0.62
+       ],
+       "rel": null
+      }
+     ],
+     "description_en": "Goal type `beat`.",
+     "env_doc": "D3-13 · attribute binding · L2 · 积木码垛\n\n同色异尺寸，唯一线索是大小\n\n依赖的 RoboTwin 基础任务: 2 beat_block_hammer, 4 blocks_ranking_size\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the hammer/mallet contacts the referenced block (press-type criterion applied to a tool). is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Goal type `beat`."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/attr_size_beat_smaller_success.mp4",
+      "failure": "assets/videos/attr_size_beat_smaller_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/attr_size_beat_smaller.png"
+    },
+    {
+     "name": "attr_size_block_pick",
+     "title": "Attr size block pick",
+     "index": 7,
+     "dim": "D3",
+     "repo_dim": "D3",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "lift",
+     "criterion_en": "Lift: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper.",
+     "context_zh": "积木码垛",
+     "context_en": "Block stacking",
+     "baseline": [
+      "blocks_ranking_size",
+      "stack_blocks_three"
+     ],
+     "note_zh": "尺寸属性。用裸方块 + lift 判据：方块能抓能举，但过不了 place_actor(实测 0-1/10)，所以尺寸这一维只能做纯抓取；容器动作那一维由 D3-05/D3-11 承担",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Grab the {A}.",
+       "Pick up the {A} with {a}."
+      ],
+      "unseen": [
+       "Pick up the {A}.",
+       "Please pick up the {A}."
+      ],
+      "schema": "",
+      "note": "D3-04 attribute binding L2;判据=lift;由 suite/table.py 生成"
+     },
+     "a_desc": "smaller block",
+     "goal": {
+      "type": "lift",
+      "dz": 0.06
+     },
+     "mirror": true,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "smaller block",
+       "static": false,
+       "color": [
+        0.45,
+        0.45,
+        0.45
+       ],
+       "rel": null
+      },
+      {
+       "role": "distractor",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "grey block",
+       "static": false,
+       "color": [
+        0.45,
+        0.45,
+        0.45
+       ],
+       "rel": null
+      }
+     ],
+     "description_en": "Pick up the smaller block and lift it at least 0.06 m off its support.",
+     "env_doc": "D3-04 · attribute binding · L2 · 积木码垛\n\n尺寸属性。用裸方块 + lift 判据：方块能抓能举，但过不了 place_actor(实测 0-1/10)，所以尺寸这一维只能做纯抓取；容器动作那一维由 D3-05/D3-11 承担\n\n依赖的 RoboTwin 基础任务: 4 blocks_ranking_size, 45 stack_blocks_three\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Pick up the smaller block and lift it at least 0.06 m off its support."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/attr_size_block_pick_success.mp4",
+      "failure": "assets/videos/attr_size_block_pick_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/attr_size_block_pick.png"
+    },
+    {
+     "name": "attr_bind_soap_box",
+     "title": "Attr bind soap box",
+     "index": 8,
+     "dim": "D3",
+     "repo_dim": "D3",
+     "tier": "L3",
+     "tier_desc_zh": "双约束 / 双段 —— 两个约束同时成立，或两段动作有真实先后依赖",
+     "tier_desc_en": "Two constraints / two segments: two constraints hold simultaneously, or two segments with a real ordering dependency.",
+     "source": "handwritten",
+     "criterion": "handwritten",
+     "criterion_en": "Handwritten: task-specific `check_success` in the environment file (see the description).",
+     "context_zh": "日用品收纳",
+     "context_en": "Toiletry storage",
+     "baseline": [
+      "put_object_cabinet",
+      "scan_object"
+     ],
+     "note_zh": "手写，颜色×类别三元组 + 诊断日志",
+     "smoke": "未跑（v1 沿用）",
+     "step_limit": 600,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Lift the {A}.",
+       "Grab the {A}.",
+       "Use {a} to pick up the {A}.",
+       "Take the {A} from the table.",
+       "Pick the {A} up off the table.",
+       "With {a}, lift the {A}.",
+       "Grab the {A} with {a}.",
+       "Lift the {A} off the table.",
+       "Pick up the {A} from the table."
+      ],
+      "unseen": [
+       "Pick up the {A} please.",
+       "Raise the {A}.",
+       "Use {a} to lift the {A}.",
+       "Take hold of the {A}.",
+       "Pick the {A} up."
+      ],
+      "schema": "{A} notifies the color and category of the target object, e.g. 'yellow soap'; {a} notifies the arm",
+      "note": "attr_bind_soap_box（属性x属性）。三个物体：目标(C1,K1)、同色异类(C1,K2)、同类异色(C2,K1)。只按颜色=50%，只按类别=50%，必须同时绑定。前一版用杯子/马克杯，抓取产出率一直 1/8（逐步探针定位到第1步抓取），换成训练池里确定好抓的 107_soap / 112_tea-box / 113_coffee-box。{A} 传字面串如 'yellow soap'，非路径值不加冠词，模板自带 'the'。"
+     },
+     "a_desc": null,
+     "goal": null,
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "Base_Task",
+     "objects": [],
+     "description_en": "Pick up the object matching both the stated color and category.",
+     "env_doc": "组合泛化测试场景（属性 x 属性）。不用于训练。\n\n桌面三个物体，构成经典的属性绑定测试：\n    target        (颜色C1, 类别K1)  <- 目标\n    same_color    (颜色C1, 类别K2)  <- 只看颜色会误选它\n    same_category (颜色C2, 类别K1)  <- 只看类别会误选它\n指令形如「拿起黄色的肥皂」。只按颜色选 = 50%，只按类别选 = 50%，\n**必须同时绑定颜色和类别**才能稳定选对。没有干扰物的话，「拿黄肥皂」和「拿肥皂」\n没有区别，成功率再高也说明不了 steerability。\n\n物体选择的来龙去脉（前一版 attr_bind_cup_mug 的教训）：\n  * 前一版用 021_cup / 039_mug，专家产出率一直是 1/8。逐步探针定位到**第 1 步抓取**\n    就挂，而不是放置。改间距、改成三角形分布、把任务从「放到垫子上」简化成「拿起」，\n    都没用 —— 同样是「拿起」，魔方能 8/8，说明是**杯子/马克杯本身难抓**。\n  * 这一版只用**训练任务里在用、抓取确定没问题**的物体（107_soap / 112_tea-box /\n    113_coffee-box），并且只取颜色描述**唯一**的变体（很多变体的描述里混着多个颜色词，\n    那些一律不用）。\n  * 代价：没有任何两个类别共享 2 个以上干净颜色，所以做不出 2x2 全排列，\n    只能枚举下面这几组合法三元组。这不影响测试性质 —— 三个物体已经足够\n    让「只看颜色」和「只看类别」各自都只有 50%。\n\n诊断：成功率分不清「属性绑错」和「抓不准」，所以每条 episode 把**实际被拿起的是哪一个**\n写进 ATTR_BIND_LOG 指定的文件。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Task-specific `check_success` returns false (wrong object selected, or the declared end state not reached)."
+      },
+      {
+       "score": 100,
+       "cond": "Task-specific `check_success` returns true. See the environment docstring above for the exact rule."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/attr_bind_soap_box_success.mp4",
+      "failure": "assets/videos/attr_bind_soap_box_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/attr_bind_soap_box.png"
+    },
+    {
+     "name": "attr_size_rank_middle",
+     "title": "Attr size rank middle",
+     "index": 9,
+     "dim": "D3",
+     "repo_dim": "D3",
+     "tier": "L3",
+     "tier_desc_zh": "双约束 / 双段 —— 两个约束同时成立，或两段动作有真实先后依赖",
+     "tier_desc_en": "Two constraints / two segments: two constraints hold simultaneously, or two segments with a real ordering dependency.",
+     "source": "generated",
+     "criterion": "lift",
+     "criterion_en": "Lift: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper.",
+     "context_zh": "家务分拣",
+     "context_en": "Household sorting",
+     "baseline": [
+      "blocks_ranking_size",
+      "place_container_plate"
+     ],
+     "note_zh": "尺寸序位（三选一的中间档），比二选一的大/小难一级",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Grab the {A}.",
+       "Pick up the {A} with {a}."
+      ],
+      "unseen": [
+       "Pick up the {A}.",
+       "Please pick up the {A}."
+      ],
+      "schema": "",
+      "note": "D3-08 attribute binding L3;判据=lift;由 suite/table.py 生成"
+     },
+     "a_desc": "medium block",
+     "goal": {
+      "type": "lift",
+      "dz": 0.06
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "medium block",
+       "static": false,
+       "color": [
+        0.45,
+        0.45,
+        0.45
+       ],
+       "rel": null
+      },
+      {
+       "role": "small",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "grey block",
+       "static": false,
+       "color": [
+        0.45,
+        0.45,
+        0.45
+       ],
+       "rel": null
+      },
+      {
+       "role": "big",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "grey block",
+       "static": false,
+       "color": [
+        0.45,
+        0.45,
+        0.45
+       ],
+       "rel": null
+      }
+     ],
+     "description_en": "Pick up the medium block and lift it at least 0.06 m off its support.",
+     "env_doc": "D3-08 · attribute binding · L3 · 家务分拣\n\n尺寸序位（三选一的中间档），比二选一的大/小难一级\n\n依赖的 RoboTwin 基础任务: 4 blocks_ranking_size, 28 place_container_plate\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Pick up the medium block and lift it at least 0.06 m off its support."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/attr_size_rank_middle_success.mp4",
+      "failure": "assets/videos/attr_size_rank_middle_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/attr_size_rank_middle.png"
+    }
+   ]
+  },
+  {
+   "id": "D4",
+   "repo_id": "D4",
+   "axis": "instruction_structure",
+   "name_en": "Referring expressions",
+   "short_en": "Referring expressions",
+   "desc_en": "The target is identified through a relation, order or negation: on the plate, behind the can, leftmost, second from left, not the red one.",
+   "desc_zh": "必须解析指代结构才能锁定目标（嵌套/序位/序数/邻接/否定）",
+   "scenes": [
+    {
+     "name": "ref_block_on_plate",
+     "title": "Ref block on plate",
+     "index": 1,
+     "dim": "D4",
+     "repo_dim": "D4",
+     "tier": "L1",
+     "tier_desc_zh": "单点替换 —— 克隆一个训练任务只动一个变量，干扰物 0-1 个，单段动作",
+     "tier_desc_en": "Single substitution: one variable changed from a training task, 0-1 distractors, single-segment motion.",
+     "source": "generated",
+     "criterion": "lift",
+     "criterion_en": "Lift: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper.",
+     "context_zh": "餐桌收拾",
+     "context_en": "Table clearing",
+     "baseline": [
+      "place_container_plate"
+     ],
+     "note_zh": "两块外观全同，唯一线索是「在盘子上」这个关系",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Grab the {A}.",
+       "Pick up the {A} with {a}."
+      ],
+      "unseen": [
+       "Pick up the {A}.",
+       "Please pick up the {A}."
+      ],
+      "schema": "",
+      "note": "D4-01 instruction structure L1;判据=lift;由 suite/table.py 生成"
+     },
+     "a_desc": "block on the plate",
+     "goal": {
+      "type": "lift",
+      "dz": 0.06
+     },
+     "mirror": true,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "plate",
+       "kind": "reference",
+       "type": "model",
+       "model": "003_plate",
+       "ids": [
+        0
+       ],
+       "desc": "plate",
+       "static": true,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "block on the plate",
+       "static": false,
+       "color": [
+        0.95,
+        0.6,
+        0.1
+       ],
+       "rel": "plate"
+      },
+      {
+       "role": "distractor",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "orange block",
+       "static": false,
+       "color": [
+        0.95,
+        0.6,
+        0.1
+       ],
+       "rel": null
+      }
+     ],
+     "description_en": "Pick up the block on the plate and lift it at least 0.06 m off its support.",
+     "env_doc": "D4-01 · instruction structure · L1 · 餐桌收拾\n\n两块外观全同，唯一线索是「在盘子上」这个关系\n\n依赖的 RoboTwin 基础任务: 28 place_container_plate\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Pick up the block on the plate and lift it at least 0.06 m off its support."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/ref_block_on_plate_success.mp4",
+      "failure": "assets/videos/ref_block_on_plate_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/ref_block_on_plate.png"
+    },
+    {
+     "name": "ref_block_behind_can",
+     "title": "Ref block behind can",
+     "index": 2,
+     "dim": "D4",
+     "repo_dim": "D4",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "lift",
+     "criterion_en": "Lift: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper.",
+     "context_zh": "通用桌面",
+     "context_en": "Generic tabletop",
+     "baseline": [
+      "place_a2b_left",
+      "place_a2b_right"
+     ],
+     "note_zh": "",
+     "smoke": "2/3",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Grab the {A}.",
+       "Pick up the {A} with {a}."
+      ],
+      "unseen": [
+       "Pick up the {A}.",
+       "Please pick up the {A}."
+      ],
+      "schema": "",
+      "note": "D4-03 instruction structure L2;判据=lift;由 suite/table.py 生成"
+     },
+     "a_desc": "block behind the can",
+     "goal": {
+      "type": "lift",
+      "dz": 0.06
+     },
+     "mirror": true,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "can",
+       "kind": "reference",
+       "type": "model",
+       "model": "071_can",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "can",
+       "static": true,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "block behind the can",
+       "static": false,
+       "color": [
+        0.95,
+        0.6,
+        0.1
+       ],
+       "rel": "can"
+      },
+      {
+       "role": "distractor",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "orange block",
+       "static": false,
+       "color": [
+        0.95,
+        0.6,
+        0.1
+       ],
+       "rel": null
+      }
+     ],
+     "description_en": "Pick up the block behind the can and lift it at least 0.06 m off its support.",
+     "env_doc": "D4-03 · instruction structure · L2 · 通用桌面\n\n依赖的 RoboTwin 基础任务: 21 place_a2b_left, 22 place_a2b_right\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Pick up the block behind the can and lift it at least 0.06 m off its support."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/ref_block_behind_can_success.mp4",
+      "failure": "assets/videos/ref_block_behind_can_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/ref_block_behind_can.png"
+    },
+    {
+     "name": "ref_cup_on_tray",
+     "title": "Ref cup on tray",
+     "index": 3,
+     "dim": "D4",
+     "repo_dim": "D4",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "lift",
+     "criterion_en": "Lift: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper.",
+     "context_zh": "快餐取餐",
+     "context_en": "Fast-food pickup",
+     "baseline": [
+      "place_burger_fries"
+     ],
+     "note_zh": "",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Grab the {A}.",
+       "Pick up the {A} with {a}."
+      ],
+      "unseen": [
+       "Pick up the {A}.",
+       "Please pick up the {A}."
+      ],
+      "schema": "",
+      "note": "D4-08 instruction structure L2;判据=lift;由 suite/table.py 生成"
+     },
+     "a_desc": "block on the tray",
+     "goal": {
+      "type": "lift",
+      "dz": 0.06
+     },
+     "mirror": true,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "tray",
+       "kind": "reference",
+       "type": "model",
+       "model": "008_tray",
+       "ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "desc": "tray",
+       "static": true,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "block on the tray",
+       "static": false,
+       "color": [
+        0.95,
+        0.6,
+        0.1
+       ],
+       "rel": "tray"
+      },
+      {
+       "role": "distractor",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "orange block",
+       "static": false,
+       "color": [
+        0.95,
+        0.6,
+        0.1
+       ],
+       "rel": null
+      }
+     ],
+     "description_en": "Pick up the block on the tray and lift it at least 0.06 m off its support.",
+     "env_doc": "D4-08 · instruction structure · L2 · 快餐取餐\n\n依赖的 RoboTwin 基础任务: 25 place_burger_fries\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Pick up the block on the tray and lift it at least 0.06 m off its support."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/ref_cup_on_tray_success.mp4",
+      "failure": "assets/videos/ref_cup_on_tray_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/ref_cup_on_tray.png"
+    },
+    {
+     "name": "ref_leftmost_of_four",
+     "title": "Ref leftmost of four",
+     "index": 4,
+     "dim": "D4",
+     "repo_dim": "D4",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "lift",
+     "criterion_en": "Lift: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper.",
+     "context_zh": "积木码垛",
+     "context_en": "Block stacking",
+     "baseline": [
+      "blocks_ranking_rgb",
+      "stack_blocks_three"
+     ],
+     "note_zh": "四选一的序位，比三选一难一级",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Grab the {A}.",
+       "Pick up the {A} with {a}."
+      ],
+      "unseen": [
+       "Pick up the {A}.",
+       "Please pick up the {A}."
+      ],
+      "schema": "",
+      "note": "D4-05 instruction structure L2;判据=lift;由 suite/table.py 生成"
+     },
+     "a_desc": "leftmost block",
+     "goal": {
+      "type": "lift",
+      "dz": 0.06
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "leftmost block",
+       "static": false,
+       "color": [
+        0.95,
+        0.6,
+        0.1
+       ],
+       "rel": null
+      },
+      {
+       "role": "d1",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "orange block",
+       "static": false,
+       "color": [
+        0.95,
+        0.6,
+        0.1
+       ],
+       "rel": null
+      },
+      {
+       "role": "d2",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "orange block",
+       "static": false,
+       "color": [
+        0.95,
+        0.6,
+        0.1
+       ],
+       "rel": null
+      },
+      {
+       "role": "d3",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "orange block",
+       "static": false,
+       "color": [
+        0.95,
+        0.6,
+        0.1
+       ],
+       "rel": null
+      }
+     ],
+     "description_en": "Pick up the leftmost block and lift it at least 0.06 m off its support.",
+     "env_doc": "D4-05 · instruction structure · L2 · 积木码垛\n\n四选一的序位，比三选一难一级\n\n依赖的 RoboTwin 基础任务: 3 blocks_ranking_rgb, 45 stack_blocks_three\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Pick up the leftmost block and lift it at least 0.06 m off its support."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/ref_leftmost_of_four_success.mp4",
+      "failure": "assets/videos/ref_leftmost_of_four_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/ref_leftmost_of_four.png"
+    },
+    {
+     "name": "ref_mug_next_to_bowl",
+     "title": "Ref mug next to bowl",
+     "index": 5,
+     "dim": "D4",
+     "repo_dim": "D4",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "lift",
+     "criterion_en": "Lift: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper.",
+     "context_zh": "餐桌收拾",
+     "context_en": "Table clearing",
+     "baseline": [
+      "hanging_mug",
+      "stack_bowls_two"
+     ],
+     "note_zh": "",
+     "smoke": "2/3",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Grab the {A}.",
+       "Pick up the {A} with {a}."
+      ],
+      "unseen": [
+       "Pick up the {A}.",
+       "Please pick up the {A}."
+      ],
+      "schema": "",
+      "note": "D4-06 instruction structure L2;判据=lift;由 suite/table.py 生成"
+     },
+     "a_desc": "mug next to the bowl",
+     "goal": {
+      "type": "lift",
+      "dz": 0.06
+     },
+     "mirror": true,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "bowl",
+       "kind": "reference",
+       "type": "model",
+       "model": "002_bowl",
+       "ids": [
+        1,
+        2,
+        3
+       ],
+       "desc": "bowl",
+       "static": true,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "039_mug",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "mug next to the bowl",
+       "static": false,
+       "color": null,
+       "rel": "bowl"
+      },
+      {
+       "role": "distractor",
+       "kind": "distractor",
+       "type": "model",
+       "model": "039_mug",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "mug",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Pick up the mug next to the bowl and lift it at least 0.06 m off its support.",
+     "env_doc": "D4-06 · instruction structure · L2 · 餐桌收拾\n\n依赖的 RoboTwin 基础任务: 11 hanging_mug, 48 stack_bowls_two\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Pick up the mug next to the bowl and lift it at least 0.06 m off its support."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/ref_mug_next_to_bowl_success.mp4",
+      "failure": "assets/videos/ref_mug_next_to_bowl_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/ref_mug_next_to_bowl.png"
+    },
+    {
+     "name": "ref_not_the_red_one",
+     "title": "Ref not the red one",
+     "index": 6,
+     "dim": "D4",
+     "repo_dim": "D4",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "lift",
+     "criterion_en": "Lift: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper.",
+     "context_zh": "积木码垛",
+     "context_en": "Block stacking",
+     "baseline": [
+      "blocks_ranking_rgb"
+     ],
+     "note_zh": "否定式指代 —— 旧套件完全没有这一类",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Grab the {A}.",
+       "Pick up the {A} with {a}."
+      ],
+      "unseen": [
+       "Pick up the {A}.",
+       "Please pick up the {A}."
+      ],
+      "schema": "",
+      "note": "D4-07 instruction structure L2;判据=lift;由 suite/table.py 生成"
+     },
+     "a_desc": "block that is not red",
+     "goal": {
+      "type": "lift",
+      "dz": 0.06
+     },
+     "mirror": true,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "block that is not red",
+       "static": false,
+       "color": [
+        0.15,
+        0.3,
+        0.9
+       ],
+       "rel": null
+      },
+      {
+       "role": "distractor",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "red block",
+       "static": false,
+       "color": [
+        0.9,
+        0.15,
+        0.15
+       ],
+       "rel": null
+      }
+     ],
+     "description_en": "Pick up the block that is not red and lift it at least 0.06 m off its support.",
+     "env_doc": "D4-07 · instruction structure · L2 · 积木码垛\n\n否定式指代 —— 旧套件完全没有这一类\n\n依赖的 RoboTwin 基础任务: 3 blocks_ranking_rgb\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Pick up the block that is not red and lift it at least 0.06 m off its support."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/ref_not_the_red_one_success.mp4",
+      "failure": "assets/videos/ref_not_the_red_one_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/ref_not_the_red_one.png"
+    },
+    {
+     "name": "ref_second_from_left",
+     "title": "Ref second from left",
+     "index": 7,
+     "dim": "D4",
+     "repo_dim": "D4",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "lift",
+     "criterion_en": "Lift: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper.",
+     "context_zh": "积木码垛",
+     "context_en": "Block stacking",
+     "baseline": [
+      "blocks_ranking_rgb",
+      "stack_blocks_three"
+     ],
+     "note_zh": "序位；MIRROR 必须关，镜像会改答案",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Grab the {A}.",
+       "Pick up the {A} with {a}."
+      ],
+      "unseen": [
+       "Pick up the {A}.",
+       "Please pick up the {A}."
+      ],
+      "schema": "",
+      "note": "D4-04 instruction structure L2;判据=lift;由 suite/table.py 生成"
+     },
+     "a_desc": "second block from the left",
+     "goal": {
+      "type": "lift",
+      "dz": 0.06
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "d1",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "orange block",
+       "static": false,
+       "color": [
+        0.95,
+        0.6,
+        0.1
+       ],
+       "rel": null
+      },
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "second block from the left",
+       "static": false,
+       "color": [
+        0.95,
+        0.6,
+        0.1
+       ],
+       "rel": null
+      },
+      {
+       "role": "d2",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "orange block",
+       "static": false,
+       "color": [
+        0.95,
+        0.6,
+        0.1
+       ],
+       "rel": null
+      }
+     ],
+     "description_en": "Pick up the second block from the left and lift it at least 0.06 m off its support.",
+     "env_doc": "D4-04 · instruction structure · L2 · 积木码垛\n\n序位；MIRROR 必须关，镜像会改答案\n\n依赖的 RoboTwin 基础任务: 3 blocks_ranking_rgb, 45 stack_blocks_three\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Pick up the second block from the left and lift it at least 0.06 m off its support."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/ref_second_from_left_success.mp4",
+      "failure": "assets/videos/ref_second_from_left_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/ref_second_from_left.png"
+    }
+   ]
+  },
+  {
+   "id": "D5",
+   "repo_id": "D5",
+   "axis": "skill_x_skill_temporal",
+   "name_en": "Skill sequences",
+   "short_en": "Skill sequences",
+   "desc_en": "Familiar actions must achieve successive conditions in the requested order; stage progress is recorded.",
+   "desc_zh": "两个训练过的技能串联，训练里从未融合，顺序有真实依赖",
+   "scenes": [
+    {
+     "name": "adjust_bottle_dustbin",
+     "title": "Adjust bottle dustbin",
+     "index": 1,
+     "dim": "D5",
+     "repo_dim": "D5",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "handwritten",
+     "criterion": "handwritten",
+     "criterion_en": "Handwritten: task-specific `check_success` in the environment file (see the description).",
+     "context_zh": "垃圾清理",
+     "context_en": "Trash cleanup",
+     "baseline": [
+      "adjust_bottle",
+      "put_bottles_dustbin"
+     ],
+     "note_zh": "手写，两段 stage 判据",
+     "smoke": "2/2",
+     "step_limit": 600,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Stand {A} upright, then put it into {B}.",
+       "Use {a} to set {A} head-up and drop it into {B}.",
+       "Lift {A} head-up from the table, then throw it into {B}.",
+       "Make {A} upright first, then place it into {B}.",
+       "With {a}, right {A} and then discard it into {B}.",
+       "Set {A} upright and put it in {B}.",
+       "Pick {A} up head-up, then drop it in {B}.",
+       "Adjust {A} to stand, then toss it into {B}.",
+       "Use {a} to upright {A} before putting it into {B}.",
+       "Right {A} on the table, then place it inside {B}."
+      ],
+      "unseen": [
+       "Stand the fallen {A} up, then throw it away into {B}.",
+       "First make {A} head-up with {a}, then dispose of it in {B}.",
+       "Upright {A} and then drop it into {B}.",
+       "Turn {A} head-up, afterwards put it into {B}.",
+       "Get {A} standing, then discard it in {B}."
+      ],
+      "schema": "{A} notifies the bottle, {B} notifies the dustbin, {a} notifies the arm",
+      "note": ""
+     },
+     "a_desc": null,
+     "goal": null,
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "Base_Task",
+     "objects": [],
+     "description_en": "First stand the fallen bottle upright with the left arm, then drop it into the dustbin.",
+     "env_doc": "组合泛化任务：先把躺着的瓶子扶正（adjust_bottle），再投进垃圾桶（put_bottles_dustbin）。\n\n两个技能都在训练集里单独出现过，这个场景只做「串起来」的组合泛化测试，不用来训练。\n\n与两个原任务的对齐关系（改之前先看这里）：\n  * 瓶子：001_bottle（adjust_bottle 用的那个），躺姿、model_id 13/16 —— 和 adjust_bottle\n    完全一致。put_bottles_dustbin 用的是 114_bottle，所以「投垃圾桶」这一段面对的是\n    没见过的瓶型，这正是要测的组合泛化的一部分。设 COMBO_BOTTLE=114_bottle 可以换成\n    另一侧的配置。\n  * 生成位置固定在**左侧**（原 adjust_bottle 是左右各一半概率）。垃圾桶在 x=-0.45，\n    左手扶正后不用换手就能直接投，右手那一支在这个组合里没有意义。\n  * 桌子用 put_bottles_dustbin 的 table_xy_bias=[0.3, 0]，否则垃圾桶放不下。\n    注意这让桌面相对 adjust_bottle 训练时平移了，属于这个组合场景固有的分布偏移。\n\n阶段（stage_reward / self.stage）：\n  0 = 还没扶正\n  1 = 瓶子在左侧被扶正；默认允许继续持瓶，不要求松手后自立\n  2 = 瓶子在垃圾桶里（判据同 put_bottles_dustbin）",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Task-specific `check_success` returns false (wrong object selected, or the declared end state not reached)."
+      },
+      {
+       "score": 100,
+       "cond": "Task-specific `check_success` returns true. See the environment docstring above for the exact rule."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/adjust_bottle_dustbin_success.mp4",
+      "failure": "assets/videos/adjust_bottle_dustbin_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/adjust_bottle_dustbin.png",
+     "delivery_note": "Instruction delivery differs between system groups on this task. Learned policies receive oracle-staged instructions (COMBO_STAGED_INSTRUCTION=1): the instruction switches to the second stage once stage 1 succeeds. The two agents (GPT-6, Gemini 3.8 Flash) receive the complete compound instruction from the start (COMBO_STAGED_INSTRUCTION=0). Seeds, success predicate and step limit are unchanged, but agent and policy numbers on this scene are not measured under identical instruction conditions."
+    },
+    {
+     "name": "click_bell_press_stapler",
+     "title": "Click bell press stapler",
+     "index": 2,
+     "dim": "D5",
+     "repo_dim": "D5",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "handwritten",
+     "criterion": "handwritten",
+     "criterion_en": "Handwritten: task-specific `check_success` in the environment file (see the description).",
+     "context_zh": "前台服务",
+     "context_en": "Front desk",
+     "baseline": [
+      "click_bell",
+      "press_stapler"
+     ],
+     "note_zh": "手写，跨物体按压时序",
+     "smoke": "未跑（v1 沿用）",
+     "step_limit": 600,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Click {A}, then press {B}.",
+       "Ring {A} first, then push down on {B}.",
+       "Press {A}, then press {B}.",
+       "Use {a} to click {A}, then use {b} to press {B}.",
+       "First ring {A}, afterwards press {B}.",
+       "Tap {A}, then push {B} down.",
+       "Click {A} and then press {B}.",
+       "Ring {A}, then press down on {B}.",
+       "Hit {A} first, then press {B}.",
+       "Push {A} down, then push {B} down."
+      ],
+      "unseen": [
+       "Click {A} first, then press {B}.",
+       "Ring {A} and then push {B} down.",
+       "After clicking {A}, press {B}.",
+       "Tap {A}, afterwards press down on {B}.",
+       "Press {A} then {B}, in that order."
+      ],
+      "schema": "{A} notifies the bell, {B} notifies the stapler, {a} notifies the arm clicking the bell, {b} notifies the arm pressing the stapler",
+      "note": "click_bell_press_stapler（技能x技能·跨物体时序）。click_bell 与 press_stapler 各自在训练的 50 个任务里，但从未在同一场景里串联过。两个都是按压型原语（物体静止、不需抓起），是这套环境里最稳的动作 —— 前两版用微波炉和抽屉都栽在抓取/容器上。"
+     },
+     "a_desc": null,
+     "goal": null,
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "Base_Task",
+     "objects": [],
+     "description_en": "First click the bell, then press the stapler.",
+     "env_doc": "组合泛化测试场景（技能 x 技能 · 跨物体时序）。不用于训练。\n\n先按响铃铛（click_bell 的技能），再按下订书机（press_stapler 的技能）。\n两个物体分居左右，各由一条手臂负责。\n\n为什么是这一对（前两版换掉的原因都记在这）：\n  * 第一版 open_microwave_put_object：微波炉是**前开口封闭腔体**，而 place_actor 从 +z\n    下降接近，从上方插不进去 —— 动作原语和几何不匹配，实测开门成功但放入全部失败。\n  * 第二版 adjust_bottle_put_cabinet / press_stapler_put_cabinet：前一半（扶正 / 按压）\n    都稳定成功，但后一半「松手重抓 + 双臂开抽屉 + 放入」失败散布在三个步骤上。\n    这和早先在 adjust_bottle_dustbin 上量到的结论一致：**松手重抓本身就不稳**。\n  * 这一版把抓取和容器整个去掉：click_bell 和 press_stapler 都是**按压型原语**\n    （物体静止不动、不需要抓起来），是这套环境里最稳的动作。两个技能各自都在训练的\n    50 个任务里，但**从未在同一场景里被串联过**，而且是**跨物体**的时序组合\n    （已有的 stapler_pad_press / adjust_bottle_dustbin 都是同物体的）。\n\n阶段：0 = 都没做；1 = 铃铛已按响；2 = 订书机也已按下。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Task-specific `check_success` returns false (wrong object selected, or the declared end state not reached)."
+      },
+      {
+       "score": 100,
+       "cond": "Task-specific `check_success` returns true. See the environment docstring above for the exact rule."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/click_bell_press_stapler_success.mp4",
+      "failure": "assets/videos/click_bell_press_stapler_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/click_bell_press_stapler.png"
+    },
+    {
+     "name": "serve_teabox_then_ring",
+     "title": "Serve teabox then ring",
+     "index": 3,
+     "dim": "D5",
+     "repo_dim": "D5",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "seq",
+     "criterion_en": "Sequence: stage goals must be reached in order; the stage counter only increases.",
+     "context_zh": "厨房备餐",
+     "context_en": "Kitchen prep",
+     "baseline": [
+      "place_bread_basket",
+      "click_bell"
+     ],
+     "note_zh": "上餐后按铃叫号",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} into the basket, then press the bell.",
+       "Place the {A} into the basket, then press the bell.",
+       "Put the {A} into the basket, then press the bell with {a}."
+      ],
+      "unseen": [
+       "Put the {A} into the basket, then press the bell.",
+       "Please put the {A} into the basket, then press the bell."
+      ],
+      "schema": "",
+      "note": "D5-02 skill x skill (temporal) L2;判据=seq;由 suite/table.py 生成"
+     },
+     "a_desc": "tea box",
+     "goal": {
+      "type": "seq",
+      "stages": [
+       {
+        "type": "in",
+        "ref": "breadbasket",
+        "r": 0.12
+       },
+       {
+        "type": "press",
+        "ref": "bell",
+        "model": "050_bell",
+        "cp": 0
+       }
+      ]
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "112_tea-box",
+       "ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "desc": "tea box",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "breadbasket",
+       "kind": "reference",
+       "type": "model",
+       "model": "110_basket",
+       "ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "desc": "basket",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "bell",
+       "kind": "reference",
+       "type": "model",
+       "model": "050_bell",
+       "ids": [
+        0,
+        1
+       ],
+       "desc": "bell",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "First put the tea box inside the basket, then press the bell.",
+     "env_doc": "D5-02 · skill x skill (temporal) · L2 · 厨房备餐\n\n上餐后按铃叫号\n\n依赖的 RoboTwin 基础任务: 23 place_bread_basket, 6 click_bell\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Stage 1 reached (Put the tea box inside the basket) but later stages not completed. Stage progress is recorded per episode for diagnosis."
+      },
+      {
+       "score": 100,
+       "cond": "All stages reached in order: First put the tea box inside the basket, then press the bell."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/serve_teabox_then_ring_success.mp4",
+      "failure": "assets/videos/serve_teabox_then_ring_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/serve_teabox_then_ring.png"
+    },
+    {
+     "name": "stapler_pad_press",
+     "title": "Stapler pad press",
+     "index": 4,
+     "dim": "D5",
+     "repo_dim": "D5",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "handwritten",
+     "criterion": "handwritten",
+     "criterion_en": "Handwritten: task-specific `check_success` in the environment file (see the description).",
+     "context_zh": "办公桌",
+     "context_en": "Office desk",
+     "baseline": [
+      "move_stapler_pad",
+      "press_stapler"
+     ],
+     "note_zh": "手写，stage 序判据 + 分段指令",
+     "smoke": "未跑（v1 沿用）",
+     "step_limit": 600,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Move {A} to the {B} mat, then press it.",
+       "Put {A} on the {B} mat and press it down.",
+       "Place {A} on the {B} colored mat, then push it down.",
+       "Use {a} to set {A} on the {B} mat, then press it.",
+       "Set {A} onto the {B} mat and press down on it.",
+       "Move {A} onto the {B} colored mat, then press {A}.",
+       "With {a}, put {A} on the {B} mat and press it.",
+       "Drop {A} on the {B} mat, then push down on it.",
+       "Bring {A} to the {B} mat and press it until it works.",
+       "Place {A} on the {B} mat, afterwards press it down."
+      ],
+      "unseen": [
+       "Move {A} to the {B} mat, then press down on it.",
+       "Put {A} onto the {B} colored mat and press it.",
+       "Use {a} to move {A} to the {B} mat, then press {A}.",
+       "Set {A} on the {B} mat, then push it down.",
+       "Place {A} on the {B} mat and then press on it."
+      ],
+      "schema": "{A} notifies the stapler, {B} notifies the color of the mat(YOU SHOULD SAY {B} mat, or {B} colored mat), {a} notifies the arm",
+      "note": "stapler_pad_press（组合泛化场景）自己的复合句，只在 STAPLER_STAGED_INSTRUCTION=0 的基线里用到。分阶段模式下用的是 move_stapler_pad.json 和 press_stapler.json 的原模板。"
+     },
+     "a_desc": null,
+     "goal": null,
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "Base_Task",
+     "objects": [],
+     "description_en": "First move the stapler onto the colored mat, then press it down.",
+     "env_doc": "组合泛化：先把订书机放到垫子上（move_stapler_pad），再按下去（press_stapler）。\n\n两个技能都在训练集里单独出现过，这个场景只做「串起来」的组合泛化测试，不用来训练。\n\n选这一对的理由（对比之前 adjust_bottle + put_bottles_dustbin 那次失败）：\n  * **接口干净**：move_stapler_pad 的 check_success 强制要求双爪张开，所以第一阶段\n    一定以「物体已放下、双手空闲」结束；press_stapler 也正是从「订书机静止在台面上」\n    开始的。瓶子那次的失败根因就是 adjust_bottle 以「握着」结束、而投桶技能从\n    「伸手去抓桌上的瓶子」开始，两者之间根本不存在衔接状态。\n  * 物体完全一致：都是 048_stapler，model_id 都是 [0..6]。\n  * 生成四元数一致：都是 [0.5,0.5,0.5,0.5] + 绕 y 随机。\n  * 选臂规则一致（x>0 用右，否则左），且垫子生成在订书机同侧，两阶段同一条手臂。\n  * 两个源任务都用默认桌面偏置，不需要像 put_bottles_dustbin 那样把桌子挪 0.3。\n\n生成区的取舍（两处都取**子集**，不引入任何分布外）：\n  * 订书机：沿用 move_stapler_pad 的原始范围 x∈[-0.25,0.25] (|x|>0.05), y∈[-0.2,0]，\n    第一阶段完全在分布内。\n  * 垫子：收窄到 press_stapler 的范围 ∩ 同侧 = |x|∈[0.05,0.2], y∈[-0.1,0]。\n    垫子的位置决定了第一阶段结束后订书机停在哪，收窄它就保证第二阶段的**起始状态**\n    落在 press_stapler 的训练区间里。这是 press_stapler 的 x∈[-0.2,0.2]、y∈[-0.1,0.05]\n    与 move_stapler_pad 垫子区 y∈[-0.2,0] 的交集，两边都是子集。\n\n已知的唯一残余差异：press_stapler 训练时订书机是 is_static=True，而这里必须是动态的\n（第一阶段要抓起来）。外观一致，物理不同 —— 按压时它可能被推动。这是这个组合固有的，\n没法两全。\n\n阶段（stage_reward / self.stage）：\n  0 = 还没放到垫子上\n  1 = 订书机已放到垫子上且松手（判据同 move_stapler_pad.check_success）\n  2 = 已按下（判据同 press_stapler.check_success）",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Task-specific `check_success` returns false (wrong object selected, or the declared end state not reached)."
+      },
+      {
+       "score": 100,
+       "cond": "Task-specific `check_success` returns true. See the environment docstring above for the exact rule."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/stapler_pad_press_success.mp4",
+      "failure": "assets/videos/stapler_pad_press_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/stapler_pad_press.png",
+     "delivery_note": "Instruction delivery differs between system groups on this task. Learned policies receive oracle-staged instructions (STAPLER_STAGED_INSTRUCTION=1): the instruction switches to the second stage once stage 1 succeeds. The two agents (GPT-6, Gemini 3.8 Flash) receive the complete compound instruction from the start (STAPLER_STAGED_INSTRUCTION=0); GPT-6's rerun under this setting remains 4/5. Seeds, success predicate and step limit are unchanged, but agent and policy numbers on this scene are not measured under identical instruction conditions."
+    },
+    {
+     "name": "lift_pot_to_pad",
+     "title": "Lift pot to pad",
+     "index": 5,
+     "dim": "D5",
+     "repo_dim": "D5",
+     "tier": "L3",
+     "tier_desc_zh": "双约束 / 双段 —— 两个约束同时成立，或两段动作有真实先后依赖",
+     "tier_desc_en": "Two constraints / two segments: two constraints hold simultaneously, or two segments with a real ordering dependency.",
+     "source": "generated",
+     "criterion": "dual_carry_to",
+     "criterion_en": "Dual carry: both arms grasp the handles, lift the object by the declared height, then carry it above the pad and release.",
+     "context_zh": "厨房备餐",
+     "context_en": "Kitchen prep",
+     "baseline": [
+      "lift_pot",
+      "move_stapler_pad"
+     ],
+     "note_zh": "用户提的 lift_pot 组合版：双臂各抓一个把手抬起，再一起送到垫子上松手",
+     "smoke": "3/10",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Lift the {A} with both arms and put it on the pad.",
+       "Lift the {A} with both arms and put it on the pad with {a}."
+      ],
+      "unseen": [
+       "Lift the {A} with both arms and put it on the pad.",
+       "Please lift the {A} with both arms and put it on the pad."
+      ],
+      "schema": "",
+      "note": "D5-11 skill x skill (temporal) L3;判据=dual_carry_to;由 suite/table.py 生成"
+     },
+     "a_desc": "pot",
+     "goal": {
+      "type": "dual_carry_to",
+      "ref": "pad",
+      "dz": 0.06,
+      "eps": [
+       0.09,
+       0.09
+      ]
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "urdf",
+       "model": "060_kitchenpot",
+       "ids": [
+        0,
+        1
+       ],
+       "desc": "pot",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "pad",
+       "kind": "reference",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "pad",
+       "static": false,
+       "color": [
+        0.45,
+        0.45,
+        0.45
+       ],
+       "rel": null
+      }
+     ],
+     "description_en": "Grasp the pot with both arms, lift it, carry it over the pad and release.",
+     "env_doc": "D5-11 · skill x skill (temporal) · L3 · 厨房备餐\n\n用户提的 lift_pot 组合版：双臂各抓一个把手抬起，再一起送到垫子上松手\n\n依赖的 RoboTwin 基础任务: 12 lift_pot, 16 move_stapler_pad\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: both arms grasp the handles, lift the object by the declared height, then carry it above the pad and release. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Grasp the pot with both arms, lift it, carry it over the pad and release."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/lift_pot_to_pad_success.mp4",
+      "failure": "assets/videos/lift_pot_to_pad_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/lift_pot_to_pad.png"
+    },
+    {
+     "name": "pack_toycar_then_ring",
+     "title": "Pack toycar then ring",
+     "index": 6,
+     "dim": "D5",
+     "repo_dim": "D5",
+     "tier": "L3",
+     "tier_desc_zh": "双约束 / 双段 —— 两个约束同时成立，或两段动作有真实先后依赖",
+     "tier_desc_en": "Two constraints / two segments: two constraints hold simultaneously, or two segments with a real ordering dependency.",
+     "source": "generated",
+     "criterion": "seq",
+     "criterion_en": "Sequence: stage goals must be reached in order; the stage counter only increases.",
+     "context_zh": "玄关",
+     "context_en": "Entryway",
+     "baseline": [
+      "place_object_basket",
+      "place_cans_plasticbox",
+      "click_bell"
+     ],
+     "note_zh": "",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} into the plastic box, then press the bell.",
+       "Place the {A} into the plastic box, then press the bell.",
+       "Put the {A} into the plastic box, then press the bell with {a}."
+      ],
+      "unseen": [
+       "Put the {A} into the plastic box, then press the bell.",
+       "Please put the {A} into the plastic box, then press the bell."
+      ],
+      "schema": "",
+      "note": "D5-06 skill x skill (temporal) L3;判据=seq;由 suite/table.py 生成"
+     },
+     "a_desc": "toy car",
+     "goal": {
+      "type": "seq",
+      "stages": [
+       {
+        "type": "in",
+        "ref": "box",
+        "r": 0.13
+       },
+       {
+        "type": "press",
+        "ref": "bell",
+        "model": "050_bell",
+        "cp": 0
+       }
+      ]
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "057_toycar",
+       "ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+       ],
+       "desc": "toy car",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "box",
+       "kind": "reference",
+       "type": "model",
+       "model": "062_plasticbox",
+       "ids": [
+        3,
+        5
+       ],
+       "desc": "plastic box",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "bell",
+       "kind": "reference",
+       "type": "model",
+       "model": "050_bell",
+       "ids": [
+        0,
+        1
+       ],
+       "desc": "bell",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "First put the toy car inside the plastic box, then press the bell.",
+     "env_doc": "D5-06 · skill x skill (temporal) · L3 · 玄关\n\n依赖的 RoboTwin 基础任务: 33 place_object_basket, 27 place_cans_plasticbox, 6 click_bell\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Stage 1 reached (Put the toy car inside the plastic box) but later stages not completed. Stage progress is recorded per episode for diagnosis."
+      },
+      {
+       "score": 100,
+       "cond": "All stages reached in order: First put the toy car inside the plastic box, then press the bell."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/pack_toycar_then_ring_success.mp4",
+      "failure": "assets/videos/pack_toycar_then_ring_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/pack_toycar_then_ring.png"
+    }
+   ]
+  },
+  {
+   "id": "D6",
+   "repo_id": "D7",
+   "axis": "mixture",
+   "name_en": "Mixed combinations",
+   "short_en": "Mixed",
+   "desc_en": "Scenes combine more than one of the above demands, or add semantically unrelated distractors to a source scene.",
+   "desc_zh": "两条以上维度叠加，复合深度阶梯",
+   "scenes": [
+    {
+     "name": "move_cup_pad_mix",
+     "title": "Move cup pad mix",
+     "index": 1,
+     "dim": "D6",
+     "repo_dim": "D7",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "on",
+     "criterion_en": "On: the target rests on top of the reference object within the declared xy/z tolerance.",
+     "context_zh": "办公桌",
+     "context_en": "Office desk",
+     "baseline": [
+      "move_stapler_pad"
+     ],
+     "note_zh": "混合维度：源场景 move_cup_pad + 一个语义无关的干扰物（071_can）。办公桌上多一个易拉罐。判据/指令/依赖全部继承源场景，只多干扰物 —— 和源场景的分差就是「干扰物 + 背景变化」这一维的代价。",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Move the {A} onto the pad.",
+       "Move the {A} onto the pad with {a}."
+      ],
+      "unseen": [
+       "Move the {A} onto the pad.",
+       "Please move the {A} onto the pad."
+      ],
+      "schema": "",
+      "note": "D1-01 mixture L2;判据=on;由 suite/table.py 生成"
+     },
+     "a_desc": "cup",
+     "goal": {
+      "type": "on",
+      "ref": "pad"
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "021_cup",
+       "ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+       ],
+       "desc": "cup",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "pad",
+       "kind": "reference",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "pad",
+       "static": false,
+       "color": [
+        0.45,
+        0.45,
+        0.45
+       ],
+       "rel": null
+      },
+      {
+       "role": "mix_distractor",
+       "kind": "distractor",
+       "type": "model",
+       "model": "071_can",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "can",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Place the cup on top of the pad.",
+     "env_doc": "D1-01 · mixture · L2 · 办公桌\n\n混合维度：源场景 move_cup_pad + 一个语义无关的干扰物（071_can）。办公桌上多一个易拉罐。判据/指令/依赖全部继承源场景，只多干扰物 —— 和源场景的分差就是「干扰物 + 背景变化」这一维的代价。\n\n依赖的 RoboTwin 基础任务: 16 move_stapler_pad\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target rests on top of the reference object within the declared xy/z tolerance. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Place the cup on top of the pad."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/move_cup_pad_mix_success.mp4",
+      "failure": "assets/videos/move_cup_pad_mix_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/move_cup_pad_mix.png"
+    },
+    {
+     "name": "ref_block_on_plate_mix",
+     "title": "Ref block on plate mix",
+     "index": 2,
+     "dim": "D6",
+     "repo_dim": "D7",
+     "tier": "L2",
+     "tier_desc_zh": "一跳 + 干扰 —— 一个新变量 + 只差一个属性的干扰物，或两段动作",
+     "tier_desc_en": "One hop plus distraction: one new variable and a distractor differing in one attribute, or a two-segment motion.",
+     "source": "generated",
+     "criterion": "lift",
+     "criterion_en": "Lift: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper.",
+     "context_zh": "餐桌收拾",
+     "context_en": "Table clearing",
+     "baseline": [
+      "place_container_plate"
+     ],
+     "note_zh": "混合维度：源场景 ref_block_on_plate + 一个语义无关的干扰物（057_toycar）。桌上多一个玩具车。判据/指令/依赖全部继承源场景，只多干扰物 —— 和源场景的分差就是「干扰物 + 背景变化」这一维的代价。",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Pick up the {A}.",
+       "Grab the {A}.",
+       "Pick up the {A} with {a}."
+      ],
+      "unseen": [
+       "Pick up the {A}.",
+       "Please pick up the {A}."
+      ],
+      "schema": "",
+      "note": "D4-01 mixture L2;判据=lift;由 suite/table.py 生成"
+     },
+     "a_desc": "block on the plate",
+     "goal": {
+      "type": "lift",
+      "dz": 0.06
+     },
+     "mirror": true,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "plate",
+       "kind": "reference",
+       "type": "model",
+       "model": "003_plate",
+       "ids": [
+        0
+       ],
+       "desc": "plate",
+       "static": true,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "block on the plate",
+       "static": false,
+       "color": [
+        0.95,
+        0.6,
+        0.1
+       ],
+       "rel": "plate"
+      },
+      {
+       "role": "distractor",
+       "kind": "distractor",
+       "type": "box",
+       "model": "box",
+       "ids": null,
+       "desc": "orange block",
+       "static": false,
+       "color": [
+        0.95,
+        0.6,
+        0.1
+       ],
+       "rel": null
+      },
+      {
+       "role": "mix_distractor",
+       "kind": "distractor",
+       "type": "model",
+       "model": "057_toycar",
+       "ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "desc": "toy car",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Pick up the block on the plate and lift it at least 0.06 m off its support.",
+     "env_doc": "D4-01 · mixture · L2 · 餐桌收拾\n\n混合维度：源场景 ref_block_on_plate + 一个语义无关的干扰物（057_toycar）。桌上多一个玩具车。判据/指令/依赖全部继承源场景，只多干扰物 —— 和源场景的分差就是「干扰物 + 背景变化」这一维的代价。\n\n依赖的 RoboTwin 基础任务: 28 place_container_plate\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target's collision geometry leaves its initial support surface by the declared height while in contact with a gripper. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Pick up the block on the plate and lift it at least 0.06 m off its support."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/ref_block_on_plate_mix_success.mp4",
+      "failure": "assets/videos/ref_block_on_plate_mix_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/ref_block_on_plate_mix.png"
+    },
+    {
+     "name": "attr_teabox_basket_then_ring",
+     "title": "Attr teabox basket then ring",
+     "index": 3,
+     "dim": "D6",
+     "repo_dim": "D7",
+     "tier": "L3",
+     "tier_desc_zh": "双约束 / 双段 —— 两个约束同时成立，或两段动作有真实先后依赖",
+     "tier_desc_en": "Two constraints / two segments: two constraints hold simultaneously, or two segments with a real ordering dependency.",
+     "source": "generated",
+     "criterion": "seq",
+     "criterion_en": "Sequence: stage goals must be reached in order; the stage counter only increases.",
+     "context_zh": "厨房备餐",
+     "context_en": "Kitchen prep",
+     "baseline": [
+      "place_bread_basket",
+      "click_bell",
+      "pick_diverse_bottles"
+     ],
+     "note_zh": "属性 × 时序",
+     "smoke": "2/3",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} into the basket, then press the bell.",
+       "Place the {A} into the basket, then press the bell.",
+       "Put the {A} into the basket, then press the bell with {a}."
+      ],
+      "unseen": [
+       "Put the {A} into the basket, then press the bell.",
+       "Please put the {A} into the basket, then press the bell."
+      ],
+      "schema": "",
+      "note": "D7-06 mixture L3;判据=seq;由 suite/table.py 生成"
+     },
+     "a_desc": "tea box",
+     "goal": {
+      "type": "seq",
+      "stages": [
+       {
+        "type": "in",
+        "ref": "breadbasket",
+        "r": 0.12
+       },
+       {
+        "type": "press",
+        "ref": "bell",
+        "model": "050_bell",
+        "cp": 0
+       }
+      ]
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "112_tea-box",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "tea box",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "distractor",
+       "kind": "distractor",
+       "type": "model",
+       "model": "035_apple",
+       "ids": [
+        0,
+        1
+       ],
+       "desc": "apple",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "breadbasket",
+       "kind": "reference",
+       "type": "model",
+       "model": "110_basket",
+       "ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "desc": "basket",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "bell",
+       "kind": "reference",
+       "type": "model",
+       "model": "050_bell",
+       "ids": [
+        0,
+        1
+       ],
+       "desc": "bell",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "First put the tea box inside the basket, then press the bell.",
+     "env_doc": "D7-06 · mixture · L3 · 厨房备餐\n\n属性 × 时序\n\n依赖的 RoboTwin 基础任务: 23 place_bread_basket, 6 click_bell, 19 pick_diverse_bottles\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Stage 1 reached (Put the tea box inside the basket) but later stages not completed. Stage progress is recorded per episode for diagnosis."
+      },
+      {
+       "score": 100,
+       "cond": "All stages reached in order: First put the tea box inside the basket, then press the bell."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/attr_teabox_basket_then_ring_success.mp4",
+      "failure": "assets/videos/attr_teabox_basket_then_ring_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/attr_teabox_basket_then_ring.png"
+    },
+    {
+     "name": "card_right_of_scanner_mix",
+     "title": "Card right of scanner mix",
+     "index": 4,
+     "dim": "D6",
+     "repo_dim": "D7",
+     "tier": "L3",
+     "tier_desc_zh": "双约束 / 双段 —— 两个约束同时成立，或两段动作有真实先后依赖",
+     "tier_desc_en": "Two constraints / two segments: two constraints hold simultaneously, or two segments with a real ordering dependency.",
+     "source": "generated",
+     "criterion": "rel",
+     "criterion_en": "Relation: the target ends up on the declared side (left/right/front/behind) of the reference within a gap band and without lateral drift.",
+     "context_zh": "超市结账",
+     "context_en": "Supermarket checkout",
+     "baseline": [
+      "rotate_qrcode",
+      "scan_object",
+      "place_a2b_right"
+     ],
+     "note_zh": "混合维度：源场景 card_right_of_scanner + 一个语义无关的干扰物（071_can）。收银台上多一个易拉罐。判据/指令/依赖全部继承源场景，只多干扰物 —— 和源场景的分差就是「干扰物 + 背景变化」这一维的代价。",
+     "smoke": "2/3",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} to the right of the barcode scanner.",
+       "Place the {A} to the right of the barcode scanner.",
+       "Put the {A} to the right of the barcode scanner with {a}."
+      ],
+      "unseen": [
+       "Put the {A} to the right of the barcode scanner.",
+       "Please put the {A} to the right of the barcode scanner."
+      ],
+      "schema": "",
+      "note": "D2-12 mixture L3;判据=rel;由 suite/table.py 生成"
+     },
+     "a_desc": "payment card",
+     "goal": {
+      "type": "rel",
+      "ref": "scanner",
+      "dir": "right",
+      "gap": [
+       0.05,
+       0.22
+      ],
+      "min_start": 0.18
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "070_paymentsign",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "paymentsign",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "scanner",
+       "kind": "reference",
+       "type": "model",
+       "model": "024_scanner",
+       "ids": [
+        0,
+        1,
+        2,
+        3,
+        4
+       ],
+       "desc": "barcode",
+       "static": true,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "mix_distractor",
+       "kind": "distractor",
+       "type": "model",
+       "model": "071_can",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "can",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Place the payment card to the right of the barcode.",
+     "env_doc": "D2-12 · mixture · L3 · 超市结账\n\n混合维度：源场景 card_right_of_scanner + 一个语义无关的干扰物（071_can）。收银台上多一个易拉罐。判据/指令/依赖全部继承源场景，只多干扰物 —— 和源场景的分差就是「干扰物 + 背景变化」这一维的代价。\n\n依赖的 RoboTwin 基础任务: 41 rotate_qrcode, 42 scan_object, 22 place_a2b_right\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target ends up on the declared side (left/right/front/behind) of the reference within a gap band and without lateral drift. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Place the payment card to the right of the barcode."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/card_right_of_scanner_mix_success.mp4",
+      "failure": "assets/videos/card_right_of_scanner_mix_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/card_right_of_scanner_mix.png"
+    },
+    {
+     "name": "place_teabox_skillet_mix",
+     "title": "Place teabox skillet mix",
+     "index": 5,
+     "dim": "D6",
+     "repo_dim": "D7",
+     "tier": "L3",
+     "tier_desc_zh": "双约束 / 双段 —— 两个约束同时成立，或两段动作有真实先后依赖",
+     "tier_desc_en": "Two constraints / two segments: two constraints hold simultaneously, or two segments with a real ordering dependency.",
+     "source": "generated",
+     "criterion": "in",
+     "criterion_en": "In: the target is inside the container — touching it, low velocity, bottom below the rim, and displaced from its start.",
+     "context_zh": "厨房备餐",
+     "context_en": "Kitchen prep",
+     "baseline": [
+      "place_bread_skillet"
+     ],
+     "note_zh": "混合维度：源场景 place_teabox_skillet + 一个语义无关的干扰物（073_rubikscube）。灶台上多一个魔方。判据/指令/依赖全部继承源场景，只多干扰物 —— 和源场景的分差就是「干扰物 + 背景变化」这一维的代价。",
+     "smoke": "2/2",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} into the skillet.",
+       "Place the {A} into the skillet.",
+       "Put the {A} into the skillet with {a}."
+      ],
+      "unseen": [
+       "Put the {A} into the skillet.",
+       "Please put the {A} into the skillet."
+      ],
+      "schema": "",
+      "note": "D1-15 mixture L3;判据=in;由 suite/table.py 生成"
+     },
+     "a_desc": "tea box",
+     "goal": {
+      "type": "in",
+      "ref": "skillet",
+      "r": 0.16
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "112_tea-box",
+       "ids": [
+        0,
+        1,
+        2,
+        3,
+        4
+       ],
+       "desc": "tea box",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "skillet",
+       "kind": "reference",
+       "type": "model",
+       "model": "106_skillet",
+       "ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "desc": "skillet",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "mix_distractor",
+       "kind": "distractor",
+       "type": "model",
+       "model": "073_rubikscube",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "cube",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Put the tea box inside the skillet.",
+     "env_doc": "D1-15 · mixture · L3 · 厨房备餐\n\n混合维度：源场景 place_teabox_skillet + 一个语义无关的干扰物（073_rubikscube）。灶台上多一个魔方。判据/指令/依赖全部继承源场景，只多干扰物 —— 和源场景的分差就是「干扰物 + 背景变化」这一维的代价。\n\n依赖的 RoboTwin 基础任务: 24 place_bread_skillet\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target is inside the container — touching it, low velocity, bottom below the rim, and displaced from its start. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Put the tea box inside the skillet."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/place_teabox_skillet_mix_success.mp4",
+      "failure": "assets/videos/place_teabox_skillet_mix_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/place_teabox_skillet_mix.png"
+    },
+    {
+     "name": "put_toycar_left_basket_mix",
+     "title": "Put toycar left basket mix",
+     "index": 6,
+     "dim": "D6",
+     "repo_dim": "D7",
+     "tier": "L3",
+     "tier_desc_zh": "双约束 / 双段 —— 两个约束同时成立，或两段动作有真实先后依赖",
+     "tier_desc_en": "Two constraints / two segments: two constraints hold simultaneously, or two segments with a real ordering dependency.",
+     "source": "generated",
+     "criterion": "in",
+     "criterion_en": "In: the target is inside the container — touching it, low velocity, bottom below the rim, and displaced from its start.",
+     "context_zh": "家务分拣",
+     "context_en": "Household sorting",
+     "baseline": [
+      "place_object_basket",
+      "place_a2b_left"
+     ],
+     "note_zh": "混合维度：源场景 put_toycar_left_basket + 一个语义无关的干扰物（112_tea-box）。地上多一个茶叶盒。判据/指令/依赖全部继承源场景，只多干扰物 —— 和源场景的分差就是「干扰物 + 背景变化」这一维的代价。",
+     "smoke": "2/6",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} into the left basket.",
+       "Place the {A} into the left basket.",
+       "Put the {A} into the left basket with {a}."
+      ],
+      "unseen": [
+       "Put the {A} into the left basket.",
+       "Please put the {A} into the left basket."
+      ],
+      "schema": "",
+      "note": "D2-08 mixture L3;判据=in;由 suite/table.py 生成"
+     },
+     "a_desc": "toy car",
+     "goal": {
+      "type": "in",
+      "ref": "basket_l",
+      "r": 0.12
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "057_toycar",
+       "ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+       ],
+       "desc": "toy car",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "basket_l",
+       "kind": "reference",
+       "type": "model",
+       "model": "110_basket",
+       "ids": [
+        0,
+        1
+       ],
+       "desc": "basket",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "basket_r",
+       "kind": "distractor",
+       "type": "model",
+       "model": "110_basket",
+       "ids": [
+        2,
+        3
+       ],
+       "desc": "basket",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "mix_distractor",
+       "kind": "distractor",
+       "type": "model",
+       "model": "112_tea-box",
+       "ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "desc": "tea box",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Put the toy car inside the basket.",
+     "env_doc": "D2-08 · mixture · L3 · 家务分拣\n\n混合维度：源场景 put_toycar_left_basket + 一个语义无关的干扰物（112_tea-box）。地上多一个茶叶盒。判据/指令/依赖全部继承源场景，只多干扰物 —— 和源场景的分差就是「干扰物 + 背景变化」这一维的代价。\n\n依赖的 RoboTwin 基础任务: 33 place_object_basket, 21 place_a2b_left\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target is inside the container — touching it, low velocity, bottom below the rim, and displaced from its start. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Put the toy car inside the basket."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/put_toycar_left_basket_mix_success.mp4",
+      "failure": "assets/videos/put_toycar_left_basket_mix_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/put_toycar_left_basket_mix.png"
+    },
+    {
+     "name": "roller_to_plate_mix",
+     "title": "Roller to plate mix",
+     "index": 7,
+     "dim": "D6",
+     "repo_dim": "D7",
+     "tier": "L3",
+     "tier_desc_zh": "双约束 / 双段 —— 两个约束同时成立，或两段动作有真实先后依赖",
+     "tier_desc_en": "Two constraints / two segments: two constraints hold simultaneously, or two segments with a real ordering dependency.",
+     "source": "generated",
+     "criterion": "on",
+     "criterion_en": "On: the target rests on top of the reference object within the declared xy/z tolerance.",
+     "context_zh": "厨房备餐",
+     "context_en": "Kitchen prep",
+     "baseline": [
+      "grab_roller",
+      "place_container_plate"
+     ],
+     "note_zh": "混合维度：源场景 roller_to_plate + 一个语义无关的干扰物（112_tea-box）。备餐台上多一个茶叶盒。判据/指令/依赖全部继承源场景，只多干扰物 —— 和源场景的分差就是「干扰物 + 背景变化」这一维的代价。",
+     "smoke": "2/5",
+     "step_limit": 1000,
+     "seeds": {
+      "count": 100
+     },
+     "instructions": {
+      "seen": [
+       "Put the {A} on the plate.",
+       "Place the {A} on the plate.",
+       "Put the {A} on the plate with {a}."
+      ],
+      "unseen": [
+       "Put the {A} on the plate.",
+       "Please put the {A} on the plate."
+      ],
+      "schema": "",
+      "note": "D1-16 mixture L3;判据=on;由 suite/table.py 生成"
+     },
+     "a_desc": "rolling pin",
+     "goal": {
+      "type": "on",
+      "ref": "plate"
+     },
+     "mirror": null,
+     "exclusive": null,
+     "base_class": "CompoScene",
+     "objects": [
+      {
+       "role": "target",
+       "kind": "target",
+       "type": "model",
+       "model": "102_roller",
+       "ids": [
+        0,
+        1,
+        2
+       ],
+       "desc": "roller",
+       "static": false,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "plate",
+       "kind": "reference",
+       "type": "model",
+       "model": "003_plate",
+       "ids": [
+        0
+       ],
+       "desc": "plate",
+       "static": true,
+       "color": null,
+       "rel": null
+      },
+      {
+       "role": "mix_distractor",
+       "kind": "distractor",
+       "type": "model",
+       "model": "112_tea-box",
+       "ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "desc": "tea box",
+       "static": false,
+       "color": null,
+       "rel": null
+      }
+     ],
+     "description_en": "Place the rolling pin on top of the plate.",
+     "env_doc": "D1-16 · mixture · L3 · 厨房备餐\n\n混合维度：源场景 roller_to_plate + 一个语义无关的干扰物（112_tea-box）。备餐台上多一个茶叶盒。判据/指令/依赖全部继承源场景，只多干扰物 —— 和源场景的分差就是「干扰物 + 背景变化」这一维的代价。\n\n依赖的 RoboTwin 基础任务: 8 grab_roller, 28 place_container_plate\n由 suite/table.py 生成，不要直接改这个文件。组合泛化测评专用，不用于训练。",
+     "scoring": [
+      {
+       "score": 0,
+       "cond": "Selection layer fails: the target's displacement is not strictly larger than every distractor's displacement (the policy did not act on the instructed object)."
+      },
+      {
+       "score": 0,
+       "cond": "Goal layer fails: the target rests on top of the reference object within the declared xy/z tolerance. is not satisfied at episode end."
+      },
+      {
+       "score": 100,
+       "cond": "Both layers hold: correct target selected and Place the rolling pin on top of the plate."
+      }
+     ],
+     "video": {
+      "success": "assets/videos/roller_to_plate_mix_success.mp4",
+      "failure": "assets/videos/roller_to_plate_mix_failure.mp4"
+     },
+     "init_images": [],
+     "thumbnail": "assets/img/scenes/roller_to_plate_mix.png"
+    }
+   ]
+  }
+ ]
+}
