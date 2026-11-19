@@ -13,6 +13,9 @@ Bug reports and reproduction problems should include the scene name, the policy 
 
 ## Contributing
 
+To have a new model or system evaluated, follow [Participate]({{rel}}participate/): self-test on the
+development set, then file an evaluation request so the organizers can run the private initial states.
+
 Changes to scenes, seeds, instruction pools or step limits alter the frozen protocol and require a new
 protocol version (see [Evaluation Protocol]({{rel}}usage/evaluation-protocol/)); adapters and
 documentation can be added without one.

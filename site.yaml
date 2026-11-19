@@ -33,6 +33,9 @@ links:
   email: "TODO@example.com"                         # TODO: contact address
   upstream_robotwin: "https://github.com/RoboTwin-Platform/RoboTwin"
   community: "community/"
+  # Submission entry point. Must be a page the public can open: the benchmark repository
+  # is not publicly readable yet, so check before advertising this link.
+  submit: "https://github.com/embodied-ai-research/ManiScope/blob/main/docs/SUBMISSIONS.md"
 
 paper:
   title: "ManipScope: A Diagnostic Benchmark for Instruction Following and Generalization in Robotic Manipulation"
@@ -114,8 +117,10 @@ nav:
   - {label: Policies, href: "policies/"}
   - {label: Leaderboard, href: "leaderboard/"}
   - {label: Diagnostics, href: "diagnostics/"}
+  - {label: Participate, href: "participate/"}
   - {label: Community, href: "community/"}
 
 # Header buttons (right side)
 header_links:
+  - {label: Submit, href: "participate/"}
   - {label: Code, href: "https://github.com/embodied-ai-research/ManiScope", icon: github}

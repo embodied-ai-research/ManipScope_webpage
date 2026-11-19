@@ -306,6 +306,14 @@ class Site:
         self.search_docs.append({"title": title, "url": current, "text": (search_text if search_text is not None else strip_tags(content))[:1200]})
 
     # ---- markdown documents ---------------------------------------------------
+    def doc_placeholders(self, text):
+        """Outward links kept configurable in site.yaml: the benchmark repository and the
+        submission entry point. `submit` falls back to the repository when it is unset."""
+        links = self.cfg.get("links", {})
+        repo = links.get("code") or ""
+        submit = links.get("submit") or repo
+        return text.replace("{{submit}}", submit).replace("{{repo}}", repo)
+
     def build_markdown_dir(self, sub):
         src = os.path.join(CONTENT, sub)
         if not os.path.isdir(src):
@@ -316,7 +324,7 @@ class Site:
             meta, body = front_matter(read(os.path.join(src, fn)))
             slug = os.path.splitext(fn)[0]
             out_path = f"{sub}/index.html" if slug == "index" else f"{sub}/{slug}/index.html"
-            rendered, toks = md_render(body.replace("{{rel}}", rel_prefix(out_path)))
+            rendered, toks = md_render(self.doc_placeholders(body.replace("{{rel}}", rel_prefix(out_path))))
             title = meta.get("title", slug.replace("-", " ").title())
             header = f'<h1>{esc(title)}</h1>' + (f'<p class="lead">{esc(meta["description"])}</p>' if meta.get("description") else "")
             self.page(out_path, title, header + rendered, toc_html(toks), description=meta.get("description", ""))
@@ -324,7 +332,7 @@ class Site:
     def build_markdown_file(self, sub, out_path):
         p = os.path.join(CONTENT, sub)
         meta, body = front_matter(read(p))
-        rendered, toks = md_render(body.replace("{{rel}}", rel_prefix(out_path)))
+        rendered, toks = md_render(self.doc_placeholders(body.replace("{{rel}}", rel_prefix(out_path))))
         title = meta.get("title", "Untitled")
         header = f'<h1>{esc(title)}</h1>' + (f'<p class="lead">{esc(meta["description"])}</p>' if meta.get("description") else "")
         self.page(out_path, title, header + rendered, toc_html(toks), description=meta.get("description", ""))
@@ -1151,6 +1159,8 @@ EPISODES=50 RUN_NAME=my_run bash suite/run_suite.sh dm05 {esc(sc["name"])}
         self.build_leaderboard()
         if os.path.exists(os.path.join(CONTENT, "diagnostics.md")):
             self.build_markdown_file("diagnostics.md", "diagnostics/index.html")
+        if os.path.exists(os.path.join(CONTENT, "participate.md")):
+            self.build_markdown_file("participate.md", "participate/index.html")
         if os.path.exists(os.path.join(CONTENT, "community.md")):
             self.build_markdown_file("community.md", "community/index.html")
         self.build_404()
