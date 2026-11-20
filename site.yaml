@@ -48,15 +48,15 @@ paper:
   title: "ManipScope: A Diagnostic Benchmark for Instruction Following and Generalization in Robotic Manipulation"
   # Author order and affiliation indices as in main_arxiv.tex; do not re-map them here.
   authors:
-    - {name: "Jiacheng Li", affil: "1,2"}
-    - {name: "Yaping Li", affil: "2,5"}
+    - {name: "Jiacheng Li", affil: "1,2", homepage: "https://embodied-ai-research.github.io/"}
+    - {name: "Yaping Li", affil: "2,5", homepage: "https://li-yaping.github.io/"}
     - {name: "Congsheng Xu", affil: "2,3"}
     - {name: "Qingchen Liu", affil: "1"}
     - {name: "Haonan Wang", affil: "2"}
     - {name: "Zhijie Deng", affil: "4", mark: "*"}
     - {name: "Jiahu Qin", affil: "1", mark: "*"}
   affiliations:
-    - {id: "1", name: "University of Science and Technology of China"}
+    - {id: "1", name: "AIR Lab, University of Science and Technology of China"}
     - {id: "2", name: "Sharpa Robotics"}
     - {id: "3", name: "Shanghai Jiao Tong University"}
     - {id: "4", name: "SJTU-Sharpa Joint Lab for Embodied AI, SJTU"}
@@ -66,6 +66,10 @@ paper:
       href: "https://www.ustc.edu.cn/"
       image: "assets/img/institutions/ustc.svg"
       source: "https://www.ustc.edu.cn/news/images/logo.svg"
+    - name: "Sharpa Robotics"
+      href: "https://www.sharpa.com/"
+      image: "assets/img/institutions/sharpa.svg"
+      source: "https://www.sharpa.com/cdn/shop/t/53/assets/sa-header-logo-dark.svg?v=71615509824511315781788967771"
     - name: "Shanghai Jiao Tong University"
       href: "https://www.sjtu.edu.cn/"
       image: "assets/img/institutions/sjtu.svg"

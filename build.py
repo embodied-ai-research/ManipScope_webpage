@@ -359,7 +359,10 @@ class Site:
             cite_block = ""
         else:
             authors = " ".join(
-                f'<span class="author">{esc(a["name"])}<sup>{esc(a.get("affil", ""))}{esc(a.get("mark", ""))}</sup></span>'
+                '<span class="author">'
+                + (f'<a href="{esc(a["homepage"])}" target="_blank" rel="noopener">{esc(a["name"])}</a>'
+                   if a.get("homepage") else esc(a["name"]))
+                + f'<sup>{esc(a.get("affil", ""))}{esc(a.get("mark", ""))}</sup></span>'
                 for a in paper.get("authors", []))
             affils = " · ".join(f'<span><sup>{esc(a["id"])}</sup>{esc(a["name"])}</span>' for a in paper.get("affiliations", []))
             author_block = f'<div class="authors">{authors}</div><div class="affils">{affils}</div><div class="marks">{esc(paper.get("marks", ""))}</div>'
@@ -371,7 +374,7 @@ class Site:
                 + (f'<span>{esc(logo["name"])}</span>' if logo.get("seal") else "") + '</a>'
                 for logo in paper.get("institution_logos", []))
             if logos:
-                author_block += f'<div class="institution-logos" aria-label="Participating universities">{logos}</div>'
+                author_block += f'<div class="institution-logos" aria-label="Participating institutions">{logos}</div>'
 
             paper_href, code_href = links.get("paper") or "", links.get("code") or ""
             meta_block = ""
