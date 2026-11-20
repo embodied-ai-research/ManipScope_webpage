@@ -150,6 +150,9 @@ body.home .layout { grid-template-columns: var(--sidebar-w) minmax(0, 1fr); }
 .btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 22px 0; }
 .btn { display: inline-block; padding: 9px 18px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg-soft); color: var(--text); font-weight: 600; font-size: .92rem; }
 .btn:hover { text-decoration: none; background: var(--accent); color: #fff; border-color: transparent; }  /* blue only while hovered */
+/* A link that does not exist yet: same chip, visibly inert, never hover-highlighted. */
+.btn.soon { opacity: .55; cursor: default; font-weight: 500; }
+.btn.soon:hover { background: var(--bg-soft); color: var(--text); border-color: var(--border); }
 .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 26px 0 0; text-align: left; }
 .meta-grid > div { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; }
 .meta-grid dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }

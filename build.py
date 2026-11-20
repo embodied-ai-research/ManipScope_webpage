@@ -310,7 +310,7 @@ class Site:
         """Outward links kept configurable in site.yaml: the benchmark repository and the
         submission entry point. `submit` falls back to the repository when it is unset."""
         links = self.cfg.get("links", {})
-        repo = links.get("code") or ""
+        repo = links.get("code") or "#"      # "#" while the repository is not public
         submit = links.get("submit") or repo
         return text.replace("{{submit}}", submit).replace("{{repo}}", repo)
 
@@ -384,11 +384,15 @@ class Site:
             f'<h3>{esc(d["name_en"])}</h3><p>{esc(d["desc_en"])}</p>'
             f'<div class="thumb-row">{thumbs(d)}</div></a>'
             for d in self.tasks["dimensions"])
+        # An empty Code link means the repository is not public yet: render a disabled chip instead
+        # of a link, which would otherwise resolve to this page.
+        code_btn = ("Code", code_href, "") if code_href else ("Code · coming soon", None, "soon")
         buttons = [
-            ("Paper", paper_href, ""), ("Code", code_href, ""),
+            ("Paper", paper_href, ""), code_btn,
             ("Documentation", "usage/install-and-download/", ""), ("Leaderboard", "leaderboard/", ""), ("Tasks", "sim-tasks/", ""),
         ]
         btn_html = "".join(
+            f'<span class="btn {c}" aria-disabled="true">{esc(l)}</span>' if h is None else
             f'<a class="btn {c}" href="{esc(h)}"' + (' target="_blank" rel="noopener"' if str(h).startswith('http') else '') + f'>{esc(l)}</a>'
             for l, h, c in buttons)
         content = f"""

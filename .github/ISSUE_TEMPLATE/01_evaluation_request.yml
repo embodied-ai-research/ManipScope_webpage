@@ -6,11 +6,13 @@ body:
   - type: markdown
     attributes:
       value: |
-        Read [the participation protocol](https://github.com/embodied-ai-research/ManiScope/blob/main/docs/SUBMISSIONS.md) in the benchmark
-        repository first and run the development set once. **Never paste an API key, a token or a
-        seed list into this issue.** Credentials go by email to sayleefilipski@gmail.com, and a
-        gateway endpoint you control with a disposable, spend-capped token is preferred over a
-        provider root key.
+        Read [Participate](https://embodied-ai-research.github.io/ManipScope_webpage/participate/) first. The benchmark repository, with the
+        development-set runner and the result schema, is being prepared for public release — ask
+        here and the organizers will send what you need to run the development set.
+
+        **Never paste an API key, a token or a seed list into this issue.** Credentials go by email
+        to sayleefilipski@gmail.com, and a gateway endpoint you control with a disposable,
+        spend-capped token is preferred over a provider root key.
   - type: input
     id: display_name
     attributes:

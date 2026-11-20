@@ -28,13 +28,16 @@ Rules for files in this directory:
 
 ## Where things live
 
-The benchmark repository is authoritative for the protocol and the tooling:
-<https://github.com/embodied-ai-research/ManiScope>. It holds the development-set runner, `tools/export_submission.py`, the organizer runbook and
-the scene-level issue templates. `tools/validate_submission.py`, `schema/submission.schema.json`,
-`examples/example_submission.json` and `dev_set.json` here are copies of the files kept there; the
-validator reads the scene list from `data/tasks.json` in this repository and from
-`suite/scenes_v2.yaml` there, so the copies are byte-identical and `diff` is enough to check drift.
-`schema_version` changes whenever the format does.
+The benchmark repository is authoritative for the protocol and the tooling: it holds the
+development-set runner, `tools/export_submission.py`, the organizer runbook and the scene-level
+issue templates. **It is being prepared for public release; its link will be added here.** Ask in an
+issue meanwhile and the organizers will send what you need.
+
+`tools/validate_submission.py`, `schema/submission.schema.json`, `examples/example_submission.json`
+and `dev_set.json` here are copies of the files kept there; the validator reads the scene list from
+`data/tasks.json` in this repository and from `suite/scenes_v2.yaml` there, so the copies are
+byte-identical and `diff` is enough to check drift. `schema_version` changes whenever the format
+does.
 
 Run it before opening a pull request:
 
@@ -43,5 +46,5 @@ python3 -m pip install jsonschema
 python3 tools/validate_submission.py submissions/<track>/<system>/<date>/submission.json
 ```
 
-See [Participate](https://embodied-ai-research.github.io/ManipScope_webpage/participate/) for the
-process and [docs/SUBMISSIONS.md](https://github.com/embodied-ai-research/ManiScope/blob/main/docs/SUBMISSIONS.md) for the full specification.
+See [Participate](https://embodied-ai-research.github.io/ManipScope_webpage/participate/) for the process; the full specification lives with the benchmark
+code and is linked from there once that repository is public.

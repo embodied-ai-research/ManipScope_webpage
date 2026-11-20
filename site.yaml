@@ -27,8 +27,9 @@ site:
 
 links:
   paper: "#"                                        # TODO: arXiv link
-  # Anonymized benchmark repository (org name carries no identity); shown even in anonymous mode.
-  code: "https://github.com/embodied-ai-research/ManiScope"
+  # Benchmark repository. Empty renders a "coming soon" chip instead of a link; restore the URL
+  # once the repository is public: "https://github.com/embodied-ai-research/ManiScope"
+  code: ""
   leaderboard: "leaderboard/"
   email: "TODO@example.com"                         # TODO: contact address
   upstream_robotwin: "https://github.com/RoboTwin-Platform/RoboTwin"
@@ -36,8 +37,9 @@ links:
   # Submission entry point: evaluation requests and result pull requests are filed in this
   # repository, which is public, so the link works regardless of the benchmark repository's state.
   submit: "https://github.com/embodied-ai-research/ManipScope_webpage/issues/new/choose"
-  # Protocol and tooling live with the benchmark code; not publicly readable yet.
-  protocol_doc: "https://github.com/embodied-ai-research/ManiScope/blob/main/docs/SUBMISSIONS.md"
+  # Protocol and tooling live with the benchmark code. Restore once that repository is public:
+  # "https://github.com/embodied-ai-research/ManiScope/blob/main/docs/SUBMISSIONS.md"
+  protocol_doc: ""
 
 paper:
   title: "ManipScope: A Diagnostic Benchmark for Instruction Following and Generalization in Robotic Manipulation"
@@ -125,4 +127,5 @@ nav:
 # Header buttons (right side)
 header_links:
   - {label: Submit, href: "participate/"}
-  - {label: Code, href: "https://github.com/embodied-ai-research/ManiScope", icon: github}
+  # Restore when the benchmark repository is public:
+  # - {label: Code, href: "https://github.com/embodied-ai-research/ManiScope", icon: github}
