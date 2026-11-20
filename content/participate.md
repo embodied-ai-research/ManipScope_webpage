@@ -4,11 +4,9 @@ description: Run the development set, request an official evaluation, and get a 
 ---
 
 !!! note "Process v0.1"
-    The interfaces, file formats and schedule below are in force; the benchmark repository is the
-    authority on the exact commands and the result schema, and this site's repository is where
-    requests and results are filed. One item is still being set up: the private address credentials
-    are sent to. Until it is published, ask in the request issue how to send a key, and never post
-    one.
+    The interfaces, file formats, schedule and credential channel below are in force. The benchmark
+    repository is the authority on the exact commands and the result schema; this site's repository
+    is where requests and results are filed.
 
 ManipScope is evaluation-only and its 100 frozen initial states per scene are organizer-held, so a
 score is comparable only when it was produced on those initial states. Participation therefore runs
@@ -112,12 +110,15 @@ Simulation is the organizers' cost; inference is normally yours.
   run the simulator and the agent framework against it.
 - **Open-weights models** — provide a container image and a weights location; the organizers run both.
 
-Credentials are never placed in an issue, a pull request, a log or a result file; they go to a
-private address, and a key posted publicly is treated as compromised. Use a key scoped to your own
-project with a spending cap and, where the provider supports it, an expiry — a 188 GPU-hour run is
-also a long billing window. The organizers hold it only in the evaluation machine's private runtime
-directory and ask you to revoke it when the batch ends. The request template states who covers the
-simulator GPU hours, the API tokens and, for open weights, the inference GPUs.
+Credentials go to **<sayleefilipski@gmail.com>** and nowhere else — never an issue, a pull request,
+a log or a result file, and a credential posted publicly is treated as compromised and must be
+revoked. Send the least dangerous thing that works: the bridge accepts any HTTPS base URL, so a
+gateway you control, with a disposable token and a hard spend cap, is preferred over a provider root
+key. Scope it to this evaluation and set an expiry where the provider supports one — a 188 GPU-hour
+run is also a long billing window, and the cap protects you. The organizers hold it only in the
+evaluation machine's private runtime directory and ask you to revoke it when the batch ends. The
+request template states who covers the simulator GPU hours, the API tokens and, for open weights,
+the inference GPUs.
 
 ## What every result records
 
