@@ -3,10 +3,11 @@ title: Participate
 description: Run the development set, request an official evaluation, and get a result on the leaderboard.
 ---
 
-!!! note "Draft process, v0.1"
-    The interfaces and file formats below are checked into the benchmark repository. Evaluation
-    capacity, the contact channel for credentials and the review turnaround are still being fixed;
-    the repository is the authority while this page settles.
+!!! note "Process v0.1"
+    The interfaces, file formats and schedule below are in force; the benchmark repository is the
+    authority on the exact commands and the result schema. One item is still being set up: the
+    private address credentials are sent to. Until it is published, ask in the request issue how to
+    send a key, and never post one.
 
 ManipScope is evaluation-only and its 100 frozen initial states per scene are organizer-held, so a
 score is comparable only when it was produced on those initial states. Participation therefore runs
@@ -81,15 +82,36 @@ and formal-set results are displayed separately and never pooled.
 
 ## Cost and scheduling
 
-Official runs are scheduled as batches rather than on demand: a small development-set check first,
-then the full 48 scenes. Simulation is the organizers' cost; inference is normally yours.
+| Stage | When |
+| --- | --- |
+| Development-set check | self-serve, any time |
+| Request acknowledged, with anything missing listed | 5 working days |
+| Batch cutoff | the 1st of each month |
+| Official result published | within 15 days of the batch starting |
+| Community-reported result merged or declined with a reason | 5 working days after the format check passes |
+
+Each system gets one official run per protocol version. A second run happens only when the
+organizers change the harness or the protocol, or when a defect on their side is recorded; both
+results then stay visible with their dates and the superseded one is labelled.
+
+Admission to a batch is by measured cost, not by quota. Simulation time dominates and differs by an
+order of magnitude between systems: at 240 episodes the five agent systems listed here cost between
+18 and 188 GPU-hours, so a slow model displaces several fast ones. The development set is one eighth
+of an agent run, which is why its measured wall time per episode belongs in the request — that is
+what the batch is planned from. A policy checkpoint is 4,800 episodes and is scheduled separately.
+
+Simulation is the organizers' cost; inference is normally yours.
 
 - **API models** — provide a quota-limited endpoint and key over a private channel; the organizers
   run the simulator and the agent framework against it.
 - **Open-weights models** — provide a container image and a weights location; the organizers run both.
 
-Credentials are never placed in an issue, a pull request, a log or a result file. The request page
-states who covers the simulator GPU hours, the API tokens and, for open weights, the inference GPUs.
+Credentials are never placed in an issue, a pull request, a log or a result file; they go to a
+private address, and a key posted publicly is treated as compromised. Use a key scoped to your own
+project with a spending cap and, where the provider supports it, an expiry — a 188 GPU-hour run is
+also a long billing window. The organizers hold it only in the evaluation machine's private runtime
+directory and ask you to revoke it when the batch ends. The request template states who covers the
+simulator GPU hours, the API tokens and, for open weights, the inference GPUs.
 
 ## What every result records
 
@@ -110,5 +132,9 @@ Proposals for new scenes enter a development area first and are released with a 
 version, so the existing 48-scene leaderboard stays comparable. Changing scenes, initial states,
 instruction pools or step limits requires a new protocol version — see the
 [evaluation protocol]({{rel}}usage/evaluation-protocol/).
+
+What happens to a request after it is filed — batch planning, credential handling, the run commands
+and the checklist applied before a result is published — is written down in the organizer runbook in
+the benchmark repository, so the process is auditable rather than informal.
 
 [Submission process and templates]({{submit}}){.btn} [Benchmark repository]({{repo}}){.btn}
