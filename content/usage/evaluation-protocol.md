@@ -1,6 +1,6 @@
 ---
 title: Evaluation Protocol
-description: The formal48-v1 contract — what is frozen, how episodes are scored and aggregated, what is measured beyond success, and what must be disclosed.
+description: What is frozen, how episodes are scored and aggregated, what is measured beyond success, and what must be disclosed.
 ---
 
 ## Task requirements and generalization
@@ -15,7 +15,7 @@ These questions overlap within scenes and do not define independent latent abili
 
 ## The frozen release
 
-`formal48-v1` is defined by five checked-in artefacts, hashed together in `protocol.lock.json`:
+The frozen release is defined by five checked-in artefacts, hashed together in `protocol.lock.json`:
 
 | Artefact | Location |
 | --- | --- |

@@ -294,7 +294,8 @@ class Site:
             "base.html", lang=site.get("language", "en"), title=esc(title), site_name=esc(site["name"]),
             description=esc(description or site.get("description", "")), rel=rel, body_class=body_class, robots=self.robots_meta(),
             header_links=self.header_links(rel), sidebar=self.sidebar(current, rel), content=content, toc=toc,
-            footer_left=f'© {date.today().year} {esc(site["name"])} · {esc(site.get("version", ""))}',
+            footer_left=f'© {date.today().year} {esc(site["name"])}'
+                        + (f' · {esc(site["version"])}' if site.get("version") else ""),
             extra_scripts=extra_scripts, asset_v=self.asset_v, clean_urls="true" if self.clean_urls else "false")
         html_out = self.fix_links(html_out)
         m = _CJK_RE.search(html_out)
@@ -387,8 +388,9 @@ class Site:
         # An empty Code link means the repository is not public yet: render a disabled chip instead
         # of a link, which would otherwise resolve to this page.
         code_btn = ("Code", code_href, "") if code_href else ("Code · coming soon", None, "soon")
+        paper_btn = ("Paper", paper_href, "") if paper_href else ("Paper · coming soon", None, "soon")
         buttons = [
-            ("Paper", paper_href, ""), code_btn,
+            paper_btn, code_btn,
             ("Documentation", "usage/install-and-download/", ""), ("Leaderboard", "leaderboard/", ""), ("Tasks", "sim-tasks/", ""),
         ]
         btn_html = "".join(
@@ -397,7 +399,7 @@ class Site:
             for l, h, c in buttons)
         content = f"""
 <section class="home-hero">
-  <div class="kicker">{esc(site.get("version", ""))}</div>
+  {f'<div class="kicker">{esc(site["version"])}</div>' if site.get("version") else ""}
   <h1 class="home-title">{esc(paper["title"])}</h1>
   <p class="home-tagline">{esc(site.get("tagline", ""))}</p>
   {author_block}
@@ -473,7 +475,7 @@ class Site:
                     f'training data is the unchanged RoboTwin 2.0 demonstration set and ManipScope adds evaluation scenes only.{stats} '
                     f'Evaluation scenes are on the left, grouped by family; base tasks are on the right. Hover a name on either side to highlight its links; base tasks in orange are not used by any scene.</p>'
                     f'<figure class="home-figure home-graph">{self.depgraph_iframe("arc", "Link diagram: RoboTwin 2.0 base tasks used by the 48 ManipScope evaluation scenes")}'
-                    f'<figcaption>Source links of the 48 formal scenes (code tag <code>formal-eval-v1</code>). The <a href="sim-tasks/#coverage">scene × base-task matrix and coverage statistics</a> are on the Simulation Tasks page; '
+                    f'<figcaption>Source links of the 48 formal scenes. The <a href="sim-tasks/#coverage">scene × base-task matrix and coverage statistics</a> are on the Simulation Tasks page; '
                     f'<a href="{graph}" target="_blank" rel="noopener">open the full graph in a new tab</a>.</figcaption></figure></section>')
         for ext in ("svg", "png", "jpg", "webp"):
             p = f"assets/img/source-task-map.{ext}"
@@ -584,7 +586,7 @@ class Site:
 <ul class="cols">{unused}</ul>
 <p class="muted small">Current coverage gaps of the formal list. Most fall into bimanual coordination (<code>pick_dual_bottles</code>, <code>place_dual_shoes</code>), articulated-object manipulation (<code>open_microwave</code>, <code>turn_switch</code>) and dynamic motions (the two <code>shake_bottle</code> tasks), the groups for which stable scripted experts are hardest to obtain.</p></div>
 </div>
-<p class="muted small">Source links are a design notion, not code-level inheritance: every scene is implemented independently, but its objects, skills and criteria trace back to these native tasks. Links come from the <code>deps</code> field of each scene in <code>suite/table.py</code> and, for the hand-written scenes, from their lineage in <code>suite/scenes.py</code>; exported by <code>suite/gen_depgraph.py</code> at code tag <code>formal-eval-v1</code>.</p>
+<p class="muted small">Source links are a design notion, not code-level inheritance: every scene is implemented independently, but its objects, skills and criteria trace back to these native tasks. Links come from the <code>deps</code> field of each scene in <code>suite/table.py</code> and, for the hand-written scenes, from their lineage in <code>suite/scenes.py</code>; exported by <code>suite/gen_depgraph.py</code>.</p>
 """
 
     def build_task_pages(self):

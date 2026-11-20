@@ -17,20 +17,25 @@ site:
   # or on hosts without directory-index fallback. true → clean ".../" URLs (needs a web server).
   clean_urls: false
   # Double-blind mode: hides authors, affiliations, citation, repository/email/community links and
-  # the header GitHub button. Paper / Code buttons link back to this page. Flip to false after review.
-  anonymous: true
+  # the header GitHub button. Paper / Code buttons link back to this page.
+  anonymous: false
   language: en
   date: "Nov 2026"            # revision release
-  version: formal48-v1
+  # Protocol version as a decorative label (home-page kicker, footer). Empty hides both; the
+  # leaderboard still states the paper's code freeze, which is provenance rather than a badge.
+  version: ""
   venue: ""                   # not rendered; fill in once the publication venue is announced
-  paper_snapshot: "formal-eval-v1 @ 39808b6"   # code freeze reported in the paper
 
 links:
-  paper: "#"                                        # TODO: arXiv link
+  # Empty renders a "Paper · coming soon" chip. Fill in once the preprint has an identifier;
+  # do not invent one.
+  paper: ""
   # Benchmark repository, public since 2026-11-21. Empty renders a "coming soon" chip instead.
   code: "https://github.com/USTC-AIR-Lab/ManiScope"
   leaderboard: "leaderboard/"
-  email: "TODO@example.com"                         # TODO: contact address
+  # Empty hides the Email row. The Participate page carries the contact route for evaluations;
+  # set a contact address here if the site should show one.
+  email: ""
   upstream_robotwin: "https://github.com/RoboTwin-Platform/RoboTwin"
   community: "community/"
   # Submission entry point: evaluation requests and result pull requests are filed in this
@@ -41,22 +46,30 @@ links:
 
 paper:
   title: "ManipScope: A Diagnostic Benchmark for Instruction Following and Generalization in Robotic Manipulation"
-  # TODO: replace with the real author list. `mark` is rendered as a superscript.
+  # Author order and affiliation indices as in main_arxiv.tex; do not re-map them here.
   authors:
-    - {name: "Author One", affil: "1", mark: "*"}
-    - {name: "Author Two", affil: "1", mark: "*"}
-    - {name: "Author Three", affil: "2"}
-    - {name: "Corresponding Author", affil: "1", mark: "†"}
+    - {name: "Jiacheng Li", affil: "1,2"}
+    - {name: "Yaping Li", affil: "2,5"}
+    - {name: "Congsheng Xu", affil: "2,3"}
+    - {name: "Qingchen Liu", affil: "1"}
+    - {name: "Haonan Wang", affil: "2"}
+    - {name: "Zhijie Deng", affil: "4", mark: "*"}
+    - {name: "Jiahu Qin", affil: "1", mark: "*"}
   affiliations:
-    - {id: "1", name: "Institution One"}
-    - {id: "2", name: "Institution Two"}
-  marks: "* Equal contribution · † Corresponding author"
+    - {id: "1", name: "University of Science and Technology of China"}
+    - {id: "2", name: "Sharpa Robotics"}
+    - {id: "3", name: "Shanghai Jiao Tong University"}
+    - {id: "4", name: "SJTU-Sharpa Joint Lab for Embodied AI, SJTU"}
+    - {id: "5", name: "The Chinese University of Hong Kong"}
+  marks: "* Co-corresponding authors"
+  # No arXiv identifier has been confirmed, so none is stated here.
   bibtex: |
-    @article{manipscope2026,
-      title   = {ManipScope: A Diagnostic Benchmark for Instruction Following and Generalization in Robotic Manipulation},
-      author  = {TODO},
-      journal = {arXiv preprint arXiv:TODO},
-      year    = {2026}
+    @misc{li2026manipscope,
+      title  = {ManipScope: A Diagnostic Benchmark for Instruction Following and Generalization in Robotic Manipulation},
+      author = {Li, Jiacheng and Li, Yaping and Xu, Congsheng and Liu, Qingchen and
+                Wang, Haonan and Deng, Zhijie and Qin, Jiahu},
+      year   = {2026},
+      note   = {Preprint; arXiv identifier to be added}
     }
 
 leaderboard:

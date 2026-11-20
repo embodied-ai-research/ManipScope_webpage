@@ -3,7 +3,7 @@ title: Participate
 description: Run the development set, request an official evaluation, and get a result on the leaderboard.
 ---
 
-!!! note "Process v0.1"
+!!! note "How participation works"
     The interfaces, file formats, schedule and credential channel below are in force. The benchmark
     repository is the authority on the exact commands and the result schema; this site's repository
     is where requests and results are filed.
