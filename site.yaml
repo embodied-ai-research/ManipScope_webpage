@@ -50,7 +50,7 @@ paper:
   authors:
     - {name: "Jiacheng Li", affil: "1,2", homepage: "https://embodied-ai-research.github.io/"}
     - {name: "Yaping Li", affil: "2,5", homepage: "https://li-yaping.github.io/"}
-    - {name: "Congsheng Xu", affil: "2,3"}
+    - {name: "Congsheng Xu", affil: "2,3", homepage: "https://acondaway.github.io/"}
     - {name: "Qingchen Liu", affil: "1"}
     - {name: "Haonan Wang", affil: "2"}
     - {name: "Zhijie Deng", affil: "4", mark: "*"}
