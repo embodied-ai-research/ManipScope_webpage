@@ -123,3 +123,17 @@ Every push to `main` builds the checked-in data and content with `build.py` and 
 The website was migrated from the existing website snapshot at commit `75e3581`. The revised agent tables integrate GPT-6.2 Astra, Gemini 4 Argon and Opus 5.5, each on 240 episodes. The original GPT-6 Astra and Gemini 3.8 Flash results retain the September data. Only aggregate per-scene results are published; organizer-managed formal seeds remain private.
 
 `data/leaderboard.json` is the per-scene source for success aggregates; `data/paper_tables.json` contains matched-episode timing, termination and request settings. Review changes before re-running `scripts/sync_from_maniscope.py`: it imports the legacy benchmark reports and can replace the revised agent data.
+
+
+### Language support
+
+Pages open in English by default. The header language control switches in place and
+remembers the selection; `?lang=en` or `?lang=zh` overrides the saved preference.
+Internal page links and search results retain the selected language. Code samples,
+original task instructions, model identifiers and recorded tool-call notes remain
+in their original form.
+
+Chinese copy lives in `data/i18n-zh.json`, keyed by the whitespace-normalized English
+text. When changing visible English prose, update its matching translation as well.
+`build.py` exports the dictionary to a versioned JavaScript asset; no translation
+service or additional runtime dependency is used.

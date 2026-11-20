@@ -163,7 +163,15 @@
   var input = document.getElementById("search-input");
   var box = document.getElementById("search-results");
   if (input && box) {
-    var index = null, sel = -1;
+    var index = null, sel = -1, localizedIndex = null;
+    var i18n = window.ManipScopeI18n;
+    function localize(docs) {
+      if (!i18n || i18n.getLanguage() !== "zh") return docs;
+      if (!localizedIndex) localizedIndex = docs.map(function (d) {
+        return { title: i18n.translate(d.title), url: d.url, text: i18n.searchText(d.text) };
+      });
+      return localizedIndex;
+    }
     function load() {
       if (index) return Promise.resolve(index);
       return fetch(rel + "search-index.json").then(function (r) { return r.json(); }).then(function (d) { index = d; return d; });
@@ -172,7 +180,7 @@
       if (!items.length) { box.hidden = true; box.innerHTML = ""; return; }
       var suffix = window.__CLEAN_URLS__ ? "" : "index.html";
       box.innerHTML = items.map(function (it) {
-        return '<a href="' + rel + it.url + suffix + '"><div class="t">' + escapeHtml(it.title) + '</div><div class="s">' + escapeHtml(it.snippet) + '</div></a>';
+        return '<a href="' + rel + it.url + suffix + '?lang=' + (i18n ? i18n.getLanguage() : 'en') + '"><div class="t">' + escapeHtml(it.title) + '</div><div class="s">' + escapeHtml(it.snippet) + '</div></a>';
       }).join("");
       box.hidden = false; sel = -1;
     }
@@ -183,7 +191,7 @@
       load().then(function (docs) {
         var terms = q.split(/\s+/);
         var scored = [];
-        docs.forEach(function (d) {
+        localize(docs).forEach(function (d) {
           var title = d.title.toLowerCase(), text = d.text.toLowerCase(), score = 0;
           terms.forEach(function (t) {
             if (title.indexOf(t) !== -1) score += 10;
@@ -200,6 +208,10 @@
         render(scored.slice(0, 8));
       });
     }
+    document.addEventListener("languagechange", function () {
+      if (input.value) search(input.value);
+      else { box.hidden = true; box.innerHTML = ""; }
+    });
     var timer;
     input.addEventListener("input", function () { clearTimeout(timer); timer = setTimeout(function () { search(input.value); }, 80); });
     input.addEventListener("focus", function () { if (input.value) search(input.value); });

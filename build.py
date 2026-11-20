@@ -125,7 +125,7 @@ class Site:
         # serving stale assets after a rebuild (recurring problem for collaborators)
         import hashlib
         h = hashlib.sha256()
-        for f in ("assets/css/style.css", "assets/js/main.js"):
+        for f in ("assets/css/style.css", "assets/js/main.js", "assets/js/i18n.js", "data/i18n-zh.json"):
             h.update(open(os.path.join(HERE, f), "rb").read())
         self.asset_v = h.hexdigest()[:10]
         self.clean_urls = bool(self.cfg["site"].get("clean_urls", False))
@@ -238,6 +238,8 @@ class Site:
     # ---- chrome ---------------------------------------------------------------
     def sidebar(self, current, rel):
         def link(label, href, cls=""):
+            if href.strip("/") == "participate":
+                cls += " nav-evaluate"
             active = " active" if href.strip("/") == current.strip("/") else ""
             return f'<a class="nav-link{cls}{active}" href="{rel}{href}">{esc(label)}</a>'
 
@@ -278,7 +280,8 @@ class Site:
             icon = ""
             if l.get("icon") == "github":
                 icon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.9 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>'
-            out.append(f'<a class="header-link" href="{esc(href)}" target="_blank" rel="noopener" title="{esc(l["label"])}">{icon}<span>{esc(l["label"])}</span></a>')
+            external = ' target="_blank" rel="noopener"' if href.startswith('http') else ''
+            out.append(f'<a class="header-link{" has-icon" if icon else ""}" href="{esc(href)}"{external} title="{esc(l["label"])}" aria-label="{esc(l["label"])}">{icon}<span>{esc(l["label"])}</span></a>')
         return "".join(out)
 
     def robots_meta(self):
@@ -362,11 +365,10 @@ class Site:
             author_block = f'<div class="authors">{authors}</div><div class="affils">{affils}</div><div class="marks">{esc(paper.get("marks", ""))}</div>'
             paper_href, code_href = links.get("paper") or "", links.get("code") or ""
             meta_block = ""
-            if links.get("code") or links.get("email"):
-                code_label = re.sub(r"^https?://(www\.)?", "", links.get("code") or "")
-                meta_block = '<dl class="meta-grid">' + \
-                    (f'<div><dt>Repository</dt><dd><a href="{esc(links["code"])}">{esc(code_label)}</a></dd></div>' if links.get("code") else "") + \
-                    (f'<div><dt>Email</dt><dd><a href="mailto:{esc(links["email"])}">{esc(links["email"])}</a></dd></div>' if links.get("email") else "") + "</dl>"
+            if links.get("email"):
+                meta_block = ('<dl class="meta-grid"><div><dt>Email</dt><dd>'
+                              f'<a href="mailto:{esc(links["email"])}">{esc(links["email"])}</a>'
+                              '</dd></div></dl>')
             cite_block = f'<section class="home-citation" id="cite"><h2>Cite our work</h2><pre><code>{esc(paper.get("bibtex", ""))}</code></pre></section>'
         n_scenes = sum(len(d["scenes"]) for d in self.tasks["dimensions"])
         n_pol = len(self.leaderboard["learned"]) if self.leaderboard else len(self.policies["policies"])
@@ -390,7 +392,7 @@ class Site:
         code_btn = ("Code", code_href, "") if code_href else ("Code · coming soon", None, "soon")
         paper_btn = ("Paper", paper_href, "") if paper_href else ("Paper · coming soon", None, "soon")
         buttons = [
-            paper_btn, code_btn,
+            ("Evaluate your model", "participate/", "primary"), paper_btn, code_btn,
             ("Documentation", "usage/install-and-download/", ""), ("Leaderboard", "leaderboard/", ""), ("Tasks", "sim-tasks/", ""),
         ]
         btn_html = "".join(
@@ -406,10 +408,10 @@ class Site:
   <div class="btn-row">{btn_html}</div>
   {meta_block}
 </section>
+{self.participate_block(rel)}
 {self.overview_figure()}
 <section class="home-abstract">{abstract_html}</section>
 <section class="home-stats">{stats_html}</section>
-{self.participate_block(rel)}
 {self.source_map_figure()}
 <section>
   <h2 id="axes">Six task families</h2>
@@ -1179,6 +1181,9 @@ EPISODES=50 RUN_NAME=my_run bash suite/run_suite.sh dm05 {esc(sc["name"])}
         if os.path.exists(dst):
             shutil.rmtree(dst)
         shutil.copytree(ASSETS, dst, ignore=shutil.ignore_patterns("README.md", ".gitkeep"))
+        translations = json.loads(read(os.path.join(DATA, "i18n-zh.json")))
+        write(os.path.join(OUT, "assets/js/translations-zh.js"),
+              "window.__ZH__ = " + json.dumps(translations, ensure_ascii=True) + ";\n")
         write(os.path.join(OUT, "search-index.json"), json.dumps(self.search_docs, ensure_ascii=False))
         write(os.path.join(OUT, ".nojekyll"), "")
 

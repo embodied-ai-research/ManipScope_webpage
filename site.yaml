@@ -115,6 +115,7 @@ leaderboard:
 # Left sidebar. Auto-generated groups (sim-tasks, policies) are inserted where `auto:` appears.
 nav:
   - {label: Home, href: ""}
+  - {label: "Evaluate your model", href: "participate/"}
   - label: Usage
     items:
       - {label: "Install & Download", href: "usage/install-and-download/"}
@@ -132,10 +133,9 @@ nav:
   - {label: Policies, href: "policies/"}
   - {label: Leaderboard, href: "leaderboard/"}
   - {label: Diagnostics, href: "diagnostics/"}
-  - {label: Participate, href: "participate/"}
   - {label: Community, href: "community/"}
 
 # Header buttons (right side)
 header_links:
-  - {label: Submit, href: "participate/"}
+  - {label: Evaluate, href: "participate/"}
   - {label: Code, href: "https://github.com/USTC-AIR-Lab/ManiScope", icon: github}
