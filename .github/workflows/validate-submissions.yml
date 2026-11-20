@@ -1,0 +1,41 @@
+name: submissions
+on:
+  pull_request:
+    paths: ["submissions/**", "tools/validate_submission.py"]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: submissions-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: python3 -m pip install --quiet jsonschema
+      - name: Validate submission files
+        run: |
+          shopt -s nullglob globstar
+          keep=()
+          for f in submissions/**/*.json; do
+            case "$f" in submissions/schema/*|submissions/dev_set.json) ;; *) keep+=("$f");; esac
+          done
+          if [[ ${#keep[@]} -eq 0 ]]; then
+            echo "No submission files in this change." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          # Keep the report in the run summary: it is what the organizers see in the notification.
+          { echo "## Submission check"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          set +e
+          python3 tools/validate_submission.py "${keep[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
+          status=${PIPESTATUS[0]}
+          set -e
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "A passing check means the file is well formed. It is not evidence that the numbers"
+            echo "came from a real run; only an organizer-run evaluation carries that status."
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit $status

@@ -1,0 +1,14 @@
+{
+  "name": "dev6",
+  "episodes_per_scene": 5,
+  "source": "https://github.com/embodied-ai-research/ManiScope/blob/main/suite/dev_set.yaml",
+  "note": "Development seeds are generated locally by the submitter, so development results are not leaderboard results.",
+  "scenes": [
+    "move_can_coaster",
+    "place_a2b_left_novel",
+    "attr_bind_bottle",
+    "ref_block_on_plate",
+    "click_bell_press_stapler",
+    "move_cup_pad_mix"
+  ]
+}

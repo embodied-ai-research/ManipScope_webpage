@@ -1,0 +1,462 @@
+{
+  "schema_version": "manipscope-submission-0.1",
+  "status": "community_reported",
+  "system": {
+    "display_name": "Example Model 1 (template)",
+    "track": "standard_agent",
+    "kind": "agent",
+    "model_id": "example-model-1",
+    "api_interface": "responses",
+    "reasoning": "high",
+    "output_cap_tokens": 4096,
+    "adapter": "eef_bridge / policy/GPT6",
+    "code": "https://github.com/example/my-agent@0123456",
+    "notes": "Template file. The numbers are illustrative and do not describe any real system."
+  },
+  "protocol": {
+    "version": "formal48-v1",
+    "scene_set": "dev6",
+    "episodes_per_scene": 5,
+    "task_config": "demo_clean",
+    "instruction_type": "unseen",
+    "seed_source": "self_generated_dev"
+  },
+  "run": {
+    "date": "2026-11-19",
+    "repo_commit": "0123456789abcdef0123456789abcdef01234567",
+    "repo_dirty": false,
+    "evaluated_by": "submitter",
+    "hardware": "1x A100 for simulation; model served over HTTPS",
+    "retries": 0,
+    "aborted_runs": 1,
+    "artifacts": [
+      {
+        "kind": "logs",
+        "url": "https://huggingface.co/datasets/example/manipscope-dev-logs",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "bytes": 12345678
+      }
+    ]
+  },
+  "budgets": {
+    "max_model_calls_per_episode": 120,
+    "wall_time_s_per_episode": 3300,
+    "wall_time_excludes_api_wait": true,
+    "step_limit_source": "task_config/_eval_step_limit.yml",
+    "api_retries_per_call": 3,
+    "prompt_revision": "standard-agent-v1",
+    "tool_schema_revision": "move_eef+finish v1"
+  },
+  "scenes": [
+    {
+      "name": "move_can_coaster",
+      "family": "skill_x_object",
+      "episodes": 5,
+      "successes": 4
+    },
+    {
+      "name": "place_a2b_left_novel",
+      "family": "skill_x_spatial",
+      "episodes": 5,
+      "successes": 3
+    },
+    {
+      "name": "attr_bind_bottle",
+      "family": "attribute_binding",
+      "episodes": 5,
+      "successes": 2
+    },
+    {
+      "name": "ref_block_on_plate",
+      "family": "instruction_structure",
+      "episodes": 5,
+      "successes": 3
+    },
+    {
+      "name": "click_bell_press_stapler",
+      "family": "skill_x_skill_temporal",
+      "episodes": 5,
+      "successes": 1
+    },
+    {
+      "name": "move_cup_pad_mix",
+      "family": "mixture",
+      "episodes": 5,
+      "successes": 2
+    }
+  ],
+  "episodes": [
+    {
+      "scene": "move_can_coaster",
+      "index": 0,
+      "success": true,
+      "termination": "success",
+      "model_calls": 28,
+      "recorded_steps": 600,
+      "model_s": 194.24,
+      "eval_wall_s": 148.01,
+      "episode_wall_s": 614.55,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "move_can_coaster",
+      "index": 1,
+      "success": true,
+      "termination": "success",
+      "model_calls": 14,
+      "recorded_steps": 1000,
+      "model_s": 258.15,
+      "eval_wall_s": 647.63,
+      "episode_wall_s": 256.67,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "move_can_coaster",
+      "index": 2,
+      "success": true,
+      "termination": "success",
+      "model_calls": 13,
+      "recorded_steps": 1000,
+      "model_s": 202.18,
+      "eval_wall_s": 259.58,
+      "episode_wall_s": 455.12,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "move_can_coaster",
+      "index": 3,
+      "success": true,
+      "termination": "success",
+      "model_calls": 11,
+      "recorded_steps": 600,
+      "model_s": 382.13,
+      "eval_wall_s": 485.76,
+      "episode_wall_s": 473.97,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "move_can_coaster",
+      "index": 4,
+      "success": false,
+      "termination": "step_limit",
+      "model_calls": 33,
+      "recorded_steps": 600,
+      "model_s": 391.93,
+      "eval_wall_s": 147.02,
+      "episode_wall_s": 636.5,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "place_a2b_left_novel",
+      "index": 0,
+      "success": true,
+      "termination": "success",
+      "model_calls": 26,
+      "recorded_steps": 1000,
+      "model_s": 109.05,
+      "eval_wall_s": 188.32,
+      "episode_wall_s": 312.0,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "place_a2b_left_novel",
+      "index": 1,
+      "success": true,
+      "termination": "success",
+      "model_calls": 19,
+      "recorded_steps": 600,
+      "model_s": 257.74,
+      "eval_wall_s": 490.57,
+      "episode_wall_s": 349.71,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "place_a2b_left_novel",
+      "index": 2,
+      "success": true,
+      "termination": "success",
+      "model_calls": 12,
+      "recorded_steps": 600,
+      "model_s": 270.46,
+      "eval_wall_s": 407.92,
+      "episode_wall_s": 443.71,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "place_a2b_left_novel",
+      "index": 3,
+      "success": false,
+      "termination": "model_finish",
+      "model_calls": 37,
+      "recorded_steps": 1000,
+      "model_s": 182.94,
+      "eval_wall_s": 264.09,
+      "episode_wall_s": 236.06,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "place_a2b_left_novel",
+      "index": 4,
+      "success": false,
+      "termination": "step_limit",
+      "model_calls": 13,
+      "recorded_steps": 1000,
+      "model_s": 238.57,
+      "eval_wall_s": 627.58,
+      "episode_wall_s": 560.37,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "attr_bind_bottle",
+      "index": 0,
+      "success": true,
+      "termination": "success",
+      "model_calls": 26,
+      "recorded_steps": 600,
+      "model_s": 100.14,
+      "eval_wall_s": 362.51,
+      "episode_wall_s": 576.71,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "attr_bind_bottle",
+      "index": 1,
+      "success": true,
+      "termination": "success",
+      "model_calls": 17,
+      "recorded_steps": 1000,
+      "model_s": 203.38,
+      "eval_wall_s": 677.97,
+      "episode_wall_s": 175.8,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "attr_bind_bottle",
+      "index": 2,
+      "success": false,
+      "termination": "call_budget",
+      "model_calls": 28,
+      "recorded_steps": 1000,
+      "model_s": 296.4,
+      "eval_wall_s": 464.73,
+      "episode_wall_s": 472.14,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "attr_bind_bottle",
+      "index": 3,
+      "success": false,
+      "termination": "model_finish",
+      "model_calls": 12,
+      "recorded_steps": 600,
+      "model_s": 381.19,
+      "eval_wall_s": 394.98,
+      "episode_wall_s": 521.85,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "attr_bind_bottle",
+      "index": 4,
+      "success": false,
+      "termination": "step_limit",
+      "model_calls": 27,
+      "recorded_steps": 1000,
+      "model_s": 156.76,
+      "eval_wall_s": 343.76,
+      "episode_wall_s": 524.51,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "ref_block_on_plate",
+      "index": 0,
+      "success": true,
+      "termination": "success",
+      "model_calls": 9,
+      "recorded_steps": 1000,
+      "model_s": 180.86,
+      "eval_wall_s": 474.33,
+      "episode_wall_s": 421.28,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "ref_block_on_plate",
+      "index": 1,
+      "success": true,
+      "termination": "success",
+      "model_calls": 21,
+      "recorded_steps": 1000,
+      "model_s": 103.98,
+      "eval_wall_s": 263.62,
+      "episode_wall_s": 360.66,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "ref_block_on_plate",
+      "index": 2,
+      "success": true,
+      "termination": "success",
+      "model_calls": 39,
+      "recorded_steps": 600,
+      "model_s": 116.56,
+      "eval_wall_s": 352.95,
+      "episode_wall_s": 293.93,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "ref_block_on_plate",
+      "index": 3,
+      "success": false,
+      "termination": "step_limit",
+      "model_calls": 35,
+      "recorded_steps": 1000,
+      "model_s": 300.17,
+      "eval_wall_s": 692.15,
+      "episode_wall_s": 532.81,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "ref_block_on_plate",
+      "index": 4,
+      "success": false,
+      "termination": "model_finish",
+      "model_calls": 22,
+      "recorded_steps": 600,
+      "model_s": 88.21,
+      "eval_wall_s": 207.75,
+      "episode_wall_s": 518.52,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "click_bell_press_stapler",
+      "index": 0,
+      "success": true,
+      "termination": "success",
+      "model_calls": 8,
+      "recorded_steps": 1000,
+      "model_s": 342.57,
+      "eval_wall_s": 225.76,
+      "episode_wall_s": 296.34,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "click_bell_press_stapler",
+      "index": 1,
+      "success": false,
+      "termination": "step_limit",
+      "model_calls": 34,
+      "recorded_steps": 1000,
+      "model_s": 267.34,
+      "eval_wall_s": 304.79,
+      "episode_wall_s": 204.04,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "click_bell_press_stapler",
+      "index": 2,
+      "success": false,
+      "termination": "call_budget",
+      "model_calls": 11,
+      "recorded_steps": 1000,
+      "model_s": 365.84,
+      "eval_wall_s": 572.38,
+      "episode_wall_s": 645.96,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "click_bell_press_stapler",
+      "index": 3,
+      "success": false,
+      "termination": "call_budget",
+      "model_calls": 33,
+      "recorded_steps": 1000,
+      "model_s": 195.65,
+      "eval_wall_s": 180.05,
+      "episode_wall_s": 504.23,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "click_bell_press_stapler",
+      "index": 4,
+      "success": false,
+      "termination": "step_limit",
+      "model_calls": 20,
+      "recorded_steps": 600,
+      "model_s": 394.79,
+      "eval_wall_s": 375.56,
+      "episode_wall_s": 194.86,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "move_cup_pad_mix",
+      "index": 0,
+      "success": true,
+      "termination": "success",
+      "model_calls": 11,
+      "recorded_steps": 600,
+      "model_s": 60.08,
+      "eval_wall_s": 207.73,
+      "episode_wall_s": 189.86,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "move_cup_pad_mix",
+      "index": 1,
+      "success": true,
+      "termination": "success",
+      "model_calls": 31,
+      "recorded_steps": 600,
+      "model_s": 83.91,
+      "eval_wall_s": 240.61,
+      "episode_wall_s": 351.98,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "move_cup_pad_mix",
+      "index": 2,
+      "success": false,
+      "termination": "call_budget",
+      "model_calls": 24,
+      "recorded_steps": 1000,
+      "model_s": 264.77,
+      "eval_wall_s": 395.01,
+      "episode_wall_s": 198.06,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "move_cup_pad_mix",
+      "index": 3,
+      "success": false,
+      "termination": "model_finish",
+      "model_calls": 37,
+      "recorded_steps": 1000,
+      "model_s": 224.5,
+      "eval_wall_s": 169.81,
+      "episode_wall_s": 190.29,
+      "instruction": "Pick up the requested object and place it as instructed."
+    },
+    {
+      "scene": "move_cup_pad_mix",
+      "index": 4,
+      "success": false,
+      "termination": "model_finish",
+      "model_calls": 24,
+      "recorded_steps": 1000,
+      "model_s": 341.81,
+      "eval_wall_s": 213.63,
+      "episode_wall_s": 143.63,
+      "instruction": "Pick up the requested object and place it as instructed."
+    }
+  ],
+  "results": {
+    "overall_pct": 50.0,
+    "pooled_pct": 50.0,
+    "family_pct": {
+      "skill_x_object": 80.0,
+      "skill_x_spatial": 60.0,
+      "attribute_binding": 40.0,
+      "instruction_structure": 60.0,
+      "skill_x_skill_temporal": 20.0,
+      "mixture": 40.0
+    }
+  }
+}

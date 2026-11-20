@@ -1,0 +1,88 @@
+name: Evaluation request
+description: Ask the organizers to evaluate a model or a system on the private initial states
+title: "[eval] <system name>"
+labels: ["evaluation-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read [the participation protocol](https://github.com/embodied-ai-research/ManiScope/blob/main/docs/SUBMISSIONS.md) in the benchmark
+        repository first and run the development set once. **Never paste an API key, a token or a
+        seed list into this issue.** Credentials are exchanged over the private channel named in
+        that document.
+  - type: input
+    id: display_name
+    attributes:
+      label: System name as it should appear on the leaderboard
+    validations: {required: true}
+  - type: dropdown
+    id: track
+    attributes:
+      label: Track
+      options:
+        - standard_agent (fixed prompt, tools, memory, controller and budgets; you change the model)
+        - open_system (your own planner, tools, memory, skills or control policy)
+    validations: {required: true}
+  - type: dropdown
+    id: kind
+    attributes:
+      label: System kind
+      options: [agent, policy]
+    validations: {required: true}
+  - type: textarea
+    id: model
+    attributes:
+      label: Model configuration
+      description: Exact model id, API interface (responses / chat / anthropic / generateContent / local), reasoning setting, output cap. For open weights, the checkpoint and the public weights location.
+      placeholder: |
+        model_id: ...
+        api_interface: responses
+        reasoning: high
+        max_output_tokens: 4096
+        weights: https://huggingface.co/...
+    validations: {required: true}
+  - type: textarea
+    id: recipe
+    attributes:
+      label: How to run it
+      description: Launch command, config file contents with credentials removed, adapter or policy key, and the commit of your own code.
+    validations: {required: true}
+  - type: input
+    id: repo_commit
+    attributes:
+      label: ManipScope commit you ran
+    validations: {required: true}
+  - type: textarea
+    id: dev_results
+    attributes:
+      label: Development-set submission file
+      description: Paste the output of `python3 tools/validate_submission.py <file>` and attach the submission JSON. The same validator runs here on every submission pull request.
+    validations: {required: true}
+  - type: textarea
+    id: budgets
+    attributes:
+      label: Budgets
+      description: Model calls per episode, wall-time budget and whether it excludes provider waiting, API retries per call, step limit source.
+      value: |
+        max_model_calls_per_episode: 120
+        wall_time_s_per_episode: 3300
+        wall_time_excludes_api_wait: true
+        api_retries_per_call: 3
+    validations: {required: true}
+  - type: textarea
+    id: cost
+    attributes:
+      label: Who pays for what
+      description: Who covers the simulator GPU hours, the API tokens and, for open weights, the inference GPUs. Say whether you can provide a quota-limited endpoint or a container image.
+    validations: {required: true}
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: This issue contains no API key, token, credential or seed value.
+          required: true
+        - label: I report all attempts, including retries and discarded runs.
+          required: true
+        - label: I understand that development-set numbers are not leaderboard numbers.
+          required: true

@@ -1,0 +1,374 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/embodied-ai-research/ManiScope/submissions/schema/submission.schema.json",
+  "title": "ManipScope evaluation submission",
+  "description": "One evaluated system on one scene set. Public submissions must not contain credentials or formal seed values; episodes are identified by index.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "system",
+    "protocol",
+    "run",
+    "budgets",
+    "scenes",
+    "episodes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "manipscope-submission-0.1"
+    },
+    "status": {
+      "description": "Set by the organizers on merge. Submitters leave it unset or 'community_reported'.",
+      "enum": [
+        "community_reported",
+        "officially_evaluated"
+      ]
+    },
+    "system": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "display_name",
+        "track",
+        "kind"
+      ],
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "track": {
+          "enum": [
+            "standard_agent",
+            "open_system"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "agent",
+            "policy"
+          ]
+        },
+        "model_id": {
+          "type": "string",
+          "description": "Exact provider model identifier, or checkpoint name for open weights."
+        },
+        "api_interface": {
+          "enum": [
+            "responses",
+            "chat",
+            "anthropic",
+            "generateContent",
+            "local",
+            "other"
+          ]
+        },
+        "reasoning": {
+          "type": "string",
+          "description": "Provider reasoning setting as sent, e.g. 'high'."
+        },
+        "output_cap_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "weights": {
+          "type": "string",
+          "description": "Public weights location, for open-weights systems."
+        },
+        "code": {
+          "type": "string",
+          "description": "Repository URL and commit of the submitter's own code."
+        },
+        "adapter": {
+          "type": "string",
+          "description": "policy/<Plugin> used, or the agent framework revision."
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      }
+    },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scene_set",
+        "episodes_per_scene",
+        "task_config",
+        "instruction_type"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "e.g. formal48-v1"
+        },
+        "scene_set": {
+          "enum": [
+            "formal48",
+            "dev6",
+            "other"
+          ]
+        },
+        "episodes_per_scene": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "task_config": {
+          "type": "string"
+        },
+        "instruction_type": {
+          "type": "string"
+        },
+        "seed_source": {
+          "description": "Formal lists are organizer-held; development seeds are self-generated and not comparable across submitters.",
+          "enum": [
+            "organizer_formal",
+            "self_generated_dev"
+          ]
+        }
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "date",
+        "repo_commit",
+        "evaluated_by"
+      ],
+      "properties": {
+        "date": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "repo_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{7,40}$"
+        },
+        "repo_dirty": {
+          "type": "boolean"
+        },
+        "evaluated_by": {
+          "enum": [
+            "submitter",
+            "organizers"
+          ]
+        },
+        "hardware": {
+          "type": "string"
+        },
+        "retries": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Episodes re-run for simulator-invalid reasons, under the predeclared rerun rule."
+        },
+        "aborted_runs": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Runs started and discarded. Must be reported, not omitted."
+        },
+        "artifacts": {
+          "type": "array",
+          "description": "Links to raw logs and videos kept in the submitter's own storage.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "url"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "logs",
+                  "videos",
+                  "config",
+                  "other"
+                ]
+              },
+              "url": {
+                "type": "string",
+                "pattern": "^https://"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_model_calls_per_episode"
+      ],
+      "properties": {
+        "max_model_calls_per_episode": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "wall_time_s_per_episode": {
+          "type": "number",
+          "minimum": 0
+        },
+        "wall_time_excludes_api_wait": {
+          "type": "boolean"
+        },
+        "step_limit_source": {
+          "type": "string",
+          "description": "e.g. task_config/_eval_step_limit.yml"
+        },
+        "api_retries_per_call": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "prompt_revision": {
+          "type": "string"
+        },
+        "tool_schema_revision": {
+          "type": "string"
+        }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "episodes",
+          "successes"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$"
+          },
+          "family": {
+            "type": "string"
+          },
+          "episodes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "successes": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "episodes": {
+      "type": "array",
+      "minItems": 1,
+      "description": "One record per attempted episode. Seed values are private and must not appear here.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scene",
+          "index",
+          "success"
+        ],
+        "properties": {
+          "scene": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$"
+          },
+          "index": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "success": {
+            "type": "boolean"
+          },
+          "termination": {
+            "enum": [
+              "success",
+              "step_limit",
+              "call_budget",
+              "wall_budget",
+              "model_finish",
+              "rejected",
+              "error",
+              "unknown"
+            ]
+          },
+          "model_calls": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "recorded_steps": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Evaluator take_action counter. Forced to the scene limit for agent endings, so it is not executed steps."
+          },
+          "model_s": {
+            "type": "number",
+            "minimum": 0
+          },
+          "eval_wall_s": {
+            "type": "number",
+            "minimum": 0
+          },
+          "episode_wall_s": {
+            "type": "number",
+            "minimum": 0
+          },
+          "instruction": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "input_tokens": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "output_tokens": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "reasoning_tokens": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "results": {
+      "type": "object",
+      "description": "Optional. Recomputed by the validator from scenes/episodes; a mismatch is an error.",
+      "additionalProperties": false,
+      "properties": {
+        "overall_pct": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "pooled_pct": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "family_pct": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}

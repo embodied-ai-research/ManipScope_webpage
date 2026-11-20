@@ -5,9 +5,10 @@ description: Run the development set, request an official evaluation, and get a 
 
 !!! note "Process v0.1"
     The interfaces, file formats and schedule below are in force; the benchmark repository is the
-    authority on the exact commands and the result schema. One item is still being set up: the
-    private address credentials are sent to. Until it is published, ask in the request issue how to
-    send a key, and never post one.
+    authority on the exact commands and the result schema, and this site's repository is where
+    requests and results are filed. One item is still being set up: the private address credentials
+    are sent to. Until it is published, ask in the request issue how to send a key, and never post
+    one.
 
 ManipScope is evaluation-only and its 100 frozen initial states per scene are organizer-held, so a
 score is comparable only when it was produced on those initial states. Participation therefore runs
@@ -22,11 +23,16 @@ skills or controller.
 
 1. **Connect and self-test.** Public environment, locally generated development initial states, an
    example adapter and one command. Confirm your model actually drives the robot.
-2. **File a request.** A GitHub issue or pull request carrying the model configuration, the adapter
-   or code revision, the development-set result file and a runnable recipe.
+2. **File a request.** An issue or pull request in [this website's repository]({{submit}}) carrying
+   the model configuration, the adapter or code revision, the development-set result file and a
+   runnable recipe. Requests live here because this is where the leaderboard is built; problems with
+   a scene, an instruction pool, a step limit or the evaluator belong in the benchmark repository,
+   with the code.
 3. **Official evaluation.** The organizers run the shared evaluator on the private initial states and
    publish the score together with the logs they produced.
-4. **Site update.** After review the result file is merged and the leaderboard is rebuilt from it.
+4. **Site update.** After review the result file is merged under `submissions/` in the website
+   repository and the leaderboard is rebuilt from it. The same format check that CI runs on the pull
+   request can be run locally first: `python3 tools/validate_submission.py <file>`.
 
 ```bash
 # interface check only: no simulator, no model calls

@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Participation protocol
+    url: https://github.com/embodied-ai-research/ManiScope/blob/main/docs/SUBMISSIONS.md
+    about: How requests, tracks, result status and costs work. Read this before filing.
+  - name: Scene, seed or evaluator problem
+    url: https://github.com/embodied-ai-research/ManiScope/issues/new/choose
+    about: Problems with a scene, an instruction pool, a step limit or the evaluator belong in the benchmark repository, with the code.
+  - name: Participate
+    url: https://embodied-ai-research.github.io/ManipScope_webpage/participate/
+    about: The three-stage process, the two leaderboard tracks, result status, schedule and costs.
