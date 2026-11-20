@@ -241,8 +241,18 @@ def main():
         if (doc.get("run") or {}).get("repo_dirty"):
             warnings.append("run.repo_dirty is true; record what was modified")
 
-        # The standard-agent track reads as a model comparison only if the tool surface is fixed.
         system = doc.get("system") or {}
+        if not system.get("training_data"):
+            warnings.append("system.training_data is absent; the training-data boundary cannot be "
+                            "checked without it")
+        if system.get("kind") == "policy" and not system.get("weights_digest"):
+            warnings.append("system.weights_digest is absent; a policy result should name the "
+                            "checkpoint it belongs to")
+        if system.get("hosting") == "remote_blackbox" and not (doc.get("run") or {}).get("verification_scope"):
+            warnings.append("hosting is remote_blackbox, so run.verification_scope must say what "
+                            "the organizers could and could not verify")
+
+        # The standard-agent track reads as a model comparison only if the tool surface is fixed.
         if system.get("track") == "standard_agent":
             declared = system.get("tools")
             if declared is None:

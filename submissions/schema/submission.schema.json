@@ -97,6 +97,24 @@
             "maxLength": 64
           },
           "maxItems": 64
+        },
+        "training_data": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Training and adaptation data provenance. The standard track forbids data built from the 48 evaluation scenes and any leaked formal trajectory; state the sources so the claim is checkable."
+        },
+        "weights_digest": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Checkpoint or container digest fixed before the run, e.g. sha256:... — the version the result belongs to."
+        },
+        "hosting": {
+          "enum": [
+            "organizer_run_local",
+            "submitter_endpoint",
+            "remote_blackbox"
+          ],
+          "description": "Where inference ran. remote_blackbox means the organizers could observe only the request/response boundary; the row says so."
         }
       }
     },
@@ -213,6 +231,11 @@
               }
             }
           }
+        },
+        "verification_scope": {
+          "type": "string",
+          "maxLength": 1000,
+          "description": "What the organizers could verify themselves, and what rests on the submitter's declaration."
         }
       }
     },

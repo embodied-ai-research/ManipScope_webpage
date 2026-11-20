@@ -158,6 +158,39 @@ Action and environment feedback logs are enough; hidden reasoning traces are not
 logs and videos stay in your own storage and are referenced by URL and digest, so this site keeps
 only result summaries and links.
 
+## Fair comparison rules
+
+Eight rules keep a column readable as a comparison, and each one states who enforces it — some are
+properties of the harness, others are declarations the organizers cannot verify from outside:
+
+1. **Track separation** — extra training on the evaluation scenes, custom tools or your own planner
+   belong in the open-system track; the two are displayed separately.
+2. **Training boundary** — the standard track forbids data built from the 48 evaluation scenes and
+   any leaked formal trajectory. Declare your training and adaptation data provenance.
+3. **Uniform inputs** — the three specified RGB views, proprioception and the instruction. Target
+   identifiers, ground-truth object poses, hidden seeds and expert trajectories are neither provided
+   nor to be obtained; depth, point cloud and segmentation are off in the evaluated configuration.
+4. **Isolated run environment** — the evaluated system does not read or modify the simulator, the
+   evaluation files or the scoring logic. For agents this is structural: the model sits behind an
+   authenticated loopback bridge with the two-tool surface above.
+5. **Locked submission version** — code, weights, configuration and dependencies fixed before the
+   run and unchanged throughout, with the checkpoint or image digest recorded. Selecting a prepared
+   answer per test instance is prohibited; the exporter refuses a run whose scenes disagree on
+   commit, episode count or task configuration.
+6. **Memory and adaptation** — within-episode history and ordinary planning are fine; state resets
+   between episodes, and no test experience accumulates across episodes or updates weights.
+7. **Protecting the formal set** — the initial states stay organizer-held, a formal scene without
+   its seed file is refused rather than run on substitutes, one official run per protocol version,
+   and spot checks use unpublished but legal layout and instruction variations.
+8. **Organizer scoring** — the organizers run all specified episodes and record success, timings,
+   actions and anomalies including retries and discarded runs. A result obtained through a remote
+   black-box service is labelled with what could and could not be verified.
+
+None of this makes cheating impossible. It makes the comparable claim precise and the unverifiable
+part visible, which is the most an evaluation-only benchmark can honestly offer. The full wording,
+including the enforcement note on each rule, is in the
+[participation protocol]({{repo}}/blob/main/docs/SUBMISSIONS.md#7-fair-comparison-rules).
+
 ## New scenes
 
 Proposals for new scenes enter a development area first and are released with a new protocol
