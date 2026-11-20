@@ -61,6 +61,20 @@ paper:
     - {id: "3", name: "Shanghai Jiao Tong University"}
     - {id: "4", name: "SJTU-Sharpa Joint Lab for Embodied AI, SJTU"}
     - {id: "5", name: "The Chinese University of Hong Kong"}
+  institution_logos:
+    - name: "University of Science and Technology of China"
+      href: "https://www.ustc.edu.cn/"
+      image: "assets/img/institutions/ustc.svg"
+      source: "https://www.ustc.edu.cn/news/images/logo.svg"
+    - name: "Shanghai Jiao Tong University"
+      href: "https://www.sjtu.edu.cn/"
+      image: "assets/img/institutions/sjtu.svg"
+      source: "https://www.sjtu.edu.cn/resource/assets/img/svg/Min-logo-pic.svg"
+      seal: true
+    - name: "The Chinese University of Hong Kong"
+      href: "https://www.cuhk.edu.hk/english/"
+      image: "assets/img/institutions/cuhk.png"
+      source: "https://www.cuhk.edu.hk/english/images/cuhk_logo_2x.png?20221027"
   marks: "* Co-corresponding authors"
   # No arXiv identifier has been confirmed, so none is stated here.
   bibtex: |

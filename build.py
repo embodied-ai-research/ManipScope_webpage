@@ -363,6 +363,16 @@ class Site:
                 for a in paper.get("authors", []))
             affils = " · ".join(f'<span><sup>{esc(a["id"])}</sup>{esc(a["name"])}</span>' for a in paper.get("affiliations", []))
             author_block = f'<div class="authors">{authors}</div><div class="affils">{affils}</div><div class="marks">{esc(paper.get("marks", ""))}</div>'
+            logos = "".join(
+                f'<a class="institution-logo{" seal" if logo.get("seal") else ""}" '
+                f'href="{esc(logo["href"])}" target="_blank" rel="noopener" '
+                f'aria-label="{esc(logo["name"])}">'
+                f'<img src="{esc(logo["image"])}" alt="{esc(logo["name"])}">'
+                + (f'<span>{esc(logo["name"])}</span>' if logo.get("seal") else "") + '</a>'
+                for logo in paper.get("institution_logos", []))
+            if logos:
+                author_block += f'<div class="institution-logos" aria-label="Participating universities">{logos}</div>'
+
             paper_href, code_href = links.get("paper") or "", links.get("code") or ""
             meta_block = ""
             if links.get("email"):
@@ -408,8 +418,8 @@ class Site:
   <div class="btn-row">{btn_html}</div>
   {meta_block}
 </section>
-{self.participate_block(rel)}
 {self.overview_figure()}
+{self.participate_block(rel)}
 <section class="home-abstract">{abstract_html}</section>
 <section class="home-stats">{stats_html}</section>
 {self.source_map_figure()}

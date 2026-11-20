@@ -362,3 +362,36 @@ html[lang="zh-CN"] .content { line-height: 1.8; }
   .search input { padding: 7px 10px; }
 }
 .home-title, .home-participate h2 { text-wrap: balance; }
+
+.institution-logos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px 20px;
+  margin: 22px auto 0;
+  max-width: 780px;
+}
+.institution-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 226px;
+  height: 68px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fff;
+  color: #292a2e;
+}
+.institution-logo img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.institution-logo.seal img { width: 48px; height: 48px; flex-shrink: 0; }
+.institution-logo.seal span { font-size: 14px; line-height: 1.35; font-weight: 600; text-align: left; }
+.institution-logo:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 540px) {
+  .institution-logos { gap: 8px; }
+  .institution-logo { width: calc(50% - 4px); height: 58px; padding: 8px; }
+  .institution-logo.seal img { width: 36px; height: 36px; }
+  .institution-logo.seal span { font-size: 11px; }
+  .institution-logo:last-child { width: 200px; }
+}
