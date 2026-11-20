@@ -11,7 +11,11 @@
     "output_cap_tokens": 4096,
     "adapter": "eef_bridge / policy/GPT6",
     "code": "https://github.com/example/my-agent@0123456",
-    "notes": "Template file. The numbers are illustrative and do not describe any real system."
+    "notes": "Template file. The numbers are illustrative and do not describe any real system.",
+    "tools": [
+      "move_eef",
+      "finish"
+    ]
   },
   "protocol": {
     "version": "formal48-v1",

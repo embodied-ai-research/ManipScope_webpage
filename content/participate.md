@@ -73,6 +73,31 @@ in instruction delivery and time budget, so each row shows its own configuration
 column is not a controlled model comparison. A single frozen protocol per track is the precondition
 for reading it as one.
 
+### The standard-agent tool surface
+
+The standard-agent track gives the model **two tools and nothing else**:
+
+| Tool | What it does |
+| --- | --- |
+| `move_eef` | the only tool that moves the robot: an absolute end-effector target (position, quaternion `[w, x, y, z]`), a phase, a gripper command and a note |
+| `finish` | ends the attempt. It does **not** claim success: the environment decides, and a `finish` is not treated as a false completion claim because the prompt permits it when the model cannot proceed |
+
+Two tools is not the same as little information. The three camera views, the measured end-effector
+and joint state, and the execution, contact and tracking feedback are **supplied by the evaluator
+with every request** — the model does not call a tool to obtain them. What the surface excludes is
+code execution, a shell, file access and any retrieval tool: the model has to solve the manipulation
+problem itself rather than orchestrate other software.
+
+This is the point of the track. Hold the prompt, the tool schema, the memory handling, the
+controller and the budgets fixed, change only the base model, and the column answers one question:
+which model follows the instruction better through the same narrow interface. The
+[open-system track](#two-leaderboard-tracks) exists precisely so that richer tool sets, planners,
+skills and memory can be compared as whole systems — declared in the submission rather than assumed.
+
+The two-tool surface is a requirement on submissions to the standard-agent track, enforced by the
+agent framework the organizers run. It is the checked-in tool schema, not an audit of the raw call
+logs of the five systems already listed.
+
 ## Result status
 
 | Status | Meaning |

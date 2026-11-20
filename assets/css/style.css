@@ -152,6 +152,23 @@ body.home .layout { grid-template-columns: var(--sidebar-w) minmax(0, 1fr); }
 .btn:hover { text-decoration: none; background: var(--accent); color: #fff; border-color: transparent; }  /* blue only while hovered */
 /* A link that does not exist yet: same chip, visibly inert, never hover-highlighted. */
 .btn.soon { opacity: .55; cursor: default; font-weight: 500; }
+/* Submission entry point on the home page: three numbered steps, readable in one glance. */
+.home-participate { margin: 46px 0 0; padding: 26px 24px 22px; border: 1px solid var(--border);
+  border-radius: var(--radius); background: var(--bg-soft); }
+.home-participate h2 { margin-top: 0; border: 0; }
+.home-participate .lead { color: var(--text-soft); max-width: 70ch; margin: 0 auto; }
+.home-participate .btn-row { margin-bottom: 4px; }
+.btn.primary { background: var(--accent); color: #fff; border-color: transparent; }
+.btn.primary:hover { filter: brightness(1.08); }
+.step-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px;
+  margin: 22px 0 18px; text-align: left; }
+.step { position: relative; padding: 16px 16px 14px 52px; background: var(--bg);
+  border: 1px solid var(--border); border-radius: var(--radius); }
+.step-n { position: absolute; left: 16px; top: 15px; width: 24px; height: 24px; border-radius: 999px;
+  background: var(--accent); color: #fff; font-size: .8rem; font-weight: 700; text-align: center;
+  line-height: 24px; }
+.step h3 { margin: 0 0 .35em; font-size: .98rem; }
+.step p { margin: 0; font-size: .88rem; color: var(--text-soft); }
 .btn.soon:hover { background: var(--bg-soft); color: var(--text); border-color: var(--border); }
 .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 26px 0 0; text-align: left; }
 .meta-grid > div { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; }

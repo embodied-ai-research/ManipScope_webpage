@@ -27,6 +27,9 @@ DEV_SET = os.path.join(ROOT, "suite", "dev_set.yaml")
 DEV_SET_JSON = os.path.join(ROOT, "submissions", "dev_set.json")
 
 # Patterns that must never appear in a public submission file.
+# The fixed tool surface of the standard-agent track, as registered in policy/GPT6/local_bridge.py.
+STANDARD_AGENT_TOOLS = ["finish", "move_eef"]
+
 SECRET_PATTERNS = [
     (r"sk-[A-Za-z0-9_\-]{16,}", "OpenAI-style API key"),
     (r"AIza[0-9A-Za-z_\-]{30,}", "Google API key"),
@@ -237,6 +240,18 @@ def main():
             errors.append("protocol: the formal scene set requires organizer-held seeds")
         if (doc.get("run") or {}).get("repo_dirty"):
             warnings.append("run.repo_dirty is true; record what was modified")
+
+        # The standard-agent track reads as a model comparison only if the tool surface is fixed.
+        system = doc.get("system") or {}
+        if system.get("track") == "standard_agent":
+            declared = system.get("tools")
+            if declared is None:
+                warnings.append("standard_agent submissions should declare system.tools; the "
+                                "track's surface is exactly %s" % STANDARD_AGENT_TOOLS)
+            elif sorted(declared) != STANDARD_AGENT_TOOLS:
+                errors.append("system.tools is %s; the standard_agent track is exactly %s. Use the "
+                              "open_system track for a different tool surface."
+                              % (sorted(declared), STANDARD_AGENT_TOOLS))
 
         overall, pooled, family_pct, total_ep, total_su = aggregate(doc, families)
         declared = doc.get("results") or {}

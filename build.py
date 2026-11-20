@@ -409,6 +409,7 @@ class Site:
 {self.overview_figure()}
 <section class="home-abstract">{abstract_html}</section>
 <section class="home-stats">{stats_html}</section>
+{self.participate_block(rel)}
 {self.source_map_figure()}
 <section>
   <h2 id="axes">Six task families</h2>
@@ -419,6 +420,36 @@ class Site:
 {cite_block}
 """
         self.page("index.html", site["name"], content, body_class="home", description=site.get("description", ""))
+
+    def participate_block(self, rel):
+        """Submission entry point on the home page. The nav item alone does not tell a visitor that
+        the leaderboard accepts new models and systems, or what it costs them to try."""
+        steps = [
+            ("1", "Run the development set",
+             "Six scenes, five episodes each, on locally generated initial states. One command checks "
+             "that your model drives the robot and that its logs export cleanly."),
+            ("2", "File a request",
+             "Model configuration, code revision, the exported result file and a runnable recipe. "
+             "An API model is one JSON file: the agent framework, tools and controller stay fixed."),
+            ("3", "Get an official result",
+             "The organizers run the same evaluator on the organizer-held initial states and publish "
+             "the score with the logs they produced."),
+        ]
+        cards = "".join(
+            f'<div class="step"><div class="step-n">{esc(n)}</div>'
+            f'<h3>{esc(title)}</h3><p>{esc(body)}</p></div>' for n, title, body in steps)
+        return f"""<section class="home-participate">
+  <h2 id="participate">Evaluate your model on ManipScope</h2>
+  <p class="lead">The leaderboard is open to new models and new methods. Two tracks: a
+  <strong>standard agent framework</strong> with a fixed prompt, two tools, controller and budgets,
+  where only the base model changes — and an <strong>open system</strong> track for your own planner,
+  tools, memory, skills and control policy.</p>
+  <div class="step-row">{cards}</div>
+  <div class="btn-row">
+    <a class="btn primary" href="{rel}participate/">How to participate</a>
+    <a class="btn" href="{rel}usage/evaluation-protocol/">Evaluation protocol</a>
+  </div>
+</section>"""
 
     def overview_figure(self):
         """Teaser figure. Source of truth is assets/img/manipscope-teaser.pdf (a copy of

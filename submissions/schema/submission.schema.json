@@ -88,6 +88,15 @@
         "notes": {
           "type": "string",
           "maxLength": 2000
+        },
+        "tools": {
+          "type": "array",
+          "description": "Tool names the model could call. The standard_agent track is exactly [\"finish\", \"move_eef\"]; an open system lists its own surface.",
+          "items": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "maxItems": 64
         }
       }
     },
