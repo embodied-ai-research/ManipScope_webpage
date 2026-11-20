@@ -28,10 +28,9 @@ Rules for files in this directory:
 
 ## Where things live
 
-The benchmark repository is authoritative for the protocol and the tooling: it holds the
+The benchmark repository is authoritative for the protocol and the tooling: <https://github.com/USTC-AIR-Lab/ManiScope>. It holds the
 development-set runner, `tools/export_submission.py`, the organizer runbook and the scene-level
-issue templates. **It is being prepared for public release; its link will be added here.** Ask in an
-issue meanwhile and the organizers will send what you need.
+issue templates.
 
 `tools/validate_submission.py`, `schema/submission.schema.json`, `examples/example_submission.json`
 and `dev_set.json` here are copies of the files kept there; the validator reads the scene list from
@@ -46,5 +45,5 @@ python3 -m pip install jsonschema
 python3 tools/validate_submission.py submissions/<track>/<system>/<date>/submission.json
 ```
 
-See [Participate](https://embodied-ai-research.github.io/ManipScope_webpage/participate/) for the process; the full specification lives with the benchmark
-code and is linked from there once that repository is public.
+See [Participate](https://embodied-ai-research.github.io/ManipScope_webpage/participate/) for the process and
+[docs/SUBMISSIONS.md](https://github.com/USTC-AIR-Lab/ManiScope/blob/main/docs/SUBMISSIONS.md) for the full specification.

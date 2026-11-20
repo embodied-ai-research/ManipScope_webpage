@@ -3,6 +3,9 @@ contact_links:
   - name: Participate
     url: https://embodied-ai-research.github.io/ManipScope_webpage/participate/
     about: The three-stage process, the two leaderboard tracks, result status, schedule and costs. Read this before filing.
-  - name: Evaluation protocol
-    url: https://embodied-ai-research.github.io/ManipScope_webpage/usage/evaluation-protocol/
-    about: What is frozen, how episodes are scored and aggregated, and what must be disclosed with a result.
+  - name: Participation protocol
+    url: https://github.com/USTC-AIR-Lab/ManiScope/blob/main/docs/SUBMISSIONS.md
+    about: The full specification of request contents, result format, budgets and what every result must record.
+  - name: Scene, seed or evaluator problem
+    url: https://github.com/USTC-AIR-Lab/ManiScope/issues/new/choose
+    about: Problems with a scene, an instruction pool, a step limit or the evaluator belong in the benchmark repository, with the code.

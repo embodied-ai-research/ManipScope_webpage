@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/embodied-ai-research/ManiScope/submissions/schema/submission.schema.json",
+  "$id": "https://github.com/USTC-AIR-Lab/ManiScope/submissions/schema/submission.schema.json",
   "title": "ManipScope evaluation submission",
   "description": "One evaluated system on one scene set. Public submissions must not contain credentials or formal seed values; episodes are identified by index.",
   "type": "object",

@@ -6,9 +6,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        Read [Participate](https://embodied-ai-research.github.io/ManipScope_webpage/participate/) first. The benchmark repository, with the
-        development-set runner and the result schema, is being prepared for public release — ask
-        here and the organizers will send what you need to run the development set.
+        Read [Participate](https://embodied-ai-research.github.io/ManipScope_webpage/participate/) and the
+        [participation protocol](https://github.com/USTC-AIR-Lab/ManiScope/blob/main/docs/SUBMISSIONS.md) first, and run the development
+        set once: `DRY_RUN=1 bash suite/run_dev_check.sh <policy_key>`.
 
         **Never paste an API key, a token or a seed list into this issue.** Credentials go by email
         to sayleefilipski@gmail.com, and a gateway endpoint you control with a disposable,

@@ -141,9 +141,9 @@ instruction pools or step limits requires a new protocol version — see the
 [evaluation protocol]({{rel}}usage/evaluation-protocol/).
 
 What happens to a request after it is filed — batch planning, credential handling, the run commands
-and the checklist applied before a result is published — is written down in the organizer runbook,
-so the process is auditable rather than informal. The benchmark repository that holds it, the
-development-set runner and the result schema is being prepared for public release; until then ask in
-a request issue and the organizers will send what you need.
+and the checklist applied before a result is published — is written down in the
+[organizer runbook]({{repo}}/blob/main/docs/ORGANIZER_RUNBOOK.md), so the process is auditable
+rather than informal. The same repository holds the development-set runner, the result schema and
+the [full specification]({{repo}}/blob/main/docs/SUBMISSIONS.md).
 
-[File a request or a result]({{submit}}){.btn} <span class="btn soon" aria-disabled="true">Benchmark repository · coming soon</span>
+[File a request or a result]({{submit}}){.btn} [Benchmark repository]({{repo}}){.btn}
